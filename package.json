@@ -1,0 +1,22 @@
+{
+  "name": "fizzaynr",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Short animated hook built with Remotion (4:3, 23.976 fps)",
+  "scripts": {
+    "dev": "remotion studio",
+    "render": "remotion render Hook out/hook.mp4",
+    "still": "remotion still Hook out/still.png --frame=30",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.534",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.534"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.8",
+    "typescript": "5.8.3"
+  }
+}
