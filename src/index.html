@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spot Timeline</title>
+<link rel="stylesheet" href="/src/style.css">
+<style>
+  body[data-mode="preview"] { display: grid; grid-template-columns: 1fr 420px; height: 100vh; overflow: hidden; color: #ddd; }
+  #left { position: relative; overflow: hidden; display: grid; grid-template-rows: 1fr auto; }
+  #frameBox { position: relative; overflow: hidden; }
+  #ref { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; pointer-events: none; opacity: 0; }
+  #ui { grid-template-columns: auto auto 1fr auto; gap: 10px; align-items: center; padding: 10px 14px; background: #161618; font: 13px/1.2 'DejaVu Sans Mono', monospace; }
+  #ui button { background: #2a2a30; color: #eee; border: 0; border-radius: 6px; padding: 6px 12px; font: inherit; cursor: pointer; }
+  #scrub { width: 100%; }
+  #shots { position: relative; height: 26px; grid-column: 1 / -1; }
+  #shots div { position: absolute; top: 0; bottom: 0; border-right: 1px solid #000; font-size: 10px; padding: 6px 3px; overflow: hidden; cursor: pointer; color: #111; }
+  #side { background: #111113; padding: 14px; display: flex; flex-direction: column; gap: 10px; font: 12px 'DejaVu Sans Mono', monospace; overflow: auto; }
+  #side textarea { flex: 1; min-height: 400px; background: #0b0b0c; color: #cfe; border: 1px solid #333; font: 11px 'DejaVu Sans Mono', monospace; padding: 8px; }
+  #side button { background: #ff6a2b; color: #fff; border: 0; border-radius: 6px; padding: 8px; font: inherit; cursor: pointer; }
+  body:not([data-mode="preview"]) #side, body:not([data-mode="preview"]) #ui { display: none !important; }
+  body:not([data-mode="preview"]) #ref { display: none; }
+</style>
+</head>
+<body>
+<div id="left">
+  <div id="frameBox"><div id="viewport"><div id="stage"></div></div><video id="ref" muted preload="auto" src="/reference/ref.mp4"></video></div>
+  <div id="ui">
+    <button id="play">▶</button>
+    <span id="tc">00:00:00:00 · f0</span>
+    <input id="scrub" type="range" min="0" max="1811" value="0">
+    <label>ref onion <input id="onion" type="range" min="0" max="100" value="0"></label>
+    <div id="shots"></div>
+  </div>
+</div>
+<div id="side">
+  <b>timeline.json (edit → Apply; Download to keep)</b>
+  <div id="shotInfo"></div>
+  <textarea id="json" spellcheck="false"></textarea>
+  <button id="apply">Apply</button>
+  <button id="dl">Download timeline.json</button>
+</div>
+<script type="module">
+  import { seek } from '/src/engine.js';
+  const mode = document.body.dataset.mode;
+  if (mode === 'preview') {
+    await window.__ready;
+    const tl = () => window.__timeline;
+    const vp = document.getElementById('viewport'), ref = document.getElementById('ref'), box = document.getElementById('frameBox');
+    const fit = () => { const k = Math.min(box.clientWidth / 1920, box.clientHeight / 1080); vp.style.transform = ref.style.transform = `scale(${k})`; };
+    addEventListener('resize', fit); fit();
+    const scrub = document.getElementById('scrub'), tcEl = document.getElementById('tc');
+    const tc = (f) => { const s = Math.floor(f / 24); return `00:${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}:${String(f % 24).padStart(2, '0')}`; };
+    let cur = 0, playing = false;
+    const go = (f) => { cur = seek(f); scrub.value = cur; ref.currentTime = (cur + 0.5) / 24;
+      const s = tl().shots.find((x) => cur >= x.start && cur < x.end);
+      tcEl.textContent = `${tc(cur)} · f${cur} · ${s ? s.id : ''}`;
+      document.getElementById('shotInfo').textContent = s ? `${s.id} ${s.scene} [${s.start}-${s.end}) — ref: ${s.ref}` : ''; };
+    scrub.oninput = () => go(+scrub.value);
+    document.getElementById('onion').oninput = (e) => (ref.style.opacity = e.target.value / 100);
+    document.getElementById('play').onclick = (e) => { playing = !playing; e.target.textContent = playing ? '❚❚' : '▶'; };
+    let last = 0;
+    const tick = (t) => { if (playing && t - last > 1000 / 24) { last = t; go((cur + 1) % tl().durationFrames); } requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+    addEventListener('keydown', (e) => { if (e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight') go(cur + (e.shiftKey ? 24 : 1)); if (e.key === 'ArrowLeft') go(cur - (e.shiftKey ? 24 : 1));
+      if (e.key === ' ') { e.preventDefault(); document.getElementById('play').click(); } });
+    const drawShots = () => { const bar = document.getElementById('shots'); bar.innerHTML = '';
+      tl().shots.forEach((s, i) => { const d = document.createElement('div'); d.textContent = s.id;
+        d.style.left = `${(s.start / tl().durationFrames) * 100}%`; d.style.width = `${((s.end - s.start) / tl().durationFrames) * 100}%`;
+        d.style.background = s.kind === 'live' ? '#ffb38a' : i % 2 ? '#9fb4d8' : '#bccbe6'; d.onclick = () => go(s.start); bar.appendChild(d); }); };
+    drawShots();
+    const ta = document.getElementById('json'); ta.value = JSON.stringify(tl(), null, 2);
+    document.getElementById('apply').onclick = async () => { await window.reloadTimeline(JSON.parse(ta.value)); drawShots(); go(cur); };
+    document.getElementById('dl').onclick = () => { const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([ta.value], { type: 'application/json' })); a.download = 'timeline.json'; a.click(); };
+    go(0);
+  }
+</script>
+</body>
+</html>

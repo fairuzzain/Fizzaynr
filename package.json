@@ -1,0 +1,16 @@
+{
+  "name": "spot-recreation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "node scripts/server.mjs",
+    "render": "node scripts/render.mjs",
+    "render:captions": "node scripts/render.mjs --mode captions",
+    "assemble": "python3 scripts/assemble.py",
+    "compare": "python3 scripts/compare.py",
+    "build": "node scripts/render.mjs && node scripts/render.mjs --mode captions && python3 scripts/assemble.py && python3 scripts/compare.py"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

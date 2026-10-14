@@ -1,0 +1,6 @@
+node_modules/
+out/
+reference/*.mp4
+reference/*.raw
+plates/*.mp4
+plates/*.mov

@@ -1,0 +1,27 @@
+{
+  "assistant": "Atlas",
+  "model": "Atlas 3",
+  "extension": "Reel Studio",
+  "extensionTagline": "Edit, generate and finish video inside your chat",
+  "user": "Theo",
+  "userInitial": "T",
+  "plan": "Studio plan",
+  "drive": "SSD_01",
+  "projectFolder": "BIKE_SPOT",
+  "finalFile": "bike_spot_final.mp4",
+  "prompt": "Cut the bike spot from SSD_01. Fix anything that looks off.",
+  "tagline": "REEL STUDIO IS NOW INSIDE ATLAS",
+  "colors": {
+    "accent": "#FF6A2B",
+    "accentSoft": "#FFD9C7",
+    "desktop": "#E6589C",
+    "desktopWave": "#D9468B",
+    "desktopWave2": "#F07AB2",
+    "darkBg": "#141416",
+    "darkPanel": "#1D1D21",
+    "darkLine": "#2C2C33",
+    "lightBg": "#FAFAF8",
+    "lightLine": "#ECEAE6",
+    "ink": "#17171A"
+  }
+}
