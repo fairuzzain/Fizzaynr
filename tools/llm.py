@@ -12,7 +12,7 @@ Usage:
   cat notes.txt | python tools/llm.py - --model claude          # gpt | claude | auto | <model id>
 
 Env (repo .env): OPENAI_API_KEY, SUB2API_API_KEY, LLM_BASE_URL (default https://space.stationine.com/v1),
-LLM_GPT_MODELS (default "gpt-5.5,gpt-5.6"), LLM_CLAUDE_MODELS (default "claude-sonnet-4-6,claude-haiku-4-5").
+LLM_GPT_MODELS (default "gpt-5.5,gpt-5.6-terra,gpt-6-astra,gpt-5.6-sol,gpt-6.1-sol,gpt-5.6"), LLM_CLAUDE_MODELS (default "claude-sonnet-4-6,claude-haiku-4-5").
 """
 import argparse, json, os, subprocess, sys, time, urllib.error, urllib.request
 from pathlib import Path
@@ -126,7 +126,7 @@ def main():
 
     base = os.environ.get("LLM_BASE_URL", "https://space.stationine.com/v1").rstrip("/")
     gpt_key, claude_key = os.environ.get("OPENAI_API_KEY"), os.environ.get("SUB2API_API_KEY")
-    gpts = [m.strip() for m in os.environ.get("LLM_GPT_MODELS", "gpt-5.5,gpt-5.6").split(",") if m.strip()]
+    gpts = [m.strip() for m in os.environ.get("LLM_GPT_MODELS", "gpt-5.5,gpt-5.6-terra,gpt-6-astra,gpt-5.6-sol,gpt-6.1-sol,gpt-5.6").split(",") if m.strip()]
     claudes = [m.strip() for m in os.environ.get("LLM_CLAUDE_MODELS", "claude-sonnet-4-6,claude-haiku-4-5").split(",") if m.strip()]
     if a.model == "gpt":
         plan = [("gpt", m) for m in gpts]

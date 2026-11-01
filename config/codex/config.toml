@@ -1,5 +1,6 @@
 # Codex CLI config for this repo. Keys come from the environment (repo .env), never from this file.
 #   codex                     -> ChatGPT (gpt-5.5)          key: OPENAI_API_KEY
+#   codex --profile gpt-fast  -> gpt-5.6-terra (when gpt-5.5 is rate-limited)
 #   codex --profile claude    -> Claude via Sub2API         key: SUB2API_API_KEY
 profile = "gpt"
 disable_response_storage = true
@@ -8,6 +9,11 @@ disable_response_storage = true
 model_provider = "stationine"
 model = "gpt-5.5"
 review_model = "gpt-5.5"
+
+[profiles.gpt-fast]
+model_provider = "stationine"
+model = "gpt-5.6-terra"
+review_model = "gpt-5.6-terra"
 
 [profiles.claude]
 model_provider = "sub2api"

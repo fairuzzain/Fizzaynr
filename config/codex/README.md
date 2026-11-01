@@ -6,6 +6,7 @@ environment (put them in the repo `.env`, never in this file):
 | Command | Model | Key |
 |---|---|---|
 | `codex` | `gpt-5.5` (ChatGPT) | `OPENAI_API_KEY` |
+| `codex --profile gpt-fast` | `gpt-5.6-terra` (use when gpt-5.5 is rate-limited) | `OPENAI_API_KEY` |
 | `codex --profile claude` | `claude-sonnet-4-6` (Sub2API) | `SUB2API_API_KEY` |
 
 Install (back up your old `~/.codex/config.toml` first):
