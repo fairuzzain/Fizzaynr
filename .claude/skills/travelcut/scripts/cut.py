@@ -28,6 +28,7 @@ world (grade key), to = transition into the NEXT shot:
 amb_db per-shot ambience trim. A shot whose window runs past its clip is shifted earlier and reported.
 Writes <run>/<out>, <run>/audio/mix.wav and <run>/qa_cuts.png (4 frames around every cut).
 """
+import os
 import argparse, json, math, subprocess, sys
 from pathlib import Path
 import numpy as np
@@ -183,7 +184,7 @@ def loudnorm(wav, lufs, tp):
 
 
 def font(size):
-    for f in ("C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf"):
+    for f in (*([os.environ["FONT_BOLD"]] if os.environ.get("FONT_BOLD") else []), "C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf", "/Library/Fonts/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
         try: return ImageFont.truetype(f, size)
         except OSError: pass
     return ImageFont.load_default()

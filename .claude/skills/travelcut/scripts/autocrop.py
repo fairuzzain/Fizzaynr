@@ -20,6 +20,7 @@ x0,y0,x1,y1 on the ORIGINAL upright photo <run>/photos/pNN.jpg, never on the con
 Frames are written in plan order: <run>/frames/fNN.png + frames/index.json (read by clean.py),
 review sheets <run>/review/fNN.png (original | analysis | candidates 1-3) and fNN_ba.png (before | after).
 """
+import os
 import argparse, json, math, sys
 from pathlib import Path
 import numpy as np
@@ -30,7 +31,7 @@ AN = 1000  # analysis long side (px)
 
 
 def font(size):
-    for f in ("C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf"):
+    for f in (*([os.environ["FONT_BOLD"]] if os.environ.get("FONT_BOLD") else []), "C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf", "/Library/Fonts/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
         try: return ImageFont.truetype(f, size)
         except OSError: pass
     return ImageFont.load_default()

@@ -5,22 +5,22 @@ description: Make a short voiced video where two cartoon characters stand over a
 
 # /video-3d-toons $ARGUMENTS
 
-You make a short video where two characters talk OVER a video the user already has and explain what is on it (captions, music, their own sound effects kept). Kit folder: `C:/Users/fairus/.video-3d-kit`. Do the work with the scripts in it; never rebuild by hand what a script does. It is the same kit as `/video-3d` (same characters, voices, project); only the stage is different.
+You make a short video where two characters talk OVER a video the user already has and explain what is on it (captions, music, their own sound effects kept). Kit folder: `$VIDEO3D_KIT` (default `<repo root>/vendor/video-3d-kit`; first run `ROOT="$(git rev-parse --show-toplevel)"; VIDEO3D_KIT="${VIDEO3D_KIT:-$ROOT/vendor/video-3d-kit}"`, and if that folder is missing tell the user the kit is not installed and stop). Do the work with the scripts in it; never rebuild by hand what a script does. It is the same kit as `/video-3d` (same characters, voices, project); only the stage is different.
 
 ## How you talk to the user (strict, this is what keeps them from getting lost)
 - Reply in the user's own language. Bullet points only, short, plain words. No jargon (no "rig", "TTS", "frames", "orthographic", file names) unless they ask.
 - One message = at most 5 bullets (a table is fine for a script or a list of options). Say what you did, then what happens next, in one line each.
 - Ask questions in ONE batch (use your question tool if you have one, otherwise a numbered list). Mark the default with ★. "ok" means "take all the ★".
-- Never ask something already saved in `project.json`. Never ask for an API key in the chat (the user puts keys in `C:/Users/fairus/.video-3d-kit/.env` themselves).
+- Never ask something already saved in `project.json`. Never ask for an API key in the chat (the user puts keys in `$VIDEO3D_KIT/.env` themselves).
 - Do not narrate each command. Give the result and the next step. Send pictures and videos to the user with your file-sending tool when you have one; otherwise give the full path.
 
 ## 0. First check
-- Run `python C:/Users/fairus/.video-3d-kit/tools/setup.py status`. If `projectExists` is false: read `C:/Users/fairus/.video-3d-kit/AGENT_SETUP.md` and follow it (first-time setup), then come back here.
-- Read `C:/Users/fairus/.video-3d-kit/skill/guides/toons-playbook.md` fully, EVERY time. It holds the look, the rules and the checks; the user has corrected each of them before.
+- Run `python $VIDEO3D_KIT/tools/setup.py status`. If `projectExists` is false: read `$VIDEO3D_KIT/AGENT_SETUP.md` and follow it (first-time setup), then come back here.
+- Read `$VIDEO3D_KIT/skill/guides/toons-playbook.md` fully, EVERY time. It holds the look, the rules and the checks; the user has corrected each of them before.
 
 ## 1. The video and the questions (one batch)
 Topic = $ARGUMENTS. The user must give you the video file (a path). If they did not, ask for it first. If they also gave notes or a timestamped script, those say WHAT to explain at which second: a guide, not text to copy.
-- Run `python C:/Users/fairus/.video-3d-kit/tools/toons.py init "<short title>" --video <path>` (the episode number can be given with `--number`), then `python C:/Users/fairus/.video-3d-kit/tools/toons.py look <slug>` and LOOK at the picture it makes: what is on screen at each second, and whether something private shows (a name, an e-mail, a phone or account number). If it does, tell the user in one bullet and offer to blur that part.
+- Run `python $VIDEO3D_KIT/tools/toons.py init "<short title>" --video <path>` (the episode number can be given with `--number`), then `python $VIDEO3D_KIT/tools/toons.py look <slug>` and LOOK at the picture it makes: what is on screen at each second, and whether something private shows (a name, an e-mail, a phone or account number). If it does, tell the user in one bullet and offer to blur that part.
 - Ask ONE batch, defaults first:
   1. Who explains: ★ the second character explains and the first chips in 3-4 times / the other way round / only one explains.
   2. Opening: ★ start straight on the video / a hook: a question in the middle of a themed picture, then they jump up and pull the video down like a roller shutter (needs a backdrop picture: a place from this kit, or one the user has).
@@ -35,7 +35,7 @@ Topic = $ARGUMENTS. The user must give you the video file (a path). If they did 
 - Language of the lines = `project.json` language. No real people, no real brands on screen unless the owner asked.
 
 ## 3. Build (scripts do the work)
-Run from `C:/Users/fairus/.video-3d-kit`.
+Run from `$VIDEO3D_KIT`.
 1. Write `toons.marks` into `episode.json`: for each screen change worth following, `"<line number>": <second of the video where that line starts>`.
 2. `python tools/toons.py settle <slug>` (makes the voices, aligns the gaps to the marks, writes the plan; repeats until stable). Special lines (a scream, a panic shout, a dramatic line) need options: make 3-4 takes (playbook "Voices"), let the user pick, then `python tools/episode.py lock <slug> <line> <file>` and run `settle` again.
 3. `python tools/episode.py validate <slug>` until it says OK, then `python tools/episode.py build <slug>`.

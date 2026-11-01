@@ -10,19 +10,19 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
-PROJECT_ROOT = Path(__file__).resolve().parents[4]
+PROJECT_ROOT = Path(os.getenv("VOX_PROJECT_ROOT") or Path(__file__).resolve().parents[4])
 load_dotenv(PROJECT_ROOT / ".env")
 
 ASSETS = PROJECT_ROOT / "assets"
-MUSIC_DIR = ASSETS / "music"
+MUSIC_DIR = Path(os.getenv("MUSIC_DIR") or ASSETS / "music")
 GUIDELINES = PROJECT_ROOT / "guidelines" / "colored"   # vox-colored: own prompt system
-RUNS = PROJECT_ROOT / "runs"
+RUNS = Path(os.getenv("RUNS_DIR") or PROJECT_ROOT / "runs")
 
 NEXABOT_BASE = "https://nexabot.id"
 # Fallback key file shared with the Motion_as_kit nexabot.ts client
-NEXABOT_KEY_FILE = Path(os.getenv("NEXABOT_KEY_FILE",
-                                  r"C:\Users\fairus\Documents\Motion_as_kit\.env.nexabot"))
-CODEX_IMAGE_HINT = Path(os.environ.get("USERPROFILE", "~")) / ".claude" / "skills" / "codex-image" / "codex-image.ps1"
+NEXABOT_KEY_FILE = Path(os.getenv("NEXABOT_KEY_FILE") or
+                        Path(os.getenv("MOTION_KIT") or PROJECT_ROOT / "vendor" / "Motion_as_kit") / ".env.nexabot")
+CODEX_IMAGE_HINT = Path(os.getenv("CODEX_IMAGE_PS1") or PROJECT_ROOT / ".claude" / "skills" / "codex-image" / "codex-image.ps1")
 CREDIT_COST = 0.15        # per request without the API Unlimited plan (refunded on failure)
 SEEDANCE_COST = 0.2       # Seedance 2.5 (own endpoint), always charged, refunded on failure
 

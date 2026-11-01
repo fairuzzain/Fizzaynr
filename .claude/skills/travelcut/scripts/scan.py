@@ -8,6 +8,7 @@ Scores: sharp = variance of the Laplacian on a 1200 px copy (higher = sharper; <
 expo = mean luma 0..1, clip_hi / clip_lo = share of blown / crushed pixels.
 Near-duplicates: 64-bit dHash, Hamming <= --dup -> same group; "keep" marks the sharpest of a group.
 """
+import os
 import argparse, json, subprocess, sys, tempfile
 from pathlib import Path
 import numpy as np
@@ -19,7 +20,7 @@ FF_EXT = {".heic", ".heif", ".avif", ".dng", ".cr2", ".cr3", ".nef", ".arw", ".r
 
 
 def font(size):
-    for f in ("C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf"):
+    for f in (*([os.environ["FONT_BOLD"]] if os.environ.get("FONT_BOLD") else []), "C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf", "/Library/Fonts/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
         try: return ImageFont.truetype(f, size)
         except OSError: pass
     return ImageFont.load_default()

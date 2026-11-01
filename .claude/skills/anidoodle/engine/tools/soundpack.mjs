@@ -22,7 +22,7 @@ import { isMain } from "./is-main.mjs";
 const SR = 48000;
 const VCSL_RAW = "https://raw.githubusercontent.com/sgossner/VCSL/master/";
 // The whole-repo file index (size TAB path), kept with the research notes this tool was built from.
-const VCSL_TREE = "/Users/alexgreenshpun/CascadeProjects/Prompts/Claude-Skills/anidoodle-research/sound-pack/vcsl-tree.tsv";
+const VCSL_TREE = process.env.ANIDOODLE_VCSL_TREE ?? "/Users/alexgreenshpun/CascadeProjects/Prompts/Claude-Skills/anidoodle-research/sound-pack/vcsl-tree.tsv";
 
 // ---------------------------------------------------------------- note names
 const SEMI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
@@ -153,7 +153,7 @@ const TIMPANI_DRUMS = ["7G", "7D", "2A", "7B", "3A", "6G", "3B", "6E", "3C", "6D
 // 4.0): B-format W X Y Z decoded to stereo as L = W + Y, R = W - Y, direct sound at frame 0,
 // unit energy, tail cut by the same rule as zones. manifest.rooms maps room id -> metadata;
 // directFrames is the length of the direct sound, for the engine to skip.
-const ROOMS_SRC = "/Users/alexgreenshpun/CascadeProjects/Prompts/Claude-Skills/anidoodle-research/sound-pack/rooms-src";
+const ROOMS_SRC = process.env.ANIDOODLE_ROOMS_SRC ?? "/Users/alexgreenshpun/CascadeProjects/Prompts/Claude-Skills/anidoodle-research/sound-pack/rooms-src";
 const ROOMS = [
   { id: "small-room", title: "Arthur Sykes Rymer Auditorium, University of York",
     wav: "arthur-sykes-rymer-auditorium-university-york/arthur-sykes-rymer-auditorium-university-york/b-format/s1r7.wav",

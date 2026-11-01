@@ -1,6 +1,6 @@
 # Plate cookbook — proven visual devices in the template
 
-Each template plate (`C:\Users\fairus\Documents\Motion_as_kit\app\src\scenes\<file>.ts` — the
+Each template plate (`$MOTION_KIT/app/src/scenes/<file>.ts` — the
 template, since projects delete their copies in Stage 5) is a working implementation you can copy
 and adapt. Match a script beat to the device that fits it, open that file, and reuse the code —
 then replace all of its `lineOf`/`wordOf` lookups and template-specific numbers for the new script.

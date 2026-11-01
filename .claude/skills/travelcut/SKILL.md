@@ -17,11 +17,12 @@ language (Malay if they write Malay); write generation prompts in English. Never
 prompts; describe them by what is visible ("the woman in the yellow dress").
 
 ```
-NB="C:\Users\fairus\Documents\Motion_as_kit\nexabot\nexabot.ts"
-S="C:\Users\fairus\.claude\skills\travelcut\scripts"     # system python (numpy, PIL, cv2, scipy)
-R="D:\Motion Claude\TravelCut\runs\<slug>"               # one folder per film, e.g. cappadocia-2026
+ROOT="$(git rev-parse --show-toplevel)"; set -a; [ -f "$ROOT/.env" ] && . "$ROOT/.env"; set +a   # repo root + overrides
+NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
+S="$ROOT/.claude/skills/travelcut/scripts"     # system python (numpy, PIL, cv2, scipy)
+R="${RUNS_DIR:-$ROOT/runs}/travelcut/<slug>"               # one folder per film, e.g. cappadocia-2026
 ```
-Always pass **absolute** `--out` paths to nexabot.ts (relative ones resolve inside Motion_as_kit).
+Always pass **absolute** `--out` paths to nexabot.ts (relative ones resolve inside the Nexabot kit folder).
 Cost: 0.15 credit per request (clip, image or music). Failed / filtered jobs are refunded.
 
 **Best input** (tell the user if they ask what to send): 6–20 photos with good light, one clear
@@ -119,7 +120,7 @@ A clip regenerated later is announced with its cost first.
 - **Otherwise Nexabot**: `bun $NB music "<music prompt>" --out "$R\audio\music"` (prompt only, no
   length/tempo params; describe genre, tempo, instruments, energy curve and a clear quiet→loud lift;
   never name artists or works; no vocals). Included in the approved total. Fallback only if it fails
-  twice: a track from `D:\Motion Claude\Vox Video\assets\music\` (say so, note its source).
+  twice: a track from `${MUSIC_DIR:-$ROOT/assets/music}/` (say so, note its source).
 - Analyse: `python $S\beats.py $R\audio\music.mp3 --out $R\audio\beats.json --span <beats needed>`
   → bpm, beat grid, `drop` (strongest quiet→loud jump), `suggested_start`. **Put the drop on the
   first cut**: `music_start = drop − shots[0].dur`. If the track is short after that point, cut.py

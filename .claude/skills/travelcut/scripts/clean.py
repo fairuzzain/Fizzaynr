@@ -6,6 +6,7 @@ BEFORE scaling, writes <run>/clean/<name>.mp4 at the film size (frames/index.jso
 frame rate (no resampling: real speed, frame for frame), muted (cut.py takes ambience from videos/),
 plus <run>/sheets/<name>.png (1 tile per second, labelled) and <run>/sheets/_all.png.
 """
+import os
 import argparse, json, subprocess
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
@@ -25,7 +26,7 @@ def delogo_box(w, h):
 
 
 def font(size):
-    for f in ("C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf"):
+    for f in (*([os.environ["FONT_BOLD"]] if os.environ.get("FONT_BOLD") else []), "C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf", "/Library/Fonts/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"):
         try: return ImageFont.truetype(f, size)
         except OSError: pass
     return ImageFont.load_default()

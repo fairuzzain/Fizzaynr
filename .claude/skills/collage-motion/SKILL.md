@@ -14,9 +14,10 @@ Here: **Claude is the creative director, Nexabot renders, `build.py` edits.** Ne
 ChatGPT or Flow. Prompts and the default style: `references/prompts.md` (read it).
 
 ```
-NB="C:\Users\fairus\Documents\Motion_as_kit\nexabot\nexabot.ts"
-S="C:\Users\fairus\.codex\skills\collage-motion\scripts"      # system Python (PIL)
-R="D:\Motion Claude\Collage Motion\runs\<slug>"                 # one folder per video
+ROOT="$(git rev-parse --show-toplevel)"; set -a; [ -f "$ROOT/.env" ] && . "$ROOT/.env"; set +a   # repo root + overrides
+NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
+S="$ROOT/.claude/skills/collage-motion/scripts"      # system Python (PIL)
+R="${RUNS_DIR:-$ROOT/runs}/collage-motion/<slug>"                 # one folder per video
 ```
 Always pass **absolute** `--out` paths to nexabot.ts. 0.15 credit per request; filter rejections are refunded.
 

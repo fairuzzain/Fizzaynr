@@ -9,5 +9,9 @@ argument-hint: "[story/topic, number of chapters 1-4]"
 This is the only Vox skill. Do not use any vox-collage / vox-explainer / vox-diorama-axcel /
 collage-broll skill even if one is still listed.
 
-Read `C:\Users\fairus\.codex\skills\vox-video-nexabot\SKILL.md` in full and follow it exactly
-(it says which project folder to `cd` into), passing on the user's arguments.
+Read `${VOX_SKILL:-<repo root>/.claude/skills/vox-video-nexabot/SKILL.md}` in full and follow it exactly
+(work from the repo root), passing on the user's arguments.
+
+If that file does not exist (the black-and-white `vox-video-nexabot` skill is not in this repo yet),
+say so in one line and offer `/vox-colored` (same pipeline, colored look) instead. Do not improvise
+the black-and-white style from memory.

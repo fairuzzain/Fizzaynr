@@ -17,9 +17,10 @@ code transition (the user rejected that approach; it was built once and deleted)
 needs scene 2 to match their Image 2 exactly, say so plainly: that needs a true first+last-frame model.
 
 ```
-NB="C:\Users\fairus\Documents\Motion_as_kit\nexabot\nexabot.ts"
-S="C:\Users\fairus\.codex\skills\window-pass-through\scripts"    # system Python (cv2, numpy, PIL)
-R="D:\Motion Claude\Window Pass-Through\runs\<slug>"               # one folder per shot
+ROOT="$(git rev-parse --show-toplevel)"; set -a; [ -f "$ROOT/.env" ] && . "$ROOT/.env"; set +a   # repo root + overrides
+NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
+S="$ROOT/.claude/skills/window-pass-through/scripts"    # system Python (cv2, numpy, PIL)
+R="${RUNS_DIR:-$ROOT/runs}/window-pass-through/<slug>"               # one folder per shot
 ```
 Always pass **absolute** `--out` paths to nexabot.ts. 0.15 credit per request; safety-filter rejections are refunded.
 

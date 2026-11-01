@@ -30,11 +30,11 @@ moment.** Every design choice below serves that.
 Paths (run every command from the project root):
 
 ```
-PY=".venv/Scripts/python"          # macOS/Linux: .venv/bin/python
+PY=".venv/Scripts/python"; [ -x "$PY" ] || PY=".venv/bin/python"   # Windows / macOS-Linux
 S=".claude/skills/vox-colored-nexabot/scripts"
 ```
 
-If `.venv` is missing: `python -m venv .venv && .venv/Scripts/python -m pip install requests python-dotenv faster-whisper`.
+If `.venv` is missing: `python -m venv .venv && $PY -m pip install requests python-dotenv faster-whisper` (re-run the `PY=` line after creating it).
 
 ## 0. Parse guidance and check setup
 

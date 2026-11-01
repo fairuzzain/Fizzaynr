@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+.venv/
+node_modules/
+__pycache__/
+runs/*
+!runs/.gitkeep
+vendor/*
+!vendor/README.md
+assets/music/*
+!assets/music/.gitkeep

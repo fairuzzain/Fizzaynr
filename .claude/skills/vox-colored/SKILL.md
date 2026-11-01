@@ -9,7 +9,7 @@ argument-hint: "[story/topic, number of chapters 1-4]"
 Sibling of `/vox` (same pipeline, colored look). Use it only when the user asks for the
 colored / berwarna version; plain Vox requests still go to `/vox`.
 
-1. Work in the project root `D:\Motion Claude\Vox Video` (all paths in the real skill —
+1. Work in the repo root (`git rev-parse --show-toplevel`; env `VOX_PROJECT_ROOT` overrides) (all paths in the real skill —
    `.venv`, `guidelines/colored/`, `runs/`, `assets/` — are relative to it; `cd` there first).
-2. Read `D:\Motion Claude\Vox Video\.claude\skills\vox-colored-nexabot\SKILL.md` in full and
+2. Read `.claude/skills/vox-colored-nexabot/SKILL.md` in full and
    follow it exactly, passing on the user's arguments.

@@ -18,6 +18,7 @@ Beat length = VO length + pad. "at"/"len" are seconds inside the beat (default: 
 "pos": top | mid | bottom (default alternates). "fps" 12 gives the stop-motion step; 0 keeps Veo's.
 ffmpeg drawtext segfaults on this machine, so labels are drawn with PIL and overlaid as PNGs.
 """
+import os
 import json
 import random
 import subprocess
@@ -27,7 +28,10 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-FONT = "C:/Windows/Fonts/impact.ttf"
+FONT = next((f for f in [os.environ.get("FONT_IMPACT", ""), "C:/Windows/Fonts/impact.ttf", "/Library/Fonts/Impact.ttf",
+             "/System/Library/Fonts/Supplemental/Impact.ttf", "/usr/share/fonts/truetype/msttcorefonts/Impact.ttf",
+             "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf"]
+             if f and os.path.exists(f)), "DejaVuSans-Bold.ttf")
 YELLOW, INK, PAPER = (255, 224, 0), (24, 24, 24), (244, 240, 230)
 
 

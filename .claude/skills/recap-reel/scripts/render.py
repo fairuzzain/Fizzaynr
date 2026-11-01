@@ -28,6 +28,7 @@ Types: clip (default), title (black card + text and/or "logo": "assets/logo.png"
        split (layout v2|v3|v4|h3|grid4, panels [[clip, in], ...], "stagger": true pops panels in one by one).
 A shot can also use "frames": N instead of beats (exact length).
 """
+import os
 import argparse, json, math, subprocess, sys
 from pathlib import Path
 import numpy as np
@@ -127,6 +128,7 @@ def apply_fx(frames, fx, fps, beat):
 
 
 # ---------------------------------------------------------------- text
+BOLD_FONTS = [*([os.environ["FONT_BOLD"]] if os.environ.get("FONT_BOLD") else []), "C:/Windows/Fonts/arialbd.ttf", "C:/Windows/Fonts/segoeuib.ttf", "/Library/Fonts/Arial Bold.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/dejavu/DejaVuSans-Bold.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"]
 _fonts = {}
 
 
@@ -136,7 +138,13 @@ def get_font(path, size):
         try:
             _fonts[key] = ImageFont.truetype(path, size)
         except OSError:
-            _fonts[key] = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", size)
+            for c in BOLD_FONTS:
+                try:
+                    _fonts[key] = ImageFont.truetype(c, size); break
+                except OSError:
+                    pass
+            else:
+                _fonts[key] = ImageFont.load_default()
     return _fonts[key]
 
 
@@ -353,7 +361,7 @@ def main():
                             "-r", str(fps), "-i", "-", "-c:v", "libx264", "-preset", "veryfast" if a.preview else "slow",
                             "-crf", "23" if a.preview else "16", "-pix_fmt", "yuv420p", str(vtmp)], stdin=subprocess.PIPE)
     grade = Grade(E.get("grade", {}), W, H)
-    font_path = E.get("font", "C:/Windows/Fonts/arialbd.ttf")
+    font_path = E.get("font", BOLD_FONTS[0])
     cues = []
     for i, s in shots:
         f0, n = bounds[i]

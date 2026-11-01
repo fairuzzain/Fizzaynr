@@ -13,11 +13,12 @@ Everything generative goes through **Nexabot** (never a paid image/video/music A
 `music` for the soundtrack. 0.15 credit per request, failed jobs are refunded.
 
 ```
-NB="C:\Users\fairus\Documents\Motion_as_kit\nexabot\nexabot.ts"
-S="C:\Users\fairus\.codex\skills\recap-reel\scripts"     # python = system Python (numpy, PIL, cv2, scipy)
-R="D:\Motion Claude\Recap Reel\runs\<slug>"               # one folder per reel
+ROOT="$(git rev-parse --show-toplevel)"; set -a; [ -f "$ROOT/.env" ] && . "$ROOT/.env"; set +a   # repo root + overrides
+NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
+S="$ROOT/.claude/skills/recap-reel/scripts"     # python = system Python (numpy, PIL, cv2, scipy)
+R="${RUNS_DIR:-$ROOT/runs}/recap-reel/<slug>"               # one folder per reel
 ```
-Always pass **absolute** `--out` paths to nexabot.ts (relative ones resolve inside Motion_as_kit).
+Always pass **absolute** `--out` paths to nexabot.ts (relative ones resolve inside the Nexabot kit folder).
 
 ## 0. Brief (ask once, in Malay if the user writes Malay)
 Get or default: the photos (paths/folder; 4–12 works best), title text for the card (e.g. event
@@ -58,7 +59,7 @@ Show the user: frame list, each clip's camera move in one line, the music prompt
    (beats needed ≈ length_s × bpm / 60). Note `bpm`, `suggested_start` (skips a quiet intro),
    `strong` beats (use them for flash / title hits). If the track is shorter than the reel, or has
    no drive, generate one more with a clearer prompt (tell the user: +0.15). Fallback only if
-   Nexabot music fails twice: a track from `D:\Motion Claude\Vox Video\assets\music\`.
+   Nexabot music fails twice: a track from `${MUSIC_DIR:-$ROOT/assets/music}/`.
    A safety-filter rejection is refunded; reword neutrally.
 
 ## 4. Clean + look

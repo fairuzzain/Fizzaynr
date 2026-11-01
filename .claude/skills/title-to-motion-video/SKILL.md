@@ -7,9 +7,9 @@ description: Turn a title or topic into a finished, voiced motion-graphics expla
 
 You are making a new voiced motion-graphics video in the style of the user's **Motion as Code** kit.
 Every frame is a deterministic function of time, written as TypeScript "plates" (scenes) that animate
-on the word timings of the voiceover. The template kit is `C:\Users\fairus\Documents\Motion_as_kit`
-(env `MOTION_KIT` overrides). Each video is a **fresh copy** under
-`C:\Users\fairus\Documents\Motion_videos\<slug>\`; never modify the template.
+on the word timings of the voiceover. The template kit is `$MOTION_KIT` (default `<repo root>/vendor/Motion_as_kit`; env `MOTION_KIT`
+overrides; if it is missing tell the user the kit is not installed and stop). Each video is a **fresh copy** under
+`${MOTION_VIDEOS_DIR:-<repo root>/runs/motion-videos}/<slug>/`; never modify the template.
 
 The work is long and creative, so it runs in **stages with a check-in after each one**: the user
 reviews cheap artefacts (script → voice cost → animatic → plate stills) before anything expensive.

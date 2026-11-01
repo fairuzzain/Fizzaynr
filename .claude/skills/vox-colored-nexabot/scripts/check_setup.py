@@ -17,7 +17,7 @@ else:
     except Exception as e:
         problems.append(f"Nexabot API not reachable or key rejected: {e}")
 if not importlib.util.find_spec("faster_whisper"):
-    problems.append("faster-whisper missing (.venv/Scripts/python -m pip install faster-whisper)")
+    problems.append("faster-whisper missing (.venv python -m pip install faster-whisper)")
 if env("IMAGE_BACKEND", "nexabot") == "codex" and not CODEX_IMAGE_HINT.exists():
     problems.append(f"IMAGE_BACKEND=codex but {CODEX_IMAGE_HINT} is missing")
 if not find_style_reference():

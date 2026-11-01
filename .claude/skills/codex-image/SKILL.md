@@ -5,7 +5,7 @@ description: FALLBACK image engine. Images are made with Nexabot `img` by defaul
 
 > **Default is Nexabot, not Codex.** Plain text-to-image (posters, thumbnails, scene frames,
 > start frames, b-roll stills) goes through
-> `bun "C:\Users\fairus\Documents\Motion_as_kit\nexabot\nexabot.ts" img "<prompt>" --aspect 1|2|5 --out <path>.png`
+> `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" img "<prompt>" --aspect 1|2|5 --out <path>.png`
 > (1 = 1:1, 2 = 16:9, 5 = 9:16; other ratios: generate the nearest and crop with ffmpeg).
 > Use Codex below only for reference-based jobs (`-Reference`), `-Pad` key sheets, or when Nexabot fails.
 
@@ -19,7 +19,7 @@ account**. Never switch it to a paid API key (`codex login --with-api-key`,
 ## Generate one image
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\skills\codex-image\codex-image.ps1" `
+powershell -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)\.claude\skills\codex-image\codex-image.ps1" `
   -Prompt "<full image prompt>" -Out "<absolute path>.png" -Aspect 16:9 [-Width 1920] [-Reference "<img1>","<img2>"]
 ```
 
