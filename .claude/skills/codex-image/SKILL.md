@@ -1,22 +1,21 @@
 ---
 name: codex-image
-description: FALLBACK image engine. Images are made with Nexabot `img` by default (see global CLAUDE.md). Use this Codex CLI skill only when Nexabot cannot do the job - image-to-image edits or character/style consistency from a reference image, key/sprite sheets that need -Pad, or when Nexabot fails or the user asks for Codex. Saves verified PNGs on the user's ChatGPT login and keeps the calling skill's prompt, aspect ratio, filenames and folder.
+description: DEFAULT image engine for every skill - ChatGPT images (gpt-image models) through openai_image.py on the repo provider; Nexabot `img` is only the fallback. Use for any still image a skill needs - start frames, keyframes, B-roll, posters, thumbnails, image-to-image edits, character/style consistency from a reference image, key/sprite sheets. Saves verified PNGs and keeps the calling skill's prompt, aspect ratio, filenames and folder.
 ---
 
-> **Default is Nexabot, not Codex.** Plain text-to-image (posters, thumbnails, scene frames,
-> start frames, b-roll stills) goes through
+> **Default is ChatGPT images** (`openai_image.py` below) for every image, with or without a
+> reference. Fallback only when it fails twice: Nexabot
 > `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" img "<prompt>" --aspect 1|2|5 --out <path>.png`
 > (1 = 1:1, 2 = 16:9, 5 = 9:16; other ratios: generate the nearest and crop with ffmpeg).
-> Use Codex below only for reference-based jobs (`-Reference`), `-Pad` key sheets, or when Nexabot fails.
+> Codex CLI (`codex-image.ps1`) is a last resort on Windows.
 
 # codex-image — image generation through Codex CLI
 
 ## Preferred: direct Images API (any OS, verified)
 
-The repo provider (`space.stationine.com`, key `OPENAI_API_KEY` in the repo `.env`) serves the
-`gpt-image-*` models directly (default `gpt-image-1.5`; others: `gpt-image-1`, `gpt-image-2`,
-`gpt-image-2.5`). Its key does **not** serve chat models such as `gpt-5.5`, so Codex CLI cannot run
-on it; use this script instead of `codex-image.ps1`:
+The repo provider (`space.stationine.com`) serves the
+`gpt-image-*` models directly (key `OPENAI_IMAGE_API_KEY`; default `gpt-image-1.5`; others: `gpt-image-1`, `gpt-image-2`,
+`gpt-image-2.5`). That key does not serve chat models, so use this script instead of `codex-image.ps1`:
 
 ```bash
 python "$(git rev-parse --show-toplevel)/.claude/skills/codex-image/openai_image.py" \
@@ -29,7 +28,7 @@ python "$(git rev-parse --show-toplevel)/.claude/skills/codex-image/openai_image
   reference's shape; if `RawWidth/RawHeight` differs a lot from `--aspect`, re-run with `--pad auto`
   or write the framing into the prompt, and look at the result.
 - ~20-60 s per image; billed by the provider. Use `--quality low` for drafts.
-- Never print or commit the key. If `OPENAI_API_KEY` is missing, tell the user in one line and stop.
+- Never print or commit the key. If `OPENAI_IMAGE_API_KEY` is missing, tell the user in one line and stop.
 
 ## Codex CLI (Windows, needs a Codex login whose provider serves a chat model)
 

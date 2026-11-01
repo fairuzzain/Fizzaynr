@@ -18,8 +18,8 @@ echo "Vox colored:"
 chk "style reference" assets/style_reference_colored.png ""; chk "prompt guidelines" guidelines/colored ""
 [ -n "$(ls -A "${MUSIC_DIR:-assets/music}" 2>/dev/null | grep -v .gitkeep)" ] && ok "music tracks" || no "music tracks (${MUSIC_DIR:-assets/music})" "add .mp3/.wav files"
 { [ -x .venv/bin/python ] || [ -x .venv/Scripts/python ]; } && ok ".venv" || no ".venv" "python -m venv .venv && <venv python> -m pip install requests python-dotenv faster-whisper"
-echo "Images API (codex-image fallback):"
-[ -n "$OPENAI_API_KEY" ] && ok "OPENAI_API_KEY" || no "OPENAI_API_KEY" "set it in .env"
+echo "Delegates (ChatGPT / Claude API):"
+for v in OPENAI_API_KEY OPENAI_IMAGE_API_KEY SUB2API_API_KEY; do [ -n "${!v}" ] && ok "$v" || no "$v" "set it in .env"; done
 echo "Codex CLI (optional, Windows):"
 command -v codex >/dev/null && ok "codex CLI" || no "codex CLI" "install Codex CLI"
 if [ -f ~/.codex/config.toml ]; then cmp -s ~/.codex/config.toml config/codex/config.toml && ok "~/.codex/config.toml matches repo" || no "~/.codex/config.toml differs from repo" "cp config/codex/config.toml ~/.codex/"; else no "~/.codex/config.toml" "cp config/codex/config.toml ~/.codex/"; fi

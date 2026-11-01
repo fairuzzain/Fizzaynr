@@ -1,17 +1,22 @@
-# Codex CLI config (used by the `codex-image` skill)
+# Codex CLI config
 
-`config.toml` points Codex at the `space.stationine.com` provider (model `gpt-5.5`). No keys are stored here.
+`config.toml` has two profiles on the `space.stationine.com` provider; keys are read from the
+environment (put them in the repo `.env`, never in this file):
 
-Install on a machine (once, or again when the environment changes):
+| Command | Model | Key |
+|---|---|---|
+| `codex` | `gpt-5.5` (ChatGPT) | `OPENAI_API_KEY` |
+| `codex --profile claude` | `claude-sonnet-4-6` (Sub2API) | `SUB2API_API_KEY` |
+
+Install (back up your old `~/.codex/config.toml` first):
 
 ```bash
-mkdir -p ~/.codex && cp config/codex/config.toml ~/.codex/config.toml          # macOS / Linux / Git Bash
+mkdir -p ~/.codex && cp config/codex/config.toml ~/.codex/config.toml         # macOS / Linux / Git Bash
+set -a; . ./.env; set +a                                                      # load the keys
 ```
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex" | Out-Null
-Copy-Item config\codex\config.toml "$env:USERPROFILE\.codex\config.toml"      # Windows PowerShell
+Copy-Item config\codex\config.toml "$env:USERPROFILE\.codex\config.toml"     # Windows PowerShell
 ```
 
-Then sign in once with `codex login` (`requires_openai_auth = true`). Auth is stored in
-`~/.codex/auth.json` on that machine, never in this repo. Keep a backup of your old
-`~/.codex/config.toml` if you had one.
+Images do not go through Codex: they use `.claude/skills/codex-image/openai_image.py`
+(`OPENAI_IMAGE_API_KEY`).

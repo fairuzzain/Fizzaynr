@@ -6,7 +6,7 @@ Usage:
                          [--reference img1.png img2.png] [--pad auto|#RRGGBB] [--model gpt-image-1.5]
                          [--quality low|medium|high|auto] [--overwrite]
 
-Config (repo .env or environment): OPENAI_API_KEY (required),
+Config (repo .env or environment): OPENAI_IMAGE_API_KEY (falls back to OPENAI_API_KEY),
 OPENAI_BASE_URL (default https://space.stationine.com/v1), IMAGE_MODEL (default gpt-image-1.5).
 Prints JSON {Path, Width, Height, Bytes, Source} on success; exits non-zero with the API error on failure.
 """
@@ -127,9 +127,9 @@ def main():
     ap.add_argument("--overwrite", action="store_true")
     a = ap.parse_args()
 
-    key = os.environ.get("OPENAI_API_KEY")
+    key = os.environ.get("OPENAI_IMAGE_API_KEY") or os.environ.get("OPENAI_API_KEY")
     if not key:
-        sys.exit(f"OPENAI_API_KEY is not set. Add it to {root / '.env'}")
+        sys.exit(f"OPENAI_IMAGE_API_KEY is not set. Add it to {root / '.env'}")
     base = os.environ.get("OPENAI_BASE_URL", "https://space.stationine.com/v1").rstrip("/")
     r = ratio(a.aspect)
     body = {"model": a.model, "prompt": a.prompt, "size": api_size(r), "quality": a.quality, "n": 1}

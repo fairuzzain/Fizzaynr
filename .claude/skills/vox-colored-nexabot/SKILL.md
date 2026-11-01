@@ -131,7 +131,7 @@ visual to literally show that idea: the place, object, number, or action being s
 On-screen numbers/headlines must be the exact facts from `research.md`, spelled exactly;
 keep text short (headlines, a giant number, labels).
 
-**Image prompt** (Codex receives `assets/style_reference_colored.png` as reference; Nexabot `img` gets text only):
+**Image prompt** (ChatGPT images and Codex receive `assets/style_reference_colored.png` as reference; Nexabot `img` gets text only):
 the Style Block from `guidelines/colored/image-prompts.md` verbatim, then a SHOT describing the **opening frame**
 of the clip: background, foreground/midground elements at named depths, focus, and the text
 on screen. Single 16:9 frame, not a style sheet. No timecodes.
@@ -172,10 +172,11 @@ $PY $S/generate.py images $R --dry    # prints count + credits first
 $PY $S/generate.py images $R          # --only ch1_c03,ch2_c01 to redo; --force to redo all
 ```
 
-`IMAGE_BACKEND=nexabot` (default): Nexabot `img`, parallel, text only, so the Style Block
+`IMAGE_BACKEND=nexabot`: Nexabot `img`, text only, so the Style Block
 in the prompt carries the whole look (spell out the materials and palette; do not say "the
-attached sheet"). `IMAGE_BACKEND=openai`: Images API on the repo provider (`OPENAI_API_KEY` in `.env`),
-`assets/style_reference_colored.png` attached as a reference, 3 in parallel; best style match.
+attached sheet"). `IMAGE_BACKEND=openai` (**default**): ChatGPT images on the repo provider (`OPENAI_IMAGE_API_KEY` in `.env`),
+`assets/style_reference_colored.png` attached as a reference, 3 in parallel; best style match. A failed
+image falls back to Nexabot `img` automatically (`IMAGE_FALLBACK=none` turns that off).
 `IMAGE_BACKEND=codex`: free, `assets/style_reference_colored.png` is attached as a
 reference, one image at a time (~1-3 min each; run the step in the background; Windows only).
 

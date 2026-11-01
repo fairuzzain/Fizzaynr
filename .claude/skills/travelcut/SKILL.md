@@ -185,8 +185,8 @@ edit plan (order, in/out ranges at real speed, transitions, where the drop goes)
 render it with Nexabot (state clip count and cost) and stop.
 
 ## Gotchas
-- Nexabot `img` is not needed: the user's photos are the start frames. Only if the user has < 5
-  usable photos, offer extra B-roll frames (cost per image) and say they are generated, not theirs.
+- No image generation needed: the user's photos are the start frames. Only if the user has < 5
+  usable photos, offer extra B-roll frames made with ChatGPT images (`codex-image/openai_image.py`, cost per image) and say they are generated, not theirs.
 - Clips are ~10 s; prompts ask for the key action in the first 4 s, the rest is spare range.
 - The Gemini mark sits at x 855, y 1695, 95×95 on 1080×1920; clean.py removes it before scaling.
 - cut.py reads ambience from `videos/<clip>.mp4` (raw) and picture from `clean/` — keep both.

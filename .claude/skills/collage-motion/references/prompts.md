@@ -75,7 +75,7 @@ Rules:
 - One camera idea per clip. Describe actions with times; Veo follows 2-3 timed actions well, not 6.
 - Safety-filter rejection (refunded): reword neutrally and resend.
 - Presenter beats use `i2v` with the presenter photo only (a clean photo, no text on it - `i2v` copies
-  text from ingredient images). Beats without the presenter use `sfv` from a text-free Nexabot `img`
+  text from ingredient images). Beats without the presenter use `sfv` from a text-free ChatGPT image (`codex-image/openai_image.py`; Nexabot `img` as fallback)
   start frame (prompt: the board composition, "no text, no letters").
 
 ## 4. Two takes

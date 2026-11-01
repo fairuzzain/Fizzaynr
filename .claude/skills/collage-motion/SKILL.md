@@ -39,7 +39,8 @@ Do not ask about anything with a sensible default.
    emphasis words (prompts.md §2).
 4. Write `$R\takes\clips.json` from the template (prompts.md §3), takes `<id>_a` / `<id>_b`:
    - presenter beat: `{"name":"s01_a","mode":"i2v","prompt":"...","ratio":2,"resolution":1080,"media":["../input/presenter.png"]}`
-   - no presenter: first `bun $NB img "<board composition, no text, no letters>" --aspect 5 --out $R\frames\s03.png`
+   - no presenter: first make a ChatGPT image `python "$ROOT/.claude/skills/codex-image/openai_image.py" --prompt "<board composition, no text, no letters>" --aspect 9:16 --width 1080 --out "$R/frames/s03.png"`
+     (fallback if it fails twice: `bun $NB img "<...>" --aspect 5 --out ...`)
      (look at it; redo if it has text), then `"mode":"sfv","media":["../frames/s03.png"]`.
 5. Show the user: style summary (3 lines), the beat table, and the cost
    (`bun $NB batch $R\takes\clips.json --dry` count + TTS beats + start frames, × 0.15). **Wait for approval.**

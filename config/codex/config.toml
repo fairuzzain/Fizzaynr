@@ -1,19 +1,36 @@
-model_provider = "OpenAI"
+# Codex CLI config for this repo. Keys come from the environment (repo .env), never from this file.
+#   codex                     -> ChatGPT (gpt-5.5)          key: OPENAI_API_KEY
+#   codex --profile claude    -> Claude via Sub2API         key: SUB2API_API_KEY
+profile = "gpt"
+disable_response_storage = true
+
+[profiles.gpt]
+model_provider = "stationine"
 model = "gpt-5.5"
 review_model = "gpt-5.5"
-disable_response_storage = true
-network_access = "enabled"
-windows_wsl_setup_acknowledged = true
 
-[model_providers.OpenAI]
-name = "OpenAI"
+[profiles.claude]
+model_provider = "sub2api"
+model = "claude-sonnet-4-6"
+review_model = "claude-sonnet-4-6"
+
+[model_providers.stationine]
+name = "Stationine ChatGPT"
 base_url = "https://space.stationine.com/v1"
 model_catalog_url = "https://space.stationine.com/v1/models"
+env_key = "OPENAI_API_KEY"
 wire_api = "responses"
-supports_websockets = true
-requires_openai_auth = true
+requires_openai_auth = false
+supports_websockets = false
+
+[model_providers.sub2api]
+name = "Sub2API Anthropic"
+base_url = "https://space.stationine.com/v1"
+model_catalog_url = "https://space.stationine.com/v1/models"
+env_key = "SUB2API_API_KEY"
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false
 
 [features]
 api_key_model_discovery = true
-responses_websockets_v2 = true
-goals = true

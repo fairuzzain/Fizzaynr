@@ -6,7 +6,7 @@ Usage:
 
 Images (IMAGE_BACKEND in .env):
   "nexabot" -> Nexabot `img` (text only: the style sheet cannot be attached), 0.15 credit each
-  "openai"  -> Images API (OPENAI_API_KEY, repo provider) with the style board as reference,
+  "openai"  -> DEFAULT. ChatGPT Images API (OPENAI_API_KEY, repo provider) with the style board as reference,
                billed by that provider, parallel (OPENAI_PARALLEL, default 3)
   "codex"   -> Codex CLI on the ChatGPT login with assets/style_reference_colored.png as reference,
                free, one image at a time (parallel Codex runs collide on temp files)
@@ -194,7 +194,7 @@ def main():
         print("Nothing to do (all outputs exist; use --force or --only).")
         return
 
-    backend = env("IMAGE_BACKEND", "nexabot") if a.stage == "images" else "nexabot"
+    backend = env("IMAGE_BACKEND", "openai") if a.stage == "images" else "nexabot"
     engine = a.engine or env("VIDEO_ENGINE", "veo")
     unit = SEEDANCE_COST if a.stage == "videos" and engine == "seedance" else CREDIT_COST
     cost = 0 if backend in ("codex", "openai") else len(todo) * unit
@@ -212,9 +212,19 @@ def main():
         style = find_style_reference()
         if not style:
             sys.exit("Missing assets/style_reference_colored.(png|jpg|jpeg|webp)")
-        if not env("OPENAI_API_KEY"):
-            sys.exit("IMAGE_BACKEND=openai needs OPENAI_API_KEY in .env")
-        job, workers = (lambda c: image_openai(run, c, style)), int(env("OPENAI_PARALLEL", "3"))
+        if not (env("OPENAI_IMAGE_API_KEY") or env("OPENAI_API_KEY")):
+            sys.exit("IMAGE_BACKEND=openai needs OPENAI_IMAGE_API_KEY in .env")
+        nb_box = []
+
+        def job(c):
+            err = image_openai(run, c, style)
+            if err and env("NEXABOT_API_KEY") and env("IMAGE_FALLBACK", "nexabot") == "nexabot":
+                log(f"[image] {c['id']} ChatGPT failed, falling back to Nexabot img")
+                if not nb_box:
+                    nb_box.append(Nexabot())
+                return image_nexabot(nb_box[0], run, c)
+            return err
+        workers = int(env("OPENAI_PARALLEL", "3"))
     elif backend == "nexabot":
         nb = Nexabot()
         print(f"balance: {nb.credit().get('credit')} credits")

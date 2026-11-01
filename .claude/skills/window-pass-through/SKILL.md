@@ -41,8 +41,8 @@ Do not ask about anything with a sensible default.
 - User photo: crop/scale to 1080×1920 (or 1920×1080) with ffmpeg, keep the opening fully in frame and
   roughly centred - the camera will fly into it:
   `ffmpeg -i in.jpg -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" $R\frames\start.png`
-- No photo: `bun $NB img "<scene with the opening as the clear focal point, no text>" --aspect 5 --out $R\frames\start.png`
-  (aspect 2 for 16:9). Look at it; regenerate if the opening is small, cut off, or there is text.
+- No photo (ChatGPT image): `python "$ROOT/.claude/skills/codex-image/openai_image.py" --prompt "<scene with the opening as the clear focal point, no text>" --aspect 9:16 --width 1080 --out "$R/frames/start.png"`
+  (`--aspect 16:9 --width 1920` for 16:9). If it fails twice, fall back to `bun $NB img "<...>" --aspect 5 --out ...` (aspect 2 for 16:9). Look at it; regenerate if the opening is small, cut off, or there is text.
 
 ## 2. Prompt → approval
 Build the prompt from `references/prompts.md`: master prompt body + the camera path line (what the

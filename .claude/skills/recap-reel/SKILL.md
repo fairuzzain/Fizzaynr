@@ -99,7 +99,7 @@ say so; a different cut/length/title/logo from the same clips is free.
 ## Gotchas
 - Watermark: clean.py removes it before scaling; never scale raw clips first.
 - `img` is not needed here (the user's photos are the frames). If the user has fewer than 3
-  photos, offer extra Nexabot `img` B-roll frames (venue detail, crowd, lights) — they cost too.
+  photos, offer extra B-roll frames made with ChatGPT images (`codex-image/openai_image.py`; venue detail, crowd, lights) — they cost too.
 - Nexabot clips carry Veo audio; clean.py mutes it on purpose (the reel is music-led).
 - Keep people's likeness: no prompts that change faces, add celebrities or invent logos.
 - Learned on "Kembara Kerjaya" (Oct 2026): the words "face" / "hijab" in the prompt tripped the
