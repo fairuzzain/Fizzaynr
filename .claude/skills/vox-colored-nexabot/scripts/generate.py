@@ -6,6 +6,8 @@ Usage:
 
 Images (IMAGE_BACKEND in .env):
   "nexabot" -> Nexabot `img` (text only: the style sheet cannot be attached), 0.15 credit each
+  "openai"  -> Images API (OPENAI_API_KEY, repo provider) with the style board as reference,
+               billed by that provider, parallel (OPENAI_PARALLEL, default 3)
   "codex"   -> Codex CLI on the ChatGPT login with assets/style_reference_colored.png as reference,
                free, one image at a time (parallel Codex runs collide on temp files)
 Videos (VIDEO_ENGINE in .env, or --engine):
@@ -25,7 +27,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from common import (CODEX_IMAGE_HINT as CODEX_IMAGE, CREDIT_COST, SEEDANCE_COST, NEXABOT_ASPECT, NEXABOT_RATIO, Nexabot,
+from common import (CODEX_IMAGE_HINT as CODEX_IMAGE, OPENAI_IMAGE, CREDIT_COST, SEEDANCE_COST, NEXABOT_ASPECT, NEXABOT_RATIO, Nexabot,
                     data_uri, env, find_style_reference, load_json, save_json)
 
 lock = threading.Lock()
@@ -112,6 +114,25 @@ def image_codex(run, clip, style):
         Path(prompt_file).unlink(missing_ok=True)
 
 
+def image_openai(run, clip, style):
+    """Images API (repo provider, OPENAI_API_KEY) with the style board attached as reference."""
+    out = run / "images" / f"{clip['id']}.png"
+    aspect = env("ASPECT_RATIO", "16:9")
+    cmd = [sys.executable, str(OPENAI_IMAGE), "--prompt", clip["image_prompt"], "--out", str(out),
+           "--aspect", aspect, "--width", "1920" if aspect == "16:9" else "1080",
+           "--reference", str(style), "--overwrite"]
+    err = ""
+    for attempt in (1, 2):
+        log(f"[image] {clip['id']} openai attempt {attempt}")
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
+        if r.returncode == 0 and out.exists():
+            log(f"[image] {clip['id']} done")
+            return None
+        err = (r.stderr or r.stdout)[-400:]
+        log(f"[image] {clip['id']} attempt {attempt} failed: {err}")
+    return f"{clip['id']}: {err}"
+
+
 def run_video(nb, run, clip, engine="veo"):
     local = run / "images" / f"{clip['id']}.png"
     if not local.exists():
@@ -176,7 +197,7 @@ def main():
     backend = env("IMAGE_BACKEND", "nexabot") if a.stage == "images" else "nexabot"
     engine = a.engine or env("VIDEO_ENGINE", "veo")
     unit = SEEDANCE_COST if a.stage == "videos" and engine == "seedance" else CREDIT_COST
-    cost = 0 if backend == "codex" else len(todo) * unit
+    cost = 0 if backend in ("codex", "openai") else len(todo) * unit
     via = backend if a.stage == "images" else f"nexabot {engine}"
     print(f"{len(todo)} {a.stage} via {via} · ~{cost:.2f} credits")
     if a.dry:
@@ -187,6 +208,13 @@ def main():
         if not style:
             sys.exit("Missing assets/style_reference_colored.(png|jpg|jpeg|webp)")
         job, workers = (lambda c: image_codex(run, c, style)), 1
+    elif backend == "openai":
+        style = find_style_reference()
+        if not style:
+            sys.exit("Missing assets/style_reference_colored.(png|jpg|jpeg|webp)")
+        if not env("OPENAI_API_KEY"):
+            sys.exit("IMAGE_BACKEND=openai needs OPENAI_API_KEY in .env")
+        job, workers = (lambda c: image_openai(run, c, style)), int(env("OPENAI_PARALLEL", "3"))
     elif backend == "nexabot":
         nb = Nexabot()
         print(f"balance: {nb.credit().get('credit')} credits")
@@ -194,7 +222,7 @@ def main():
         # Concurrent `img` jobs came back as copies of one image (2026-10-30), so images run one at a time
         workers = 1 if a.stage == "images" else int(env("MAX_PARALLEL", "4"))
     else:
-        sys.exit(f"IMAGE_BACKEND must be 'nexabot' or 'codex', got {backend!r}")
+        sys.exit(f"IMAGE_BACKEND must be 'nexabot', 'openai' or 'codex', got {backend!r}")
 
     with ThreadPoolExecutor(max_workers=workers) as ex:
         results = list(ex.map(lambda c: _safe(job, c), todo))

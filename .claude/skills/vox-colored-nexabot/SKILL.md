@@ -174,8 +174,10 @@ $PY $S/generate.py images $R          # --only ch1_c03,ch2_c01 to redo; --force 
 
 `IMAGE_BACKEND=nexabot` (default): Nexabot `img`, parallel, text only, so the Style Block
 in the prompt carries the whole look (spell out the materials and palette; do not say "the
-attached sheet"). `IMAGE_BACKEND=codex`: free, `assets/style_reference_colored.png` is attached as a
-reference, one image at a time (~1-3 min each; run the step in the background).
+attached sheet"). `IMAGE_BACKEND=openai`: Images API on the repo provider (`OPENAI_API_KEY` in `.env`),
+`assets/style_reference_colored.png` attached as a reference, 3 in parallel; best style match.
+`IMAGE_BACKEND=codex`: free, `assets/style_reference_colored.png` is attached as a
+reference, one image at a time (~1-3 min each; run the step in the background; Windows only).
 
 Then **look at every image** (Read the PNGs). Check: matches the narration, style matches
 the colored board (looks like a /vox frame in hand-tinted color: aged paper, maps, keylined colorized cutouts, one hero number; no B&W drift, no neon modern color), text spelled correctly, public-figure rules respected (black bar, distant).

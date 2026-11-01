@@ -23,6 +23,7 @@ NEXABOT_BASE = "https://nexabot.id"
 NEXABOT_KEY_FILE = Path(os.getenv("NEXABOT_KEY_FILE") or
                         Path(os.getenv("MOTION_KIT") or PROJECT_ROOT / "vendor" / "Motion_as_kit") / ".env.nexabot")
 CODEX_IMAGE_HINT = Path(os.getenv("CODEX_IMAGE_PS1") or PROJECT_ROOT / ".claude" / "skills" / "codex-image" / "codex-image.ps1")
+OPENAI_IMAGE = PROJECT_ROOT / ".claude" / "skills" / "codex-image" / "openai_image.py"
 CREDIT_COST = 0.15        # per request without the API Unlimited plan (refunded on failure)
 SEEDANCE_COST = 0.2       # Seedance 2.5 (own endpoint), always charged, refunded on failure
 

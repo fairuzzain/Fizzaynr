@@ -15,7 +15,9 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 
 ## Defaults
 - Images: Nexabot `img`; `codex-image` only as fallback (reference images, key sheets, Nexabot failure).
-  Codex uses `config/codex/config.toml` (copy to `~/.codex/config.toml`).
+  The fallback runs `.claude/skills/codex-image/openai_image.py` (Images API, `OPENAI_API_KEY`,
+  provider `space.stationine.com`). Codex CLI (`config/codex/config.toml`) is Windows-only and
+  cannot use that key (no chat model on it).
 - Video clips and music: Nexabot. Do not switch to paid video connectors.
 - Never put API keys in chat or commit `.env`.
 

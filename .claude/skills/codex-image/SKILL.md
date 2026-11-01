@@ -11,12 +11,33 @@ description: FALLBACK image engine. Images are made with Nexabot `img` by defaul
 
 # codex-image — image generation through Codex CLI
 
+## Preferred: direct Images API (any OS, verified)
+
+The repo provider (`space.stationine.com`, key `OPENAI_API_KEY` in the repo `.env`) serves the
+`gpt-image-*` models directly (default `gpt-image-1.5`; others: `gpt-image-1`, `gpt-image-2`,
+`gpt-image-2.5`). Its key does **not** serve chat models such as `gpt-5.5`, so Codex CLI cannot run
+on it; use this script instead of `codex-image.ps1`:
+
+```bash
+python "$(git rev-parse --show-toplevel)/.claude/skills/codex-image/openai_image.py" \
+  --prompt "<full image prompt>" --out "<absolute path>.png" --aspect 16:9 [--width 1920] \
+  [--reference img1.png img2.png] [--pad auto|"#00FF00"] [--model gpt-image-1.5] [--quality low|medium|high]
+```
+
+- Same options and output JSON as the PowerShell script below (`--pad`, no overwrite unless
+  `--overwrite`), plus `RawWidth`/`RawHeight`. With `--reference` the API may return the
+  reference's shape; if `RawWidth/RawHeight` differs a lot from `--aspect`, re-run with `--pad auto`
+  or write the framing into the prompt, and look at the result.
+- ~20-60 s per image; billed by the provider. Use `--quality low` for drafts.
+- Never print or commit the key. If `OPENAI_API_KEY` is missing, tell the user in one line and stop.
+
+## Codex CLI (Windows, needs a Codex login whose provider serves a chat model)
+
 The user's own image engine. Codex CLI is installed at
 `%LOCALAPPDATA%\Programs\OpenAI\Codex\bin\codex.exe` (Windows) or on `PATH`. Its provider
 and model come from the repo's `config/codex/config.toml` (provider `space.stationine.com`,
 model `gpt-5.5`), installed to `~/.codex/config.toml` as described in `config/codex/README.md`.
-If `~/.codex/config.toml` is missing or differs from the repo copy, tell the user in one line and
-stop. Never change the provider, model or login method without the user's explicit consent.
+If `~/.codex/config.toml` is missing or differs from the repo copy, use the direct Images API above. Never change the provider, model or login method without the user's explicit consent.
 
 ## Generate one image
 
