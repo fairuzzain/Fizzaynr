@@ -12,9 +12,11 @@ description: FALLBACK image engine. Images are made with Nexabot `img` by defaul
 # codex-image — image generation through Codex CLI
 
 The user's own image engine. Codex CLI is installed at
-`%LOCALAPPDATA%\Programs\OpenAI\Codex\bin\codex.exe` and logged in with their **ChatGPT
-account**. Never switch it to a paid API key (`codex login --with-api-key`,
-`OPENAI_API_KEY`) without the user's explicit consent.
+`%LOCALAPPDATA%\Programs\OpenAI\Codex\bin\codex.exe` (Windows) or on `PATH`. Its provider
+and model come from the repo's `config/codex/config.toml` (provider `space.stationine.com`,
+model `gpt-5.5`), installed to `~/.codex/config.toml` as described in `config/codex/README.md`.
+If `~/.codex/config.toml` is missing or differs from the repo copy, tell the user in one line and
+stop. Never change the provider, model or login method without the user's explicit consent.
 
 ## Generate one image
 

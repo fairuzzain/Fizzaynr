@@ -15,6 +15,7 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 
 ## Defaults
 - Images: Nexabot `img`; `codex-image` only as fallback (reference images, key sheets, Nexabot failure).
+  Codex uses `config/codex/config.toml` (copy to `~/.codex/config.toml`).
 - Video clips and music: Nexabot. Do not switch to paid video connectors.
 - Never put API keys in chat or commit `.env`.
 
