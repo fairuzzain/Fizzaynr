@@ -1,0 +1,754 @@
+{
+ "editorial": {
+  "label": "Editorial krim & coklat",
+  "mood": "premium, promo produk, explainer kemas",
+  "main-bg": "radial-gradient(circle at 30% 20%,#F7F5F1 0%,#F1EFEB 45%,#E9E5DF 100%)",
+  "main": "#F1EFEB",
+  "hook-bg": "radial-gradient(circle at 35% 25%,#A2704C 0%,#87573A 45%,#5E3A27 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "radial-gradient(circle at 35% 25%,#2B2B2B 0%,#151515 60%,#0B0B0B 100%)",
+  "alt-ink": "#FFFFFF",
+  "ink": "#141414",
+  "mute": "#8A857E",
+  "accent": "#C8102E",
+  "accent2": "#F5D94E",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#141414",
+  "panel": "#FCEBCB",
+  "paper": "#F7F2EA",
+  "line": "#ECE8E2",
+  "pill-bg": "#141414",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#141414",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "anton",
+   "sans": "inter:600",
+   "serif": "instrument-serif:400i",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "italic",
+  "serif-size": "1.18em",
+  "r": "22px",
+  "r-sm": "16px",
+  "shadow": "0 18px 40px rgba(0,0,0,.13)",
+  "card-border": "0",
+  "texture": "none",
+  "texture-op": "0",
+  "tiles": [
+   [
+    "#F5D94E",
+    "#141414"
+   ],
+   [
+    "#E3ECFB",
+    "#2B6BE0"
+   ],
+   [
+    "#141414",
+    "#F5D94E"
+   ],
+   [
+    "#C8102E",
+    "#FFFFFF"
+   ],
+   [
+    "#FCDCCB",
+    "#C8102E"
+   ],
+   [
+    "#DDF1E4",
+    "#22A35A"
+   ],
+   [
+    "#2C2470",
+    "#FFFFFF"
+   ],
+   [
+    "#FFFFFF",
+    "#141414"
+   ]
+  ],
+  "pill-num": "#F5D94E",
+  "title-scale": "1",
+  "kit": {
+   "layout": "left",
+   "enter": "move",
+   "transition": "cut",
+   "deco": [],
+   "music": "lofi"
+  }
+ },
+ "neon": {
+  "label": "Neon malam",
+  "mood": "tech, gaming, AI, malam",
+  "main-bg": "radial-gradient(circle at 25% 15%,#1D2A6B 0%,#0E1438 45%,#070A1E 100%)",
+  "main": "#0B1026",
+  "hook-bg": "radial-gradient(circle at 70% 30%,#5A1470 0%,#260A3A 50%,#0C0414 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "radial-gradient(circle at 50% 50%,#0F3B4A 0%,#06141C 100%)",
+  "alt-ink": "#E8FBFF",
+  "ink": "#EAF2FF",
+  "mute": "#7F8BC0",
+  "accent": "#FF3DCB",
+  "accent2": "#3DF5FF",
+  "accent-ink": "#0B1026",
+  "card": "#151C44",
+  "card-ink": "#EAF2FF",
+  "panel": "#1B2456",
+  "paper": "#EAF2FF",
+  "line": "#2A3570",
+  "pill-bg": "#3DF5FF",
+  "pill-ink": "#0B1026",
+  "badge-bg": "#FF3DCB",
+  "badge-ink": "#0B1026",
+  "fonts": {
+   "disp": "bebas-neue",
+   "sans": "space-grotesk:600",
+   "serif": "playfair-display:700i",
+   "mono": "space-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "italic",
+  "serif-size": "1.1em",
+  "r": "18px",
+  "r-sm": "12px",
+  "shadow": "0 0 0 1px rgba(61,245,255,.25),0 0 30px rgba(255,61,203,.25)",
+  "card-border": "0",
+  "texture": "linear-gradient(rgba(61,245,255,.07) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,rgba(61,245,255,.07) 1px,transparent 1px) 0 0/60px 60px",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FF3DCB",
+    "#0B1026"
+   ],
+   [
+    "#3DF5FF",
+    "#0B1026"
+   ],
+   [
+    "#151C44",
+    "#EAF2FF"
+   ],
+   [
+    "#7C5CFF",
+    "#FFFFFF"
+   ],
+   [
+    "#1B2456",
+    "#3DF5FF"
+   ],
+   [
+    "#FFE14D",
+    "#0B1026"
+   ]
+  ],
+  "pill-num": "#FF3DCB",
+  "title-scale": "1.05",
+  "kit": {
+   "layout": "left",
+   "enter": "blur",
+   "transition": "glitch",
+   "deco": [
+    "brackets",
+    "scanlines"
+   ],
+   "music": "funky"
+  }
+ },
+ "pastel": {
+  "label": "Pastel comel",
+  "mood": "parenting, kids, lifestyle, santai",
+  "main-bg": "radial-gradient(circle at 20% 15%,#FFFFFF 0%,#FFF1F5 50%,#FDE3EC 100%)",
+  "main": "#FFF4F7",
+  "hook-bg": "radial-gradient(circle at 30% 25%,#D9FBEF 0%,#B4EFDB 55%,#8EDFC4 100%)",
+  "hook-ink": "#2E2A4A",
+  "alt-bg": "radial-gradient(circle at 30% 25%,#EDE7FF 0%,#D7CCFF 100%)",
+  "alt-ink": "#2E2A4A",
+  "ink": "#2E2A4A",
+  "mute": "#9A93B8",
+  "accent": "#FF5C9A",
+  "accent2": "#7C5CFF",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#2E2A4A",
+  "panel": "#EDE7FF",
+  "paper": "#FFFFFF",
+  "line": "#F1E8F0",
+  "pill-bg": "#7C5CFF",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#FF5C9A",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "fredoka:700",
+   "sans": "nunito:700",
+   "serif": "dm-serif-display:400i",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "700",
+  "disp-case": "none",
+  "serif-style": "italic",
+  "serif-size": "1.12em",
+  "r": "32px",
+  "r-sm": "24px",
+  "shadow": "0 14px 30px rgba(124,92,255,.15)",
+  "card-border": "0",
+  "texture": "radial-gradient(rgba(255,92,154,.18) 3px,transparent 3.5px) 0 0/46px 46px",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FFD6E5",
+    "#C2185B"
+   ],
+   [
+    "#D9FBEF",
+    "#13795B"
+   ],
+   [
+    "#EDE7FF",
+    "#5B3FD6"
+   ],
+   [
+    "#FFF2C4",
+    "#9A6A00"
+   ],
+   [
+    "#DDEEFF",
+    "#1E5FBF"
+   ],
+   [
+    "#FFE2D1",
+    "#C2410C"
+   ]
+  ],
+  "pill-num": "#FFE66D",
+  "title-scale": "0.88",
+  "kit": {
+   "layout": "center",
+   "enter": "pop",
+   "transition": "circle",
+   "deco": [
+    "blobs",
+    "sparkles"
+   ],
+   "music": "cheerful"
+  }
+ },
+ "notebook": {
+  "label": "Buku nota",
+  "mood": "edu, tips belajar, tutorial",
+  "main-bg": "#FBF8EE",
+  "main": "#FBF8EE",
+  "hook-bg": "radial-gradient(circle at 30% 25%,#3E6FD6 0%,#2E5BBA 55%,#1F3F87 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "#FFF6C9",
+  "alt-ink": "#1F2A44",
+  "ink": "#1F2A44",
+  "mute": "#8C93A8",
+  "accent": "#2E5BBA",
+  "accent2": "#FFD84D",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#1F2A44",
+  "panel": "#FFF6C9",
+  "paper": "#FFFFFF",
+  "line": "#E6E2D3",
+  "pill-bg": "#2E5BBA",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#E8483B",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "permanent-marker",
+   "sans": "nunito:700",
+   "serif": "caveat:700",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "normal",
+  "serif-size": "1.35em",
+  "r": "6px",
+  "r-sm": "6px",
+  "shadow": "4px 6px 0 rgba(31,42,68,.12)",
+  "card-border": "2px solid #1F2A44",
+  "texture": "linear-gradient(90deg,transparent 118px,rgba(232,72,59,.45) 118px,rgba(232,72,59,.45) 121px,transparent 121px),repeating-linear-gradient(0deg,transparent 0 46px,rgba(46,91,186,.16) 46px 48px)",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FFFFFF",
+    "#1F2A44"
+   ],
+   [
+    "#FFD84D",
+    "#1F2A44"
+   ],
+   [
+    "#DDEBFF",
+    "#2E5BBA"
+   ],
+   [
+    "#FFE0DC",
+    "#E8483B"
+   ],
+   [
+    "#E3F6E5",
+    "#2F7D3E"
+   ]
+  ],
+  "pill-num": "#FFD84D",
+  "title-scale": "0.85",
+  "kit": {
+   "layout": "left",
+   "enter": "wipe",
+   "transition": "page",
+   "deco": [
+    "doodles"
+   ],
+   "music": "lofi"
+  }
+ },
+ "techgrid": {
+  "label": "Tech grid gelap",
+  "mood": "coding, automasi, data, SaaS",
+  "main-bg": "radial-gradient(circle at 20% 10%,#1B2222 0%,#0E1111 60%)",
+  "main": "#0E1111",
+  "hook-bg": "radial-gradient(circle at 70% 20%,#25330F 0%,#0E1111 70%)",
+  "hook-ink": "#E8FFE0",
+  "alt-bg": "#000000",
+  "alt-ink": "#E8FFE0",
+  "ink": "#E8FFE0",
+  "mute": "#6F8A80",
+  "accent": "#B6FF3B",
+  "accent2": "#3BE8FF",
+  "accent-ink": "#0E1111",
+  "card": "#161C1C",
+  "card-ink": "#E8FFE0",
+  "panel": "#1C2626",
+  "paper": "#E8FFE0",
+  "line": "#283333",
+  "pill-bg": "#B6FF3B",
+  "pill-ink": "#0E1111",
+  "badge-bg": "#B6FF3B",
+  "badge-ink": "#0E1111",
+  "fonts": {
+   "disp": "archivo-black",
+   "sans": "space-grotesk:600",
+   "serif": "instrument-serif:400i",
+   "mono": "space-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "italic",
+  "serif-size": "1.18em",
+  "r": "10px",
+  "r-sm": "8px",
+  "shadow": "0 0 0 1px #2A3636,0 20px 40px rgba(0,0,0,.5)",
+  "card-border": "0",
+  "texture": "linear-gradient(rgba(182,255,59,.06) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(182,255,59,.06) 1px,transparent 1px) 0 0/40px 40px",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#B6FF3B",
+    "#0E1111"
+   ],
+   [
+    "#161C1C",
+    "#B6FF3B"
+   ],
+   [
+    "#3BE8FF",
+    "#0E1111"
+   ],
+   [
+    "#1C2626",
+    "#E8FFE0"
+   ],
+   [
+    "#FF5F57",
+    "#0E1111"
+   ]
+  ],
+  "pill-num": "#0E1111",
+  "title-scale": "0.74",
+  "kit": {
+   "layout": "left",
+   "enter": "scan",
+   "transition": "scan",
+   "deco": [
+    "code",
+    "cursor"
+   ],
+   "music": "retro8bit"
+  }
+ },
+ "sunset": {
+  "label": "Retro sunset",
+  "mood": "motivasi, cerita, travel, 80an",
+  "main-bg": "radial-gradient(circle at 80% 10%,#FFE2C2 0%,#FFF0E0 45%,#FFE6D6 100%)",
+  "main": "#FFF0E0",
+  "hook-bg": "linear-gradient(180deg,#FF8A3D 0%,#E8456B 50%,#7B2CBF 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "linear-gradient(180deg,#3B1460 0%,#1C0A33 100%)",
+  "alt-ink": "#FFE6D6",
+  "ink": "#2B1630",
+  "mute": "#A0788C",
+  "accent": "#FF5A1F",
+  "accent2": "#7B2CBF",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#2B1630",
+  "panel": "#FFE1C7",
+  "paper": "#FFF7EE",
+  "line": "#F5E0D0",
+  "pill-bg": "#7B2CBF",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#FF5A1F",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "bungee",
+   "sans": "poppins:600",
+   "serif": "dm-serif-display:400i",
+   "mono": "space-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "italic",
+  "serif-size": "1.12em",
+  "r": "20px",
+  "r-sm": "14px",
+  "shadow": "6px 8px 0 rgba(123,44,191,.18)",
+  "card-border": "0",
+  "texture": "repeating-linear-gradient(0deg,rgba(255,90,31,.05) 0 2px,transparent 2px 10px)",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FF8A3D",
+    "#FFFFFF"
+   ],
+   [
+    "#E8456B",
+    "#FFFFFF"
+   ],
+   [
+    "#7B2CBF",
+    "#FFFFFF"
+   ],
+   [
+    "#FFD166",
+    "#2B1630"
+   ],
+   [
+    "#FFE1C7",
+    "#2B1630"
+   ]
+  ],
+  "pill-num": "#FFD166",
+  "title-scale": "0.7",
+  "kit": {
+   "layout": "center",
+   "enter": "rise",
+   "transition": "blinds",
+   "deco": [
+    "sun"
+   ],
+   "music": "emotional"
+  }
+ },
+ "corporate": {
+  "label": "Biru korporat",
+  "mood": "takaful, kewangan, B2B, formal",
+  "main-bg": "radial-gradient(circle at 85% 0%,#DCE7FF 0%,#F5F8FF 50%,#EEF3FF 100%)",
+  "main": "#F5F8FF",
+  "hook-bg": "radial-gradient(circle at 30% 20%,#2E6BFF 0%,#0F3DDE 55%,#0A2A9C 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "radial-gradient(circle at 30% 20%,#132250 0%,#0B1B3F 100%)",
+  "alt-ink": "#FFFFFF",
+  "ink": "#0B1B3F",
+  "mute": "#7C8BB0",
+  "accent": "#0F5BFF",
+  "accent2": "#FFC531",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#0B1B3F",
+  "panel": "#E6EEFF",
+  "paper": "#FFFFFF",
+  "line": "#E3EAF8",
+  "pill-bg": "#0B1B3F",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#0F5BFF",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "poppins:800",
+   "sans": "inter:600",
+   "serif": "playfair-display:700i",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "800",
+  "disp-case": "none",
+  "serif-style": "italic",
+  "serif-size": "1.1em",
+  "r": "20px",
+  "r-sm": "14px",
+  "shadow": "0 16px 40px rgba(15,61,222,.12)",
+  "card-border": "0",
+  "texture": "none",
+  "texture-op": "0",
+  "tiles": [
+   [
+    "#0F5BFF",
+    "#FFFFFF"
+   ],
+   [
+    "#E6EEFF",
+    "#0F3DDE"
+   ],
+   [
+    "#FFC531",
+    "#0B1B3F"
+   ],
+   [
+    "#0B1B3F",
+    "#FFFFFF"
+   ],
+   [
+    "#DFF7EC",
+    "#0E8A5F"
+   ]
+  ],
+  "pill-num": "#FFC531",
+  "title-scale": "0.84",
+  "kit": {
+   "layout": "left",
+   "enter": "slide",
+   "transition": "push",
+   "deco": [
+    "dots"
+   ],
+   "music": "cheerful"
+  }
+ },
+ "comic": {
+  "label": "Komik pop",
+  "mood": "lawak, viral, hype, jualan",
+  "main-bg": "#FFE14D",
+  "main": "#FFE14D",
+  "hook-bg": "radial-gradient(circle at 40% 30%,#FF4A5C 0%,#E8283C 60%,#B5122A 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "#1E6BFF",
+  "alt-ink": "#FFFFFF",
+  "ink": "#111111",
+  "mute": "#5A4E1A",
+  "accent": "#E8283C",
+  "accent2": "#1E6BFF",
+  "accent-ink": "#FFFFFF",
+  "card": "#FFFFFF",
+  "card-ink": "#111111",
+  "panel": "#FFFFFF",
+  "paper": "#FFFFFF",
+  "line": "#111111",
+  "pill-bg": "#111111",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#E8283C",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "bangers",
+   "sans": "nunito:800",
+   "serif": "permanent-marker",
+   "mono": "space-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "normal",
+  "serif-size": "1.08em",
+  "r": "14px",
+  "r-sm": "12px",
+  "shadow": "8px 8px 0 #111111",
+  "card-border": "4px solid #111111",
+  "texture": "radial-gradient(rgba(232,40,60,.22) 4px,transparent 4.5px) 0 0/22px 22px",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FFFFFF",
+    "#111111"
+   ],
+   [
+    "#E8283C",
+    "#FFFFFF"
+   ],
+   [
+    "#1E6BFF",
+    "#FFFFFF"
+   ],
+   [
+    "#111111",
+    "#FFE14D"
+   ],
+   [
+    "#7CE07C",
+    "#111111"
+   ]
+  ],
+  "pill-num": "#FFE14D",
+  "title-scale": "1",
+  "kit": {
+   "layout": "center",
+   "enter": "slam",
+   "transition": "burst",
+   "deco": [
+    "burst",
+    "speed"
+   ],
+   "music": "comedy"
+  }
+ },
+ "calm": {
+  "label": "Hijau tenang",
+  "mood": "kesihatan, Islamik, wellness, keluarga",
+  "main-bg": "radial-gradient(circle at 20% 15%,#F6F8F2 0%,#EEF2EA 55%,#E3EADD 100%)",
+  "main": "#EEF2EA",
+  "hook-bg": "radial-gradient(circle at 30% 25%,#45694F 0%,#2F4A3A 60%,#1E3326 100%)",
+  "hook-ink": "#F6F8F2",
+  "alt-bg": "radial-gradient(circle at 30% 25%,#F6E7C7 0%,#EBD5A8 100%)",
+  "alt-ink": "#1E2B22",
+  "ink": "#1E2B22",
+  "mute": "#83927F",
+  "accent": "#3E7C59",
+  "accent2": "#D9A441",
+  "accent-ink": "#FFFFFF",
+  "card": "#FBFCF8",
+  "card-ink": "#1E2B22",
+  "panel": "#E2EBDD",
+  "paper": "#FBFCF8",
+  "line": "#DDE5D6",
+  "pill-bg": "#2F4A3A",
+  "pill-ink": "#FFFFFF",
+  "badge-bg": "#3E7C59",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "dm-serif-display:400",
+   "sans": "nunito:700",
+   "serif": "instrument-serif:400i",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "none",
+  "serif-style": "italic",
+  "serif-size": "1.2em",
+  "r": "26px",
+  "r-sm": "18px",
+  "shadow": "0 14px 32px rgba(47,74,58,.12)",
+  "card-border": "0",
+  "texture": "none",
+  "texture-op": "0",
+  "tiles": [
+   [
+    "#3E7C59",
+    "#FFFFFF"
+   ],
+   [
+    "#E2EBDD",
+    "#2F4A3A"
+   ],
+   [
+    "#D9A441",
+    "#FFFFFF"
+   ],
+   [
+    "#FBFCF8",
+    "#1E2B22"
+   ],
+   [
+    "#F6E7C7",
+    "#7A5A12"
+   ]
+  ],
+  "pill-num": "#F6E7C7",
+  "title-scale": "0.92",
+  "kit": {
+   "layout": "center",
+   "enter": "soft",
+   "transition": "veil",
+   "deco": [
+    "leaves"
+   ],
+   "music": "emotional"
+  }
+ },
+ "bold": {
+  "label": "Hitam merah berani",
+  "mood": "amaran, mitos vs fakta, jualan agresif",
+  "main-bg": "radial-gradient(circle at 25% 15%,#232323 0%,#111111 60%,#080808 100%)",
+  "main": "#111111",
+  "hook-bg": "radial-gradient(circle at 35% 25%,#FF2A1A 0%,#E10600 55%,#A00400 100%)",
+  "hook-ink": "#FFFFFF",
+  "alt-bg": "#FFE600",
+  "alt-ink": "#111111",
+  "ink": "#FFFFFF",
+  "mute": "#8A8A8A",
+  "accent": "#FF2A1A",
+  "accent2": "#FFE600",
+  "accent-ink": "#FFFFFF",
+  "card": "#1E1E1E",
+  "card-ink": "#FFFFFF",
+  "panel": "#242424",
+  "paper": "#FFFFFF",
+  "line": "#333333",
+  "pill-bg": "#FFE600",
+  "pill-ink": "#111111",
+  "badge-bg": "#FF2A1A",
+  "badge-ink": "#FFFFFF",
+  "fonts": {
+   "disp": "anton",
+   "sans": "inter:600",
+   "serif": "instrument-serif:400i",
+   "mono": "jetbrains-mono:400"
+  },
+  "disp-weight": "400",
+  "disp-case": "uppercase",
+  "serif-style": "italic",
+  "serif-size": "1.18em",
+  "r": "14px",
+  "r-sm": "10px",
+  "shadow": "0 20px 40px rgba(0,0,0,.5)",
+  "card-border": "1px solid #333333",
+  "texture": "repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 14px)",
+  "texture-op": "1",
+  "tiles": [
+   [
+    "#FF2A1A",
+    "#FFFFFF"
+   ],
+   [
+    "#FFE600",
+    "#111111"
+   ],
+   [
+    "#1E1E1E",
+    "#FFFFFF"
+   ],
+   [
+    "#FFFFFF",
+    "#111111"
+   ],
+   [
+    "#333333",
+    "#FFE600"
+   ]
+  ],
+  "pill-num": "#FF2A1A",
+  "title-scale": "1",
+  "kit": {
+   "layout": "stack",
+   "enter": "slam",
+   "transition": "flash",
+   "deco": [
+    "caution"
+   ],
+   "music": "epic"
+  }
+ }
+}
