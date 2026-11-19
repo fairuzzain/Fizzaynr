@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Install Rhubarb Lip Sync (v1.13.0) once and print the path to the binary.
 
-  python setup_rhubarb.py            -> installs into ~/.rbdigital/rhubarb-1.13.0/ (if missing), prints path
+  python setup_rhubarb.py            -> installs into <repo>/vendor/rhubarb-1.13.0/ (or $RHUBARB_DIR) (if missing), prints path
   python setup_rhubarb.py --check    -> prints path or exits 1 (no download)
 
 Works on Windows, macOS and Linux. Needs internet the first time (~90 MB zip from
@@ -10,7 +10,9 @@ github.com/DanielSWolf/rhubarb-lip-sync releases). Idempotent.
 import os, platform, shutil, stat, subprocess, sys, tempfile, urllib.request, zipfile
 
 VER = "1.13.0"
-ROOT = os.path.join(os.path.expanduser("~"), ".rbdigital", f"rhubarb-{VER}")
+# Repo convention: install under <repo>/vendor/ (git-ignored); override with RHUBARB_DIR.
+_REPO = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."))
+ROOT = os.environ.get("RHUBARB_DIR") or os.path.join(_REPO, "vendor", f"rhubarb-{VER}")
 EXE = "rhubarb.exe" if os.name == "nt" else "rhubarb"
 
 

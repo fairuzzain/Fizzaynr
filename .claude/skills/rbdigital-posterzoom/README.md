@@ -1,5 +1,8 @@
 # Poster Zoom Video
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Upload satu gambar (poster, infografik, slide) → jadi video explainer: spotlight, tajuk 'slam', zoom satu-satu point, VO, muzik. Gambar asal TAK dilukis semula — setiap frame crop dari gambar kau.
 
 ## Keperluan

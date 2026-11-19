@@ -1,5 +1,8 @@
 # RB Digital Mascot Explainer
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Video explainer / promo tanpa muka: motion graphic gaya editorial (krim & coklat, tajuk Anton, aksen serif italic merah, mockup app) + maskot kartun yang **mulut ikut suara** (Rhubarb lip-sync), SFX dan muzik lo-fi. 16:9 atau 9:16. Render dengan HyperFrames.
 
 ## Keperluan

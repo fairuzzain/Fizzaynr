@@ -1,5 +1,8 @@
 # Toon Series Video
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Video kartun, explainer, dokumentari atau drama (1–3 minit) dari klip AI: Claude tulis skrip VO, prompt character sheet, prompt gambar + video 10s setiap scene. Kau generate klip, upload, Claude edit penuh: potong ikut VO, punch-in, crossfade, caption, muzik, SFX. 30 style — dari kartun sampai realistik (sinematik, arkib dokumentari, reenactment sejarah, true crime, drama keluarga Melayu, seram kampung), dengan preset Explainer / Dokumentari / Drama.
 
 ## Keperluan

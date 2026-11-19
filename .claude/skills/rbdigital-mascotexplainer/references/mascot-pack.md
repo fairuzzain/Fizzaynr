@@ -1,7 +1,8 @@
 # Mascot pack — any character the user wants
 
-The user describes (or uploads a photo of) the mascot they want; Claude gives **2 image prompts**; the user generates both
-images (ChatGPT / Gemini / Flow / any image tool) and uploads them; Claude turns them into a pack with `make_pack.py`.
+The user describes (or uploads a photo of) the mascot they want; Claude writes the image prompts and generates
+them with ChatGPT images (`.claude/skills/codex-image/openai_image.py`; Nexabot `img` if it fails twice). The user may upload their
+own instead. Claude turns them into a pack with `make_pack.py`.
 A pack is a folder: `mascot.json` + transparent PNGs. It can be reused for every future video.
 
 ## 1. Character description (write it once, reuse it in both prompts)
@@ -52,7 +53,7 @@ inside the image. Mouth gently CLOSED and neutral in all 4.
 <CHARACTER DESCRIPTION>. Plain solid flat pure green #00FF00 background, no shadows on the background, no floor, no text,
 no logos, no extra objects. 2K, high resolution.
 ```
-Sheet 2 = same prompt with the next 4 poses, and tell them to give sheet 1 as a reference image so the character matches.
+Sheet 2 = same prompt with the next 4 poses, generated with `--reference sheet1.png` so the character matches.
 
 ### 2c. Mouth chart prompt (square image). Pick the version for the character.
 
@@ -84,7 +85,7 @@ Use the muzzle-style anchoring for this version (§3): width = the patch width, 
 
 Add one line: "Background hijau rata supaya senang potong. Kalau watak ada benda hijau, tukar #00FF00 kepada magenta #FF00FF."
 
-## 3. Build the pack (after upload)
+## 3. Build the pack (once the images exist)
 
 ```bash
 python <skill>/scripts/make_pack.py cut poses1.png,poses2.png mouths.png --out mascot/<name> --poses think,point,phone,thumbs/wave,explain,shocked,celebrate

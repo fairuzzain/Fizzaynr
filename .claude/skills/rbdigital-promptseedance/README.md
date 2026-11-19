@@ -1,5 +1,8 @@
 # Seedance Prompt Writer
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Tulis prompt video Seedance 2.5 yang siap copy-paste: logline, style, character lock, beat ikut saat dengan kamera + bunyi. Kalau ada watak, dia bagi prompt **character sheet** dulu supaya watak konsisten.
 
 ## Keperluan

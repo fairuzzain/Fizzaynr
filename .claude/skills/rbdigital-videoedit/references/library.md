@@ -89,8 +89,8 @@ Saiz: lebar ≈ 0.68 × fontSize × bilangan huruf (Montserrat); anton/bebas/lea
 Perlu screenshot / screen recording sebenar → minta dalam storyboard; tiada → bina versi rekaan generik dalam HTML. Lower third nama + handle kalau ada dalam CLAUDE.md.
 
 ## Icon sheet (style 6, preset D)
-- Default: bagi user SATU prompt icon sheet 4x4 (16 icon) untuk dia generate sendiri. Connector image-gen hanya kalau user minta DAN connector tu ada dalam sesi (cth OpenRouter: `mcp__Openrouter__generate-image` model `google/gemini-2.5-flash-image` ~$0.04), laporkan kos + baki (`get-credits`: total_credits − total_usage). Takde connector → bagi prompt je.
-- Template: `A sprite sheet of 16 separate 3D icons arranged in a clean 4x4 grid, glossy stylized 3D cartoon render, soft studio lighting, vibrant saturated colors, each icon isolated with wide empty spacing, plain pure white background (#FFFFFF), no ground shadows, no reflections, no text, no labels, no borders, no overlapping. Icons in order, row by row: 1. ... 16. ... Every icon fully visible, centered in its grid cell, crisp edges.` Sebut kat user: background putih kosong + takde bayang supaya cutout bersih.
+- Default: tulis SATU prompt icon sheet 4x4 (16 icon) dan jana sendiri dengan ChatGPT images: `python "$IMG" --prompt "<template>" --out "$R/icons/sheet.png" --aspect 1:1 --width 2048` (Nexabot `img --aspect 1` kalau gagal 2 kali). User boleh upload sheet sendiri.
+- Template: `A sprite sheet of 16 separate 3D icons arranged in a clean 4x4 grid, glossy stylized 3D cartoon render, soft studio lighting, vibrant saturated colors, each icon isolated with wide empty spacing, plain pure white background (#FFFFFF), no ground shadows, no reflections, no text, no labels, no borders, no overlapping. Icons in order, row by row: 1. ... 16. ... Every icon fully visible, centered in its grid cell, crisp edges.` (Background putih kosong + takde bayang supaya cutout bersih.)
 - Cutout icon: JANGAN AI remove-background (buang bahagian putih dalam icon). Guna **flood-fill putih dari tepi setiap cell** (whiteness distance < 40, alpha MinFilter 3 + GaussianBlur 1.2), crop bbox, pad segi empat, 400x400 PNG `icons/NN.png`. Contact sheet atas bg gelap untuk QA.
 
 ## B-roll (preset E / add-on)
@@ -108,8 +108,8 @@ Perlu screenshot / screen recording sebenar → minta dalam storyboard; tiada �
 Treatment: Ken Burns (1.0→1.12 + pan), masuk whip/slide 0.2s + whoosh, keluar cut. Masuk/keluar guna J/L-cut: gambar B-roll masuk 0.1-0.2s SELEPAS ayat cerita mula (atau keluar 0.1-0.2s selepas muka dah bercakap semula), bukan tepat atas sempadan ayat. Masalah = desaturate + vignette; penyelesaian = terang + glow.
 
 Sumber:
-1. **user generate (default):** SATU prompt sheet 3x3 (9 frame 9:16). Template: `A 3x3 grid storyboard sheet of 9 separate vertical 9:16 photographic frames, consistent cinematic style, realistic photo, Malaysian setting, soft natural light, thin pure white gutters between frames, no text, no captions, no borders, no logos. Frames in order: 1. ... 9. ...` Sebut: gutter putih nipis supaya senang potong. Potong grid ikut baris/lajur hampir putih, scale cover ke 1080x1920.
-2. **Connector image-gen (bila user minta & connector ada, cth OpenRouter):** template sama (~$0.04/sheet), laporkan kos + baki.
+1. **ChatGPT images (default, aku jana):** SATU sheet 3x3 (9 frame 9:16), `python "$IMG" --prompt "<template>" --out "$R/broll/sheet.png" --aspect 9:16 --width 2160`; atau satu gambar per shot (`--aspect 9:16 --width 1080`) bila perlu kualiti penuh. Template: `A 3x3 grid storyboard sheet of 9 separate vertical 9:16 photographic frames, consistent cinematic style, realistic photo, Malaysian setting, soft natural light, thin pure white gutters between frames, no text, no captions, no borders, no logos. Frames in order: 1. ... 9. ...` (Gutter putih nipis supaya senang potong.) Potong grid ikut baris/lajur hampir putih, scale cover ke 1080x1920.
+2. **Klip Nexabot (bila shot perlu bergerak):** `bun "$NB" sfv "<gerak kecil + kamera perlahan>" --media "$R/broll/bNN.png" --ratio 2 --res 1080 --out "$R/broll/bNN"` (0.15 kredit/klip), guna `muted`.
 3. **Code-only (percuma):** mockup HyperFrames: laptop/phone UI prompt menaip, timeline editor, chat bubble, dashboard, notification bertimbun, kalendar penuh.
 4. **Klip user:** `trim` bahagian terbaik, `muted`.
 

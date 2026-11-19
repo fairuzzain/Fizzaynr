@@ -3,7 +3,7 @@
 ## 0. Setup (senyap)
 
 ```bash
-W=<scratchpad>/edit; mkdir -p $W && cd $W
+W="${RUNS_DIR:-$ROOT/runs}/rbdigital-videoedit/<slug>"; mkdir -p $W && cd $W   # = $R in SKILL.md Repo setup
 ffmpeg -version | head -1; node -v   # node 22+
 which hyperframes || npm i -g hyperframes
 hyperframes browser ensure           # WAJIB, kalau tak Chrome tiada
@@ -162,7 +162,7 @@ ffmpeg -i p1.mov -i p2.mov -filter_complex "[0][1]concat=n=2:v=1:a=0,format=yuva
 ## 5. Audio (SFX + music, jana sendiri, percuma)
 
 - SFX ffmpeg/numpy: whoosh (`anoisesrc` pink + highpass/lowpass + fade), pop (`sine=880:d=0.12`), chime (sine 1568/2093/2637 + adelay), typing click (`sine=2000:d=0.02`), news sting (sine 440→660 + `aecho`), tick (`sine=1200:d=0.015`), boom (sine 60Hz + `acrusher`). Sync dengan effect & setiap masuk B-roll. Jangan SFX sama dua kali berturut.
-- Music (preset B/D/E atau add-on): beat 100bpm kick/hat/pad Am-F-C-G jana numpy. Cinematic/editorial: music minimum.
+- Music (preset B/D/E atau add-on): default Nexabot `bun "$NB" music "<mood>, ~100 bpm, instrumental, no vocals" --out "$W/music"` → guna `music.mp3` di tempat `music.wav` dalam mix bawah (fail user menang). Fallback bila Nexabot gagal: beat 100bpm kick/hat/pad Am-F-C-G jana numpy (envelope silence-before-punch tetap guna; untuk track Nexabot buat dengan `volume` expression dalam ffmpeg). Cinematic/editorial: music minimum.
 - **Silence sebelum punchline**: masa jana music, darab dengan envelope gain: 1 → 0 dalam 0.08s pada (P - 0.4s), kekal 0 sampai P, kemudian drop balik penuh tepat pada P (P = mula punch word), dengan hit/boom pada P. Max 2-3 kali.
 - **Loop ending**: music berakhir pada bar penuh dan fade ≤ 0.3s; jangan tail panjang (video ulang terus ke hook).
 - SFX boleh sebagai `<audio id=sfxN>` dalam komposisi (vol 0.35-0.8), ATAU mix selepas render bersama music. Mix (WAJIB format ni, loudnorm SEKALI di sini; versi lama pernah potong suara hujung sebab loudnorm tukar sample rate). Ganti DUR:

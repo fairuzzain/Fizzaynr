@@ -1,5 +1,8 @@
 # Talking Head Edit
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Upload video talking head (satu atau banyak take) → Claude potong dead air/filler/take buruk, transcribe, cadang edit penuh (Auto) atau kau pilih dari 85 style (text behind body, karaoke, split screen, editorial, orbit, bento grid, checklist, HUD, paper cut, halftone...). Caption campur, zoom, effect, B-roll, muzik → MP4 9:16.
 
 ## Keperluan

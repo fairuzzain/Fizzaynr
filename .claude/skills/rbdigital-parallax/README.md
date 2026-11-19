@@ -1,5 +1,8 @@
 # Craft Parallax Video
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Video parallax 3 lapis (background + watak + foreground) gaya kraf: paper cut, claymation, 3D animated, felt, fabric, knit, kayu, miniature, origami, cardboard dan lain-lain. Kamera bergerak, depth of field, partikel, transition, caption, muzik + SFX — semua dirender dengan script yang dah dibundle.
 
 ## Keperluan

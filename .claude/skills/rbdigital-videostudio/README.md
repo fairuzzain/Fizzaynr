@@ -1,5 +1,8 @@
 # RB Digital Video Studio
 
+> **Dalam repo Fizzaynr:** skill ni dah disesuaikan — gambar guna ChatGPT images (`codex-image/openai_image.py`), VO/muzik/klip guna Nexabot, output dalam `runs/<skill>/<slug>`. Lihat seksyen *Repo setup* dalam `SKILL.md`. Keperluan di bawah ialah untuk versi asal.
+
+
 Studio video pendek 9:16 dengan 110 style — cerita, edu, data, hook, tech, jualan, seni, dan 10 style 3D sebenar (Three.js). Dua mode:
 - **A) Code only** — semua visual dibina dengan code (HyperFrames), tak perlu gambar. Claude bagi skrip VO ElevenLabs.
 - **B) Flow** — Claude bagi prompt gambar Google Flow, kau generate & upload, Claude edit.

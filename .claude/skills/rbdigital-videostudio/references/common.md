@@ -2,23 +2,24 @@
 
 ## Paths
 Skill scripts: `<skill>` = the folder that contains this skill's SKILL.md. If you don't know it: `dirname "$(dirname "$(find / -path '*rbdigital-videostudio/scripts/common.py' 2>/dev/null | head -1)")"`. Scripts live in `<skill>/scripts`.
-Work in a project folder inside the working directory (or scratchpad). Final MP4 → `/mnt/user-data/outputs/<name>.mp4` if that folder exists (claude.ai), otherwise the working directory; then deliver it with whichever file tool the session has (`SendUserFile` or `present_files`).
+Work in `${RUNS_DIR:-$ROOT/runs}/rbdigital-videostudio/<slug>` (`$R`, see SKILL.md Repo setup). Final MP4 stays there; deliver it with SendUserFile.
 
 ## Format
 9:16, 1080x1920, 24 fps, 35–55 s. Keep text inside x 90–990; top ~250 px and bottom ~250 px are covered by TikTok UI on phones, so key text sits between y 250–1700 (bottom captions ≈ y 1600–1780 is OK but keep short).
 
-## Google Flow prompt rules (the user generates, uploads back)
+## Flow image prompt rules (Claude generates them with ChatGPT images; the user may upload their own)
+- Generate: sticker/icon/2x2 sheets `python "$IMG" --prompt "<prompt>" --out "$R/src/<code>.png" --aspect 1:1 --width 2048`; backgrounds `--aspect 9:16 --width 1080`. Sheet 2 of a recurring character: `--reference $R/src/<sheet1>.png`. Nexabot `img` (`--aspect 1` / `5`) if it fails twice.
 - **Combine assets into sheets** — Keep the number of prompts low. Stickers/icons: 4x4 grid sheet (≤16 items). Scene images/panels/photos: 2x2 grid per sheet (4 images, more resolution each), 2 sheets for 8 scenes.
 - Always write: `exactly N separate items/panels in a WxH grid, thin white gutters (or wide empty space), nothing overlapping, no text, no labels, no speech bubbles, no borders` — Claude renders ALL text (AI text is garbage; it happened: "HAPY, OUR OFFER").
-- One shared style line at the end of every prompt so sheets match; describe recurring characters identically in each prompt (name + hair + clothes) and tell the user to use sheet 1 as **ingredient** for sheet 2.
+- One shared style line at the end of every prompt so sheets match; describe recurring characters identically in each prompt (name + hair + clothes) and pass sheet 1 as `--reference` for sheet 2.
 - Backgrounds: separate prompt each, `Vertical 9:16 …, empty center, no text`.
-- Sticker sheets: ask for `plain solid dark grey background` (easiest to cut). Flow sometimes bakes a fake transparency checkerboard anyway — `cut_sheet.py` handles it.
+- Sticker sheets: ask for `plain solid dark grey background` (easiest to cut). Image models sometimes bake a fake transparency checkerboard anyway — `cut_sheet.py` handles it.
 - Things AI can't draw reliably (text on paper, UI, numbers, charts, chat bubbles) → leave blank in the image, render them yourself.
 
-## VO (ElevenLabs v3)
-One code block, one short paragraph per scene, audio tags in brackets: `[excited] [curious] [surprised] [playful] [amazed] [laughs] [nervous laugh] [serious] [sad] [thoughtful] [cheerful] [calm] [whispers] [scared] [trembling] [gasps] [sighs] [crying] [dramatic] [shocked] [confident] [pause]`. Tell them: use model **Eleven v3** (others read tags aloud), a Malay-capable voice; for horror lower stability. Malay pace ≈ 2.3 words/s; aim 90–120 words for 45 s. Keep claims factual; hedge numbers ("lebih kurang", "±").
+## VO (Nexabot TTS)
+One code block, one short paragraph per scene, plain text (no bracket audio tags). Voice it with `bun "$NB" tts "$(cat vo.txt)" --voice "${NEXABOT_VOICE:-Charon}" --out assets/vo.wav` (pick a voice that fits: calm, energetic, deep for horror/documentary). ElevenLabs v3 (with tags) only if the user asks for it by name. Malay pace ≈ 2.3 words/s; aim 90–120 words for 45 s. Keep claims factual; hedge numbers ("lebih kurang", "±").
 
-## Identify uploads
+## Identify uploads (only when the user uploads their own)
 Sheets are square (1:1), backgrounds 9:16, VO is mp3. Tell pages/sheets apart by content (view them) — upload order is random. Check mean colour to tell backgrounds apart.
 
 ## Cutting assets
@@ -35,7 +36,7 @@ Sheets are square (1:1), backgrounds 9:16, VO is mp3. Tell pages/sheets apart by
 Always preview first with `contact_sheet(compose, [times])` and **view** it — check overlaps, text cut-offs, elements off-screen, camera beyond the background edge (clamp camera to the world bounds).
 
 ## Audio (`Mix` in common.py)
-No network for stock music → synthesize. Under VO: music gain 0.3–0.35, SFX ~0.6×. Mute music during dramatic beats (`mute=[(t0,t1)]`) and use `drone` for tension. If the user uploads their own music, mix that instead (ffmpeg amix or load into Mix via vo()-style decode with lower gain).
+Music = Nexabot track (`bun "$NB" music ... --out assets/music`) or the user's own, loaded into Mix; the seeded synth below is the fallback. Under VO: music gain 0.3–0.35, SFX ~0.6×. Mute music during dramatic beats (`mute=[(t0,t1)]`) and use `drone` for tension. If the user uploads their own music, mix that instead (ffmpeg amix or load into Mix via vo()-style decode with lower gain).
 
 **Every video must get its own track.** `m.music(style, gain, seed=...)` is a seeded generator: key, BPM, chord progression, arp pattern, instruments (pluck/marimba/bell/epiano/square/saw/flute/koto), bass style and drum groove are all picked from the seed, and the track has sections (intro without drums, main, contrast section without lead).
 - Use the video title as seed (`seed="Tajuk video"`) so a re-render of the same video keeps the same song; a new video = new title = new song. Never copy a fixed seed or a hardcoded chord list from an earlier script/example.
