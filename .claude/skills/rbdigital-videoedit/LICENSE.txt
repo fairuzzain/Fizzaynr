@@ -1,0 +1,17 @@
+LESEN PENGGUNA / USER LICENSE
+RB Digital Solution — Claude Skill
+
+1. Pembeli diberi lesen untuk guna skill ini untuk diri sendiri atau perniagaan sendiri
+   (1 orang / 1 akaun Claude).
+2. Semua video, prompt dan output yang dihasilkan menggunakan skill ini milik pembeli
+   dan boleh digunakan secara komersial.
+3. DILARANG menjual semula, berkongsi, memuat naik secara awam, atau mengedar semula
+   fail skill ini (SKILL.md, scripts, references) sama ada asal atau diubah suai.
+4. Pembeli boleh ubah suai skill untuk kegunaan sendiri.
+5. Skill ini diberi "seadanya" (as is). Hasil bergantung pada tool pihak ketiga
+   (Claude, ElevenLabs, Google Flow, Seedance, HyperFrames dll.) yang boleh berubah.
+   Kos tool pihak ketiga ditanggung pembeli.
+6. Font yang dibundle (jika ada) tertakluk pada lesen masing-masing dalam folder
+   fonts/licenses/ (SIL OFL 1.1 / Apache 2.0).
+
+© 2026 RB Digital Solution. Hak cipta terpelihara.

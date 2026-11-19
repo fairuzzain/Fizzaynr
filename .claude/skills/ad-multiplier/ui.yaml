@@ -1,0 +1,10 @@
+display_name: "Ad Multiplier"
+sub_title: "Creates scalable ad variations from one source video"
+category: "content_creation"
+color: "#6D5DFB"
+
+example_prompts:
+  - "Replace the woman in this video with 6 different women while keeping the original performance and audio"
+  - "Make 4 ad versions of this clip: swap the product and background in each version using the attached reference images"
+  - "Change the jacket to red and remove the sign while keeping the source captions and all other on-screen text unchanged"
+  - "Recreate this 15-second ad for the German market with a local presenter speaking German, keeping the same structure and pacing"

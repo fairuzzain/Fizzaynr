@@ -1,0 +1,122 @@
+<!-- AUTO-GENERATED from motion.md.tmpl — do not edit directly -->
+<!-- Regenerate: bun run gen:skill-docs -->
+## Motion: empty state, load, stories, cycle
+
+Every timing, distance and curve comes from the defaults table at the end. Never invent ad hoc values; change the table instead.
+
+### Start empty
+
+The first frame of every showcase load and every export is the empty state (on a website the doctrine wins: the markup is the finished state until the intro fires): the background plus the static joined surfaces for an app frame, the background alone for separate cards. Empty becomes loaded; never open on the finished frame.
+
+### Loading choreography
+
+Elements rise from just below and resolve from blur to sharp, staggered in reading order.
+
+| Kind | For | From |
+|---|---|---|
+| `card` | Separate cards, with their shadow | `translateY(24px) scale(0.985) blur(6px)`, opacity 0 |
+| `up` | Text, headers, values, rows | `translateY(10px) blur(4px)`, opacity 0 |
+| `down` | Top bars and toolbars | `translateY(-8px) blur(4px)` |
+| `left` | Sidebar items, list rows, labels | `translateX(-10px) blur(4px)` |
+| `pop` | Icons, badges, avatars, buttons, dots | `scale(0.82-0.88)` from the element's own centre, `blur(4px)` |
+| `photo` | Images | skeleton shimmer, then `blur(14px) saturate(0.6)` to sharp |
+| `wipe` | Bars, fills, highlights | left-to-right `clip-path` in stage pixels: right inset from `stageW − x` (zero width, no sliver) to `stageW − (x + w)`; top and bottom stay at `y` and `stageH − (y + h)` |
+| `line` / `grow` | Rules, ticks, timelines | `scaleX(0)` / `scaleY(0)` from the start edge |
+| `donut` | Rings, gauges | conic mask sweeping clockwise from 12 o'clock |
+| `tray` | Sheets, trays, folders | up 40 px from inside the container's bottom edge, clipped by it |
+| `fade` | Layers under another layer | opacity only |
+
+- Containers load in reading order 80-90 ms apart (cards start about 0.15 s before their own contents). Inside one: header, labels, values, then visuals; items in a group stagger 30-80 ms. The whole intro takes 2 to 2.5 s.
+- Covered layers arrive last and leave first, so they never ghost through their cover.
+- Skeletons match the real shape and sit 1 px inside it, so no halo shows.
+- Data bars, meters and highlights fill like progress: a `wipe` with `--io` over 0.7-1.1 s. Never add a loading line or any shape the design lacks.
+
+### Stories: one per visual
+
+The intro only opens the show. The main act is each visual acting out what it does, on a loop. Write each story as one sentence before building it ("a new lead lands on top and the older ones step back").
+
+| Visual | Story |
+|---|---|
+| Stack (leads, notifications, files) | A new item lands on top with a blur, the rest step back a slot, the last leaves |
+| Line or area chart | A scrubber glides across, a dot rides the curve, the tooltip value counts |
+| Bar chart, grid of cells | Bars breathe like a live feed and settle on the design heights |
+| Donut, gauge | Segments ease outward one at a time and back, or the ring sweeps again |
+| Table, list | A soft highlight inspects rows one by one; a preview loads for the active row |
+| Calendar | A highlight searches for an open slot, the event glides into it and back |
+| Flow, connectors | Pulses travel the connectors in flow direction and light each node they pass |
+| Prompt, form | The prompt deletes and retypes glyph by glyph; the result resolves from blur |
+| Counters, KPIs | Numbers count up with the chart that drives them |
+| Long content | It scrolls slowly inside its clip and returns |
+| Logo row (showcase only) | A marquee moving exactly one full set per loop |
+| Media player | The playhead and progress advance |
+
+- **Start and end on the exact design.** At rest the frame equals `?still`. Clear inline styles a story set (`style.transform = ''`) rather than leaving `translate(0)`, which antialiases differently and fails the rest check.
+- **Use the design's own elements.** Helpers a story needs match the design's style and are absent from `?still`.
+- **Text changes only when it is the point:** counters (live text in the design's font, landing on the design's exact text) and typing (one glyph every 45-70 ms, caret at the edge; deleting runs a little faster).
+- **Obvious, not busy.** A card with a story shows a clear beat every one to two seconds; if a viewer cannot tell it is animated within two seconds, the story is too timid. A calm screen may rest after load if the user prefers; ask once.
+- **Text-only cards get no story.** They rise with their card and rest.
+- **Readable in the 800×500 GIF.** A moving element under about 4 px there gets enlarged within the design's style or a bigger story.
+- **Offset the cards.** Stories never act in unison; attention travels in reading order.
+- **One story per card, 3 to 8 s.** A short story may run twice in the story phase; every run ends at rest before the dissolve.
+- Stories are eased keyframe tracks on the JS clock:
+
+```js
+// [[time, value], ...] eased per segment; values may be numbers or arrays
+const easeInOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2); // --io, never past 1
+function track(keys, t, ease = easeInOut) {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let i = 1; i < keys.length; i++) {
+    const [t1, v1] = keys[i], [t0, v0] = keys[i - 1];
+    if (t <= t1) {
+      const k = ease(Math.min(1, (t - t0) / (t1 - t0 || 1)));
+      return Array.isArray(v0) ? v0.map((v, j) => v + (v1[j] - v) * k) : v0 + (v1 - v0) * k;
+    }
+  }
+  return keys[keys.length - 1][1];
+}
+```
+
+**Accents** sit on top of a story, never instead of one, and only on elements the design already has: a pulse ring on a live indicator or play button (1.8-2.2 s, ring 1 → 2.6, opacity 0.55 → 0), a sheen on a photo or button (a band 38% wide, 1.5 s pass every 3.4 s), a skeleton glimmer on placeholder lines (2.4 s). Accents and helpers fade in over 0.6 s once the intro lands, and are gone before the dissolve. None of them ships running on a website.
+
+### The loop cycle (showcase)
+
+| Phase | Default |
+|---|---|
+| Build in | 0 → 2.4 s |
+| Stories | 2.4 → 11.0 s |
+| Dissolve | 11.0 → 11.6 s (opacity, 0.5 s) |
+| Empty beat | 11.6 → 12.0 s |
+
+The story phase holds at least one full story of every card; lengthen the cycle rather than cut one short. The dissolve returns to the empty state: an app frame dissolves only its contents, separate cards dissolve too, the background never. **Reset everything:** one frame with transitions disabled resets the CSS, and every JS-driven value (masks, tracks, helpers, typed text, pulses) goes back to its empty value too, or it ghosts through the empty beat. The live page keeps its stories running forever after the intro; only `?loop` and the exports cycle.
+
+### Easing and camera
+
+| Token | Curve | Use |
+|---|---|---|
+| `--e` | `cubic-bezier(0.16, 1, 0.3, 1)` | Entrance transforms |
+| `--e2` | `cubic-bezier(0.33, 1, 0.68, 1)` | Opacity and blur |
+| `--io` | `cubic-bezier(0.65, 0, 0.35, 1)` | Wipes, fills, sweeps, camera moves |
+| `linear` | `linear` | Constant motion only (shimmer, playback) |
+
+No zoom and no pan unless asked. When asked, only the app frame scales toward the items, with `--io`, and it is back at rest before the dissolve.
+
+### Website sections
+
+On a website the intro starts when about 30% of the section is visible (`IntersectionObserver`, once; never a scroll listener), the story pauses off screen and resumes on return, stagger stays inside the section, and `prefers-reduced-motion: reduce` shows the final state with no story. Map the page section by section: bento and feature cards with a visual get the card intro and a story; a product or dashboard mockup gets the loading intro, and a story only if the user says yes when asked; text-only sections (headlines, testimonials, FAQ, pricing, CTA, footer) get nothing from this skill. Under the one-moment rule, propose one section, not all of them.
+
+### Defaults
+
+| Value | Default |
+|---|---|
+| Rise | 10 px (`up`), 8 px (`down`), 10 px (`left`), 24 px + `scale(0.985)` (`card`), 40 px (`tray`) |
+| Entrance blur | 4 px; cards 6 px; photos 14 px |
+| Pop start scale | 0.82-0.88 |
+| Durations (showcase) | transforms 1.05 s `--e` (cards 0.9 s); opacity and blur 0.7-0.8 s `--e2` (cards 0.6 s); wipes 0.7 s, slow bars 1.1 s `--io` |
+| Durations (website) | 50-700 ms |
+| Stagger | containers 80-90 ms, items 30-80 ms |
+| Typing | one glyph per 45-70 ms, caret blink 1 s (showcase only) |
+| Story | starts 2.4 s, 3-8 s per card, offset between cards |
+| Cycle | 12 s (dissolve 11.0, reset 11.6), longer when a story needs it |
+| Exports | MP4 60 fps CRF 15 up to 1920×1200; loop GIF 960 px 20 fps; small GIF 800×500 20 fps |
+
+Adapted from Elaya's [ai-design-skills](https://github.com/elayadesign/ai-design-skills) design-to-motion (MIT, © 2026 Elaya), rewritten for gstack. See NOTICE.md.

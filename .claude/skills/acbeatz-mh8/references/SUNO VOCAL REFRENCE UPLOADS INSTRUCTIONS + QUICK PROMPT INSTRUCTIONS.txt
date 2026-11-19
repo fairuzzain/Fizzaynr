@@ -1,0 +1,172 @@
+[SUNO VOCAL REFRENCE UPLOADS INSTRUCTIONS + QUICK PROMPT INSTRUCTIONS]
+
+James — follow these steps when a Quick Prompt is submitted: Validate fields; accept optional 5–12s vocal upload; extract timbre profile (pitch_range, spectral_centroid, formant_profile, vibrato_rate, sibilance_index, dynamic_range); create timbre_tags; map Quick Prompt {genre, hook, vocal_type} to full Suno prompt template; attach selected mix_preset metadata (LUFS, TruePeak, vocal_chain, master_fx, low_end_rule); run gate checks and compute optimization_index; compute sha256_receipt of final prompt; return copy‑paste Suno prompt plus timbre summary, preset summary, optimization index, and sha256_receipt; persist metadata record keyed by prompt_id and vocal_ref_hash. If vocal upload fails, return a single-line error and proceed with Vocal Type mapping.
+
+Vocal reference upload + timbre extraction (behavioral spec)
+UI element: Upload Vocal Reference (5–12s) — accept WAV/MP3, show file size and duration. Mark optional but recommended.
+
+Required validation: accept only audio ≤ 12s; sample rate ≥ 22kHz preferred; reject clipped/zero‑level files.
+
+Processing steps (automated):
+
+Trim silence and normalize RMS to a safe level.
+
+Compute timbre profile fields:
+
+pitch_range — min/max fundamental (Hz) and suggested vocal register (e.g., alto, mezzo).
+
+median_pitch — median F0 (Hz).
+
+spectral_centroid — brightness indicator (low/medium/high).
+
+formant_profile — F1/F2 cluster summary (helps vowel color).
+
+sibilance_index — high‑freq energy ratio (de‑esser suggestion).
+
+vibrato_rate — Hz and depth estimate (if present).
+
+dynamic_range — RMS variance (soft → aggressive).
+
+Generate timbre tags from profile (e.g., female_mezzo_bright_vibrato_light, breathy, belt_capable).
+
+Produce a short timbre summary sentence for the user (one line).
+
+Store a hashed reference to the audio (vocal_ref_hash) and the timbre profile in the prompt metadata. Do not expose raw audio in prompts; use tags and numeric fields.
+
+How James uses the profile:
+
+Inject Vocal: [timbre_tags] and VocalChain: [de‑esser, gentle saturation, plate reverb settings] into the generated Suno prompt.
+
+Bias vocal synthesis parameters (register, vibrato, breathiness) to match timbre_profile.
+
+When generating multiple versions, reuse vocal_ref_hash to keep vocal identity consistent.
+
+2. Quick Prompt UI (3 fields) → mapping rules
+UI fields (required):
+
+Genre / Style (dropdown or free text) — e.g., Dark Pop, Nu‑Metal, Boom‑Bap.
+
+Mood / One‑line Hook (single line) — short phrase or hook (6–12 words). Example: “I won’t go back tonight”.
+
+Vocal Type (dropdown) — Female airy / Female belting / Male rap / Spoken / Any.
+
+Optional toggle: Advanced expands to BPM, Key, Preset, and Vocal Upload.
+
+Mapping to full prompt template:
+
+Genre → [Genre: <value>] + select instrument palette and BPM range defaults.
+
+Mood/Hook → place as Theme and Hook lines; also create a short chorus lyric seed using the hook.
+
+Vocal Type → map to Vocal metatags and default vocal chain; if a vocal reference exists, override with timbre_tags.
+
+Example mapping rule (pseudocode):
+
+If Genre contains “dark” → set production_aesthetic = "dark cinematic pads, low synths".
+
+If Vocal Type = Female belting → set Vocal: Female singer | belting | harmonies on chorus.
+
+If Hook provided → create Chorus seed: Chorus: [Hook phrase] and add Repetition: 2x for earworm.
+
+Validation: require at least one non-empty field; if Hook is missing, prompt user to enter a one‑line hook before generating PRO prompt.
+
+3. One‑click mix presets (attach to prompt metadata)
+Preset list (three defaults):
+
+Radio — LUFS: -14, TruePeak: -1.0dB, TapeSat: light, VocalChain: de‑esser→gentle comp→plate, LowEndMonoBelow: 120Hz.
+
+Industrial — LUFS: -10, TruePeak: -0.5dB, Distortion: mid, VocalChain: aggressive comp→presence boost→short reverb, Sidechain: synth→kick.
+
+Live — LUFS: -8, TruePeak: -0.5dB, RoomAmbience: high, VocalChain: raw comp→room reverb, DrumRoom: live.
+
+UI: Preset dropdown in Quick Prompt UI; default = Radio.
+
+How James attaches presets: include a mix_preset object in prompt metadata with explicit fields (LUFS, TruePeak, vocal_chain, master_fx, low_end_rule). The Suno prompt must include these as plain metatags (e.g., [Master: Streaming | Target -14 LUFS]).
+
+Preset extensibility: allow users to save custom presets; store preset_id and preset_hash in metadata.
+
+4. Prompt metadata schema (minimal, to paste into James)
+Fields to include with every generated prompt:
+
+prompt_id — unique id (timestamped).
+
+vocal_ref_hash — SHA256 of uploaded vocal file (if provided).
+
+timbre_tags — array of short tags.
+
+timbre_profile — numeric summary (pitch_range, spectral_centroid, vibrato_rate).
+
+quick_prompt — {genre, hook, vocal_type}.
+
+bpm — integer.
+
+key — string.
+
+mix_preset — object (LUFS, TruePeak, vocal_chain, master_fx, low_end_rule).
+
+optimization_index — computed score.
+
+sha256_receipt — SHA256 of final prompt text for provenance.
+
+Storage rule: persist metadata for versioning and reuse; expose only sha256_receipt and timbre_summary to end users.
+
+5. James’ runtime behavior (step sequence when user submits Quick Prompt)
+Validate Quick Prompt fields.
+
+If vocal uploaded, run timbre extraction and attach timbre_tags.
+
+Map Quick Prompt → full Suno prompt using mapping rules and selected preset.
+
+Compute optimization_index and run gate checks (metatag validation, genre coherence, vocal clarity).
+
+Generate final prompt text and compute sha256_receipt.
+
+Return prompt to user with: short timbre summary, selected preset summary, optimization index, and the copy‑paste Suno prompt.
+
+Save metadata record for reproducibility.
+
+6. UX copy (short lines James can paste into UI)
+Upload button label: Upload 5–12s Vocal Reference (optional)
+
+Quick Prompt placeholders:
+
+Genre / Style — e.g., Dark Pop, Nu‑Metal, Boom‑Bap
+
+Mood / Hook — One-line hook or mood (6–12 words)
+
+Vocal Type — Female airy / Female belting / Male rap / Spoken / Any
+
+Preset dropdown labels: Radio (default), Industrial, Live
+
+Timbre summary line (example): Timbre: female mezzo, bright spectral centroid, light vibrato — suggested de‑esser + plate on chorus.
+
+7. Edge cases and fallbacks
+No vocal upload: use Vocal Type mapping only; mark timbre_profile as null.
+
+Bad audio: return a one‑line error: Upload failed — audio too short or clipped. Try 5–12s clean vocal.
+
+Conflicting fields: if user selects a preset incompatible with genre (e.g., Live + heavy synthwave), warn and suggest Radio or Industrial.
+
+Privacy: store only vocal_ref_hash and timbre_profile for reuse; do not embed raw audio in prompts or public logs.
+
+8. Minimal instruction block to paste into James’ config
+Use this exact short block as James’ actionable instruction (pasteable):
+
+James — follow these steps when a Quick Prompt is submitted: Validate fields; accept optional 5–12s vocal upload; extract timbre profile (pitch_range, spectral_centroid, formant_profile, vibrato_rate, sibilance_index, dynamic_range); create timbre_tags; map Quick Prompt {genre, hook, vocal_type} to full Suno prompt template; attach selected mix_preset metadata (LUFS, TruePeak, vocal_chain, master_fx, low_end_rule); run gate checks and compute optimization_index; compute sha256_receipt of final prompt; return copy‑paste Suno prompt plus timbre summary, preset summary, optimization index, and sha256_receipt; persist metadata record keyed by prompt_id and vocal_ref_hash. If vocal upload fails, return a single-line error and proceed with Vocal Type mapping.
+
+9. Quick implementation checklist for engineers (deliverable tasks)
+Add Upload Vocal Reference UI and server endpoint.
+
+Implement timbre extraction pipeline and tag generator.
+
+Implement Quick Prompt UI and mapping rules.
+
+Implement mix preset objects and one‑click attach.
+
+Add metadata schema and storage.
+
+Add gate checks and optimization index computation.
+
+Add SHA256 receipt generator and viewer.
+
+Add small UX copy and error messages.

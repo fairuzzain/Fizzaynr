@@ -1,0 +1,488 @@
+[GPT knowledge files lyrics instructional]
+
+Additional Musical Lyric Styles (appended to knowledge file)
+This section adds nine musical lyric style templates for the lyric assistant to use as selectable writing formats. Each entry describes the style’s lyrical voice, common themes, preferred rhetorical devices, meter and phrasing guidance, and production cues the assistant should include when generating or expanding lyrics. Do not quote or imitate any copyrighted lines; use only stylistic devices and original text. Label each style by a short descriptive tag (no proper names).
+
+🎹 Theatrical piano‑ballad storyteller
+Lyrical voice: grand, confessional, emotionally direct with theatrical flourishes.
+Themes: personal revelation, redemption, intimate confession turned universal.
+Devices: extended metaphors, rising cadences into sustained vowels, dramatic crescendos, clear chorus payoff.
+Meter & phrasing: 8–12 syllables per line; allow long sustained vowels on chorus lines for melodic holds.
+Production cues: piano forward, warm strings, spacious reverb on chorus; suggest plate reverb and vocal doubling for climactic lines.
+Prompt hint: ask for a single emotional image to build a theatrical arc around.
+
+🎤 Street‑poetic spoken‑word narrator
+Lyrical voice: direct, rhythmic, socially aware, conversational but tightly metered.
+Themes: survival, community, identity, social observation.
+Devices: internal rhyme, enjambment, anaphora, concrete imagery, call‑and‑response hooks.
+Meter & phrasing: 6–10 syllables per punchy line; allow syncopation and breath breaks for spoken delivery.
+Production cues: sparse beat, warm low end, close‑mic vocal with light saturation; leave space for cadence.
+Prompt hint: request a real‑world scene or occupation to root the narrative.
+
+⚡ Rapid‑fire confessional lyricist
+Lyrical voice: urgent, confessional, high‑velocity internal rhyme and multisyllabic patterns.
+Themes: personal struggle, moral reckoning, rapid emotional shifts.
+Devices: multisyllabic rhyme, internal couplets, abrupt line breaks, conversational asides.
+Meter & phrasing: 5–9 syllables per line for verses; chorus can open to 8–12 for melodic lift.
+Production cues: tight drum pocket, aggressive vocal compression, presence boosting; leave room for breathy pre‑chorus.
+Prompt hint: provide a short list of concrete images to seed internal rhymes.
+
+🪕 Roots‑folk introspective narrator
+Lyrical voice: plainspoken, intimate, observational, warm domestic detail.
+Themes: memory, travel, small moments, relational nuance.
+Devices: simple similes, conversational phrasing, steady rhyme schemes (ABAB or AABB).
+Meter & phrasing: 8–12 syllables per line; regular stress patterns for singability.
+Production cues: acoustic guitar or fingerpicked arrangement, natural room reverb, minimal processing.
+Prompt hint: ask for a place or object to anchor the verse.
+
+🌫️ Psychedelic atmospheric chronicler
+Lyrical voice: abstract, image‑driven, contemplative, often elliptical.
+Themes: existential questions, altered perception, cosmic or interior journeys.
+Devices: extended imagery chains, assonant echoes, open‑ended refrains, modal phrasing.
+Meter & phrasing: flexible; lines may vary widely to create space for ambient phrasing.
+Production cues: lush pads, delay‑heavy guitars, spatial reverb, gradual automation.
+Prompt hint: request two contrasting images to weave into a recurring motif.
+
+🌊 Melodic, intimate acoustic crooner
+Lyrical voice: tender, confessional, conversational with melodic hooks.
+Themes: relationships, quiet longing, domestic scenes.
+Devices: tight internal rhyme, repeated melodic motifs, simple chorus hook.
+Meter & phrasing: 7–10 syllables per line; keep lines singable and vowel‑rich for sustained notes.
+Production cues: warm acoustic guitar, soft backing harmonies, intimate vocal chain (gentle compression, subtle reverb).
+Prompt hint: ask for a single emotional verb (e.g., “remember,” “hold”) to center the chorus.
+
+🧭 Conscious jazz‑inflected storyteller
+Lyrical voice: literate, rhythmically flexible, socially reflective with poetic diction.
+Themes: social observation, moral nuance, personal responsibility.
+Devices: syncopated phrasing, conversational asides, metaphorical anchors, slant rhyme.
+Meter & phrasing: variable; allow off‑beat phrasing and conversational cadences.
+Production cues: upright bass, brushed drums, sparse piano comping, warm horn accents.
+Prompt hint: request a social scene or moral dilemma to dramatize.
+
+🎧 Boom‑bap poetic lyricist
+Lyrical voice: measured, authoritative, dense with internal rhyme and narrative detail.
+Themes: personal history, social commentary, lyrical craftsmanship.
+Devices: internal rhyme chains, multisyllabic end rhymes, vivid nameable details.
+Meter & phrasing: 6–10 syllables per bar for tight flow; chorus can expand for melodic contrast.
+Production cues: crisp sampled drums, warm sub bass, vinyl texture optional.
+Prompt hint: provide a three‑word motif to repeat as a hook.
+
+🪙 Streetwise storyteller with classic cadence
+Lyrical voice: reflective, precise, economy of words with strong narrative arcs.
+Themes: survival, legacy, moral clarity, observational storytelling.
+Devices: clear couplets, internal consonance, narrative turns, refrain lines for emphasis.
+Meter & phrasing: 7–11 syllables per line; maintain steady cadence for clarity.
+Production cues: soulful samples, warm midrange, clear vocal presence.
+Prompt hint: ask for a formative memory to anchor the verse.
+
+Implementation entries to append to knowledge file
+Style tags: add short tags for each template (e.g., theatrical_piano, street_poetic, rapid_confessional, roots_folk, psychedelic_atmos, acoustic_crooner, conscious_jazz, boom_bap, classic_street).
+
+Device mapping: for each tag, list 4–6 rhetorical devices and 2 production cues to include automatically.
+
+Meter presets: map each tag to default syllable ranges and suggested BPM ranges where applicable.
+
+Prompt templates: provide a one‑line user prompt pattern for each tag (e.g., “Write a [tag] verse about [seed image] with a [mood] chorus hook”).
+
+Safety & originality rule: never output verbatim copyrighted lyrics; always produce original text and flag any close matches for rewrite.
+
+Searchable fields: theme_examples, device_list, meter_range, production_notes, prompt_template.
+
+How the assistant should apply these styles
+When the user requests a named style, map it to the corresponding tag and apply the device list, meter preset, and production cues.
+
+Offer three intensity variants (Conservative / Moderate / Bold) showing increasing stylistic imprint.
+
+Provide a short “singability” note and one production tip per variant to guide recording or Suno generation.
+
+
+{
+  "metadata": {
+    "version": "2026-02-28.v1",
+    "created_by": "ACBEATZ Lyric Assistant",
+    "description": "Comprehensive rhyme families, internal rhyme patterns, writers technique encyclopedia, and musical lyric style templates for lyric expansion and generation."
+  },
+  "rhyme_dictionary": {
+    "ight_family": {
+      "family_label": "-ight",
+      "examples": ["light","night","sight","bright","fight","right","might","tight","white","height"],
+      "slant_suggestions": ["-ite (slant)","-ate (slant)"],
+      "notes": "Strong for climactic hooks and internal echoes."
+    },
+    "ove_family": {
+      "family_label": "-ove",
+      "examples": ["love","above","glove","shove","of (slant)","prove (slant)","move (slant)"],
+      "slant_suggestions": ["vowel-match: /ʌv/ -> /uːv/ (slant)"],
+      "notes": "Use sparingly for emotional hooks; 'love' often pairs with slant rhymes."
+    },
+    "ear_family": {
+      "family_label": "-ear",
+      "examples": ["near","dear","clear","fear","tear","year","appear","sincere"],
+      "slant_suggestions": ["-eer (slant)"],
+      "notes": "Good for intimate choruses and sustained vowels."
+    },
+    "ain_family": {
+      "family_label": "-ain",
+      "examples": ["rain","pain","gain","remain","refrain","explain","chain"],
+      "slant_suggestions": ["-ane (slant)"],
+      "notes": "Common for narrative resolutions and refrains."
+    },
+    "ow_family": {
+      "family_label": "-ow",
+      "examples": ["now","how","vow","allow","somehow","brow"],
+      "slant_suggestions": ["-ou (slant)"],
+      "notes": "Useful for conversational hooks and rhetorical questions."
+    }
+  },
+  "internal_rhyme_patterns": [
+    {
+      "pattern_id": "internal_echo",
+      "description": "Repeat a vowel or consonant sound within a line to create internal resonance.",
+      "example_template": "I found the light, I found the fight",
+      "use_cases": ["chorus emphasis","haunting verses"]
+    },
+    {
+      "pattern_id": "multisyllabic_chain",
+      "description": "Link multisyllabic rhymes across adjacent lines for dense flow.",
+      "example_template": "remembering / surrendering / tethering",
+      "use_cases": ["rapid-fire verses","hip-hop influenced hooks"]
+    }
+  ],
+  "writers_encyclopedia": {
+    "shakespearean_techniques": {
+      "tag": "shakespearean_techniques",
+      "style_summary": "Elevated diction, rhetorical antithesis, and measured iambic hints for dramatic statements.",
+      "preferred_devices": ["antithesis","enjambment","chiasmus","iambic_hint"],
+      "meter_guidance": "Aim for 8-12 syllables per line; iambic pairs where possible but prioritize singability.",
+      "diction_notes": "Favor Latinate multisyllabic words for gravitas; avoid archaic pronouns unless user approves.",
+      "example_devices": ["'antithesis: 'light in shadow'","'enjambment across emotional beats'"],
+      "safety_constraints": "Do not reproduce historical text verbatim; use devices only."
+    },
+    "poe_techniques": {
+      "tag": "poe_techniques",
+      "style_summary": "Dark atmosphere, internal rhyme, repetition, and sensory layering for haunting effect.",
+      "preferred_devices": ["internal_rhyme","anaphora","sensory_chain","refrain"],
+      "meter_guidance": "Flexible; allow longer lines for slow-burn crescendos.",
+      "diction_notes": "Use sensory adjectives and slow cadence; favor assonance.",
+      "example_devices": ["'anaphora: repeated opening phrase'","'internal rhyme within lines'"],
+      "safety_constraints": "Avoid direct quotations from public-domain poems; ensure originality."
+    },
+    "twain_techniques": {
+      "tag": "twain_techniques",
+      "style_summary": "Plainspoken irony, vivid concrete detail, and conversational cadence for narrative clarity.",
+      "preferred_devices": ["colloquial_contraction","vivid_detail","wry_simile","short_declarative_lines"],
+      "meter_guidance": "7-11 syllables per line; steady stress patterns.",
+      "diction_notes": "Favor concrete nouns and regional idioms sparingly.",
+      "example_devices": ["'wry simile: 'like a tired old dog'","'conversational parenthetical aside'"],
+      "safety_constraints": "Do not mimic voice of living authors; maintain originality."
+    }
+  },
+  "musical_lyric_styles": {
+    "theatrical_piano": {
+      "tag": "theatrical_piano",
+      "description": "Grand piano-led ballad with theatrical crescendos and confessional lyricism.",
+      "lyrical_voice": "Confessional, dramatic, emotionally direct.",
+      "common_themes": ["redemption","personal revelation","intimate confession"],
+      "rhetorical_devices": ["extended_metaphor","rising_cadence","sustained_vowel_lines"],
+      "meter_and_phrasing": "8-12 syllables per line; allow long sustained vowels in chorus.",
+      "bpm_range": "60-80",
+      "production_cues": ["piano forward","warm strings","plate reverb on chorus"],
+      "prompt_template": "Write a theatrical piano ballad about [seed image] with a climactic chorus.",
+      "implementation_notes": "Reserve dramatic key changes and vocal doubling for final chorus."
+    },
+    "street_poetic": {
+      "tag": "street_poetic",
+      "description": "Direct spoken-word or rap-adjacent style with social observation and rhythmic phrasing.",
+      "lyrical_voice": "Direct, rhythmic, socially aware.",
+      "common_themes": ["community","identity","survival"],
+      "rhetorical_devices": ["internal_rhyme","anaphora","concrete_imagery"],
+      "meter_and_phrasing": "6-10 syllables per punchy line; allow syncopation.",
+      "bpm_range": "80-100",
+      "production_cues": ["sparse beat","close-mic vocal","warm low end"],
+      "prompt_template": "Write a street-poetic verse about [occupation or scene] with a repeated hook.",
+      "implementation_notes": "Leave space for cadence and breath; prioritize intelligibility."
+    },
+    "rapid_confessional": {
+      "tag": "rapid_confessional",
+      "description": "High-velocity internal rhyme and multisyllabic patterns for urgent confessions.",
+      "lyrical_voice": "Urgent, confessional, rapid-fire.",
+      "common_themes": ["struggle","reckoning","intensity"],
+      "rhetorical_devices": ["multisyllabic_rhyme","internal_couplets","abrupt_line_breaks"],
+      "meter_and_phrasing": "5-9 syllables per line for verses; chorus 8-12.",
+      "bpm_range": "90-120",
+      "production_cues": ["tight drum pocket","aggressive compression","presence boost"],
+      "prompt_template": "Write a rapid confessional verse about [personal struggle] with a cathartic chorus.",
+      "implementation_notes": "Seed with concrete images to generate internal rhyme chains."
+    },
+    "roots_folk": {
+      "tag": "roots_folk",
+      "description": "Plainspoken, intimate folk with domestic detail and steady rhyme.",
+      "lyrical_voice": "Warm, observational, intimate.",
+      "common_themes": ["memory","travel","small moments"],
+      "rhetorical_devices": ["simple_simile","steady_rhyme","conversational_phrasing"],
+      "meter_and_phrasing": "8-12 syllables per line; regular stress patterns.",
+      "bpm_range": "70-100",
+      "production_cues": ["acoustic guitar","natural room reverb","minimal processing"],
+      "prompt_template": "Write a roots-folk verse about [place or object] with a nostalgic chorus.",
+      "implementation_notes": "Anchor verses with a concrete object or place."
+    },
+    "psychedelic_atmos": {
+      "tag": "psychedelic_atmos",
+      "description": "Abstract, image-driven lyrics for ambient and exploratory arrangements.",
+      "lyrical_voice": "Elliptical, contemplative, image-rich.",
+      "common_themes": ["existential","interior journeys","altered perception"],
+      "rhetorical_devices": ["extended_imagery","assonant_echo","open_ended_refrain"],
+      "meter_and_phrasing": "Flexible; lines may vary widely.",
+      "bpm_range": "60-90",
+      "production_cues": ["lush pads","delay-heavy guitars","spatial reverb"],
+      "prompt_template": "Write a psychedelic atmospheric verse using two contrasting images [image1] and [image2].",
+      "implementation_notes": "Encourage modal phrasing and non-linear narrative."
+    },
+    "acoustic_crooner": {
+      "tag": "acoustic_crooner",
+      "description": "Tender, melodic acoustic songs with intimate hooks and vowel-rich lines.",
+      "lyrical_voice": "Tender, confessional, melodic.",
+      "common_themes": ["relationships","longing","quiet moments"],
+      "rhetorical_devices": ["tight_internal_rhyme","repeated_melodic_motif","simple_chorus_hook"],
+      "meter_and_phrasing": "7-10 syllables per line; vowel-rich for sustained notes.",
+      "bpm_range": "60-90",
+      "production_cues": ["warm acoustic guitar","soft backing harmonies","intimate vocal chain"],
+      "prompt_template": "Write an intimate acoustic chorus about [emotion] with a simple melodic hook.",
+      "implementation_notes": "Prioritize vowel sounds for sustained melodic lines."
+    },
+    "conscious_jazz": {
+      "tag": "conscious_jazz",
+      "description": "Literate, rhythmically flexible lyrics with social reflection and poetic diction.",
+      "lyrical_voice": "Literate, rhythmically flexible, reflective.",
+      "common_themes": ["moral nuance","social observation","personal responsibility"],
+      "rhetorical_devices": ["syncopated_phrasing","slant_rhyme","metaphorical_anchor"],
+      "meter_and_phrasing": "Variable; allow off-beat phrasing.",
+      "bpm_range": "60-100",
+      "production_cues": ["upright bass","brushed drums","sparse piano comping"],
+      "prompt_template": "Write a conscious-jazz verse about [moral dilemma] with a reflective hook.",
+      "implementation_notes": "Use slant rhyme to preserve conversational tone."
+    },
+    "boom_bap": {
+      "tag": "boom_bap",
+      "description": "Measured, authoritative hip-hop lyricism with dense internal rhyme and narrative detail.",
+      "lyrical_voice": "Measured, authoritative, dense.",
+      "common_themes": ["personal history","craftsmanship","social commentary"],
+      "rhetorical_devices": ["internal_rhyme_chains","multisyllabic_end_rhyme","vivid_detail"],
+      "meter_and_phrasing": "6-10 syllables per bar; tight flow.",
+      "bpm_range": "85-95",
+      "production_cues": ["crisp sampled drums","warm sub bass","vinyl texture optional"],
+      "prompt_template": "Write a boom-bap verse about [personal history] with a repeated three-word motif.",
+      "implementation_notes": "Provide a motif seed to anchor the hook."
+    },
+    "classic_street": {
+      "tag": "classic_street",
+      "description": "Reflective, precise storytelling with economy of words and strong narrative arcs.",
+      "lyrical_voice": "Reflective, precise, economical.",
+      "common_themes": ["legacy","survival","observational storytelling"],
+      "rhetorical_devices": ["clear_couplets","internal_consonance","narrative_turns"],
+      "meter_and_phrasing": "7-11 syllables per line; steady cadence.",
+      "bpm_range": "80-100",
+      "production_cues": ["soulful samples","warm midrange","clear vocal presence"],
+      "prompt_template": "Write a classic-street verse about a formative memory with a concise refrain.",
+      "implementation_notes": "Encourage a single formative memory to drive the verse."
+    }
+  },
+  "import_instructions": {
+    "file_split_recommendation": "Split into three files: rhyme_dictionary.json, writers_encyclopedia.json, musical_lyric_styles.json for modular imports.",
+    "search_index_fields": ["family_label","examples","tag","rhetorical_devices","prompt_template"],
+    "versioning_guidelines": "Use semantic versioning YYYY-MM-DD.vN and include changelog entries for additions or edits."
+  }
+}
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LyricAssistantKnowledgeSchema",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": {"type": "string"},
+        "created_by": {"type": "string"},
+        "description": {"type": "string"}
+      },
+      "required": ["version","created_by"]
+    },
+    "rhyme_dictionary": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_\\-]+$": {
+          "type": "object",
+          "properties": {
+            "family_label": {"type": "string"},
+            "examples": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "slant_suggestions": {
+              "type": "array",
+              "items": {"type": "string"}
+            },
+            "notes": {"type": "string"}
+          },
+          "required": ["family_label","examples"]
+        }
+      }
+    },
+    "internal_rhyme_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pattern_id": {"type": "string"},
+          "description": {"type": "string"},
+          "example_template": {"type": "string"},
+          "use_cases": {"type": "array","items":{"type":"string"}}
+        },
+        "required": ["pattern_id","description"]
+      }
+    },
+    "writers_encyclopedia": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_\\-]+$": {
+          "type": "object",
+          "properties": {
+            "tag": {"type": "string"},
+            "style_summary": {"type": "string"},
+            "preferred_devices": {"type": "array","items":{"type":"string"}},
+            "meter_guidance": {"type": "string"},
+            "diction_notes": {"type": "string"},
+            "example_devices": {"type":"array","items":{"type":"string"}},
+            "safety_constraints": {"type":"string"}
+          },
+          "required": ["tag","style_summary","preferred_devices"]
+        }
+      }
+    },
+    "musical_lyric_styles": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z0-9_\\-]+$": {
+          "type": "object",
+          "properties": {
+            "tag": {"type": "string"},
+            "description": {"type": "string"},
+            "lyrical_voice": {"type": "string"},
+            "common_themes": {"type": "array","items":{"type":"string"}},
+            "rhetorical_devices": {"type": "array","items":{"type":"string"}},
+            "meter_and_phrasing": {"type": "string"},
+            "bpm_range": {"type": "string"},
+            "production_cues": {"type": "array","items":{"type":"string"}},
+            "prompt_template": {"type": "string"},
+            "implementation_notes": {"type": "string"}
+          },
+          "required": ["tag","description","lyrical_voice"]
+        }
+      }
+    },
+    "import_instructions": {
+      "type": "object",
+      "properties": {
+        "file_split_recommendation": {"type":"string"},
+        "search_index_fields": {"type":"array","items":{"type":"string"}},
+        "versioning_guidelines": {"type":"string"}
+      }
+    }
+  },
+  "required": ["metadata","rhyme_dictionary","writers_encyclopedia","musical_lyric_styles"]
+}
+
+{
+  "metadata": {"version":"2026-02-28.v2","created_by":"ACBEATZ Lyric Assistant","description":"Musical-first rhyme families with slant rules and hook guidance."},
+  "rhyme_dictionary": {
+    "ight_family": {"family_label":"-ight","examples":["light","night","sight","bright","fight","right","might","tight","white","height"],"slant_suggestions":["-ite (slant)","-ate (slant)"],"notes":"Strong for climactic hooks; use sustained vowel on 'ight' for long melodic holds."},
+    "ove_family": {"family_label":"-ove","examples":["love","above","glove","shove","of (slant)","prove (slant)","move (slant)"],"slant_suggestions":["vowel-match: /ʌv/ -> /uːv/ (slant)"],"notes":"Emotional hooks; pair with open vowels for singability."},
+    "ain_family": {"family_label":"-ain","examples":["rain","pain","gain","remain","refrain","explain","chain"],"slant_suggestions":["-ane (slant)"],"notes":"Narrative refrains; good for repeated chorus lines."},
+    "ore_family": {"family_label":"-ore","examples":["more","before","shore","door","roar","core","floor","pour","sore","store"],"slant_suggestions":["-oor (slant)"],"notes":"Works well with rising melodic lines and call‑and‑response hooks."},
+    "ear_family": {"family_label":"-ear","examples":["near","dear","clear","fear","tear","year","appear","sincere"],"slant_suggestions":["-eer (slant)"],"notes":"Sustained vowel family; ideal for ballad choruses."}
+  }
+}
+{
+  "internal_rhyme_patterns": [
+    {"pattern_id":"internal_echo","description":"Repeat a vowel or consonant sound within a line to create resonance.","example_template":"I found the light, I found the fight","use_cases":["chorus emphasis","haunting verses"]},
+    {"pattern_id":"multisyllabic_chain","description":"Link multisyllabic rhymes across adjacent lines for dense flow.","example_template":"remembering / surrendering / tethering","use_cases":["rapid verses","hip-hop influenced hooks"]},
+    {"pattern_id":"anaphora_refrain","description":"Start successive lines with the same phrase to build momentum.","example_template":"We rise, we fall, we rise again","use_cases":["anthemic choruses","Poe‑style crescendos"]},
+    {"pattern_id":"internal_consonance","description":"Use repeated consonant clusters inside lines for punch.","example_template":"cold, cracked, and calling","use_cases":["nu‑metal verses","aggressive hooks"]}
+  ]
+}
+{
+  "writers_encyclopedia": {
+    "elevated_rhetoric": {
+      "tag":"elevated_rhetoric",
+      "style_summary":"Grand diction and rhetorical contrast for dramatic choruses.",
+      "preferred_devices":["antithesis","chiasmus","extended_metaphor"],
+      "meter_guidance":"8-12 syllables per line; favor long vowels on sustained notes.",
+      "diction_notes":"Use Latinate multisyllables for gravitas; avoid archaic pronouns unless user requests.",
+      "example_devices":["antithesis: 'light in shadow'","chiasmus: 'we live to love, we love to live'"],
+      "safety_constraints":"Do not reproduce historical text verbatim."
+    },
+    "dark_atmosphere": {
+      "tag":"dark_atmosphere",
+      "style_summary":"Sensory layering, internal rhyme, and repetition for haunting effect.",
+      "preferred_devices":["internal_rhyme","anaphora","sensory_chain"],
+      "meter_guidance":"Flexible; allow longer lines for slow crescendos.",
+      "diction_notes":"Favor tactile adjectives and assonance.",
+      "example_devices":["anaphora: 'I heard... I heard...'","internal rhyme: 'hollow / follow'"],
+      "safety_constraints":"Avoid direct quotations from public-domain poems."
+    },
+    "plainspoken_narrator": {
+      "tag":"plainspoken_narrator",
+      "style_summary":"Conversational, vivid detail, and wry observation for narrative verses.",
+      "preferred_devices":["concrete_detail","wry_simile","short_declarative_lines"],
+      "meter_guidance":"7-11 syllables per line; steady stress patterns.",
+      "diction_notes":"Use concrete nouns and active verbs.",
+      "example_devices":["wry simile: 'like a tired old dog'","conversational aside: '(you know?)'"],
+      "safety_constraints":"Avoid mimicking living authors' voices."
+    }
+  }
+}
+
+{
+  "musical_lyric_styles": {
+    "theatrical_piano": {
+      "tag":"theatrical_piano",
+      "description":"Grand piano-led ballad with theatrical crescendos and confessional lyricism.",
+      "lyrical_voice":"Confessional, dramatic, emotionally direct.",
+      "common_themes":["redemption","personal revelation","intimate confession"],
+      "rhetorical_devices":["extended_metaphor","rising_cadence","sustained_vowel_lines"],
+      "meter_and_phrasing":"8-12 syllables per line; allow long sustained vowels in chorus.",
+      "bpm_range":"60-76",
+      "production_cues":["piano forward","warm strings","plate reverb on chorus"],
+      "prompt_template":"Write a theatrical piano ballad about [seed image] with a climactic chorus.",
+      "implementation_notes":"Reserve dramatic key changes and vocal doubling for final chorus."
+    },
+    "boom_bap": {
+      "tag":"boom_bap",
+      "description":"Measured, authoritative hip-hop lyricism with dense internal rhyme and narrative detail.",
+      "lyrical_voice":"Measured, authoritative, dense.",
+      "common_themes":["personal history","craftsmanship","social commentary"],
+      "rhetorical_devices":["internal_rhyme_chains","multisyllabic_end_rhyme","vivid_detail"],
+      "meter_and_phrasing":"6-10 syllables per bar; tight flow.",
+      "bpm_range":"85-95",
+      "production_cues":["crisp sampled drums","warm sub bass","vinyl texture optional"],
+      "prompt_template":"Write a boom-bap verse about [personal history] with a repeated three-word motif.",
+      "implementation_notes":"Provide a motif seed to anchor the hook."
+    },
+    "nu_metal": {
+      "tag":"nu_metal",
+      "description":"Aggressive drop‑tuned rock with introspective lyrics and melodic hooks.",
+      "lyrical_voice":"Intense, confessional, anthemic.",
+      "common_themes":["alienation","redemption","everyday heroism"],
+      "rhetorical_devices":["short_declarative_lines","internal_consonance","refrain_repeat"],
+      "meter_and_phrasing":"5-9 syllables per verse line; chorus 7-11 for melodic lift.",
+      "bpm_range":"90-110",
+      "production_cues":["drop tuning","palm-muted chugs","half-time bridge","vocal stacks on chorus"],
+      "prompt_template":"Write a nu-metal verse about [ordinary person as hero] with a repeated title hook.",
+      "implementation_notes":"Lock tuning and BPM for multi-version consistency."
+    }
+  }
+}
+
+
+
+

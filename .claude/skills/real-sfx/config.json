@@ -1,0 +1,17 @@
+{
+  "libraries": [
+    {
+      "name": "openverse",
+      "path": "assets/sfx",
+      "tier": "main"
+    }
+  ],
+  "uisfx": {
+    "path": "vendor/node_modules/uisfx",
+    "default_pack": "studio"
+  },
+  "skip_dir_names": [
+    "_mister horse previews"
+  ],
+  "index_path": "library_index.json"
+}

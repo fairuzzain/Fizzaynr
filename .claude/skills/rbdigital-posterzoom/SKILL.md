@@ -1,0 +1,170 @@
+---
+name: "rbdigital-posterzoom"
+description: "Turn an uploaded poster, infographic, slide or any image into a zoom explainer video from that exact image (no redrawing): spotlight, title slam, zoom per point, VO, music. Use when the user uploads an image and wants it animated as a zoom/explainer video."
+---
+> [!IMPORTANT]
+> **Mandatory Daily Nexabot API Check:** Before generating any assets with Nexabot, run:
+> `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" check`
+> This verifies active endpoints, models, and pricing against https://nexabot.id/developers and /api/v1/modes.
+
+
+# Poster Zoom Video
+
+Turn ONE uploaded image into an animated explainer video by moving a virtual camera over it. Never redraw, regenerate or restyle the image — every frame is a crop of the original. Reply in the user's language (default: informal Bahasa Melayu / rojak when they write in Malay), concise. Work autonomously: no style menu, no confirmation pauses. Do NOT use rbdigital-videostudio, papercut or HyperFrames for this.
+
+Trigger phrases: "zoom video", "buat video guna gambar ni", "gerak-gerak je gambar ni", "macam video denggi".
+
+## Setup: Python (check once per chat, esp. Claude Code on a Windows PC)
+Scripts here need Python 3 + numpy, pillow and ffmpeg. Check: `python --version` (or `py --version`) and `python -c "import numpy, PIL"`.
+- **Windows:** `python3` usually doesn't exist and plain `python` may be a Microsoft Store stub → use `python` (or `py`) in every command below where it says `python3`. Missing → install it yourself, don't skip steps:
+  ```powershell
+  winget install -e --id Python.Python.3.12 --scope user --accept-package-agreements --accept-source-agreements
+  python -m pip install numpy pillow
+  ```
+  The current shell won't see the new PATH → call `"$env:LOCALAPPDATA\Programs\Python\Python312\python.exe"` (Git Bash: `"$LOCALAPPDATA/Programs/Python/Python312/python.exe"`) or ask them to reopen Claude Code. No `--break-system-packages` on Windows. ffmpeg missing → `winget install -e --id Gyan.FFmpeg --scope user`. If winget fails, ask them to install Python from python.org (tick "Add python.exe to PATH") and wait.
+- Linux/Mac sandbox: `pip install numpy pillow --break-system-packages -q` if an import fails.
+
+## Flow (universal — order comes from the image)
+
+1. **Analyse the image** (Read it). Find, in image pixel coords:
+   - `subject`: main person/character (centre + radius). None → skip spotlight, open on the most striking element.
+   - `title`: main heading rect.
+   - `shots`: every point/box/label, in reading order (numbers if present; else left→right, top→bottom; for a 2-column layout with a figure in the middle, alternate left/right row by row).
+   - `bottom`: closing bar/footer rect if any.
+   Verify rects by drawing them on a copy and looking at it before going on.
+2. **Format**: landscape image → 1920x1080; portrait → 1080x1920; square → 1080x1080.
+3. **VO script (BM)**: hook line (over spotlight) → title line → one short line per shot (the text in the box, lightly expanded) → bottom/closing line → CTA. ~2–3 s per line. Separate lines with blank lines so pauses are clean.
+4. **Generate VO** (one request, whole script, blank lines between lines). Malay: `python "${MOTION_KIT:-$ROOT/vendor/Motion_as_kit}/gemini_tts.py" -f script.txt -v Puck -i "Energetic, urgent hook, serious close" -o vo.wav`. English: `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" tts "<text>" --voice Puck --out vo.wav`. Use another voice if they name one; say which. Convert with `ffmpeg -i vo.wav vo.mp3`. Report any Nexabot credits used. Never ElevenLabs. If generation fails: render without VO, give them the script in a code block and say why.
+5. **Time the camera to the VO**: `ffmpeg -i vo.mp3 -af silencedetect=noise=-38dB:d=0.25 -f null -` → each line's start. Camera arrives at a shot ~0.15 s before its line starts. Title arrives with the title line, bottom pan runs over the closing line, full zoom-out lands on the CTA. VO is placed unaltered from t=0.35 (spotlight opens under the hook).
+6. **Preview**: contact sheet of ~10 frames (one per section) → LOOK at it → fix rects/framing (common bugs: zoom too tight cutting text, highlight box misaligned, two shots overlapping in time).
+7. **Render** in 2 parallel chunks → concat → mux audio → **QA:** `python3 <skill>/scripts/look.py final.mp4 --expect-duration <s> --audio --sheet qa.jpg` → every gate PASS: decodes, right size/length, audio present, no frozen run > 0.4 s mid-video (deliberate pauses: `--allow-still <t>`), end hold ≤ 1.5 s. FAIL = fix and re-render, don't deliver. Look at `qa.jpg` (frames from the real MP4). Quote the numbers in one line of the summary. → copy to `/mnt/user-data/outputs` if it exists (else keep in the working dir) and send with `SendUserFile` (or `present_files`).
+8. **Reply**: 3–4 bullets (what plays when, voice used, cost), "kalau ada timing lari, bagitahu saat berapa". Offer 9:16 version if they made 16:9.
+
+## Camera rules
+- Intro: black → elliptical spotlight grows on subject (ease-out-back), surroundings stay ~90% dark, then dark fades out by ~2.5 s.
+- Title: fast ease-in-out zoom, flash (white 60%, 0.12 s) + shake (0.3 s) + slam SFX.
+- Each shot: view centred on rect, view width = max(rect_w*1.45, rect_h*1.45/AR) clamped to image; ease-in-out move (0.6 s) + small punch-in (2.5%); everything outside the rect dimmed 55% with a soft rounded mask; slow push-in (width x0.96) while held.
+- Bottom bar: view height ≈ bar height x1.6, pan left→right across it, dim 45% outside.
+- End: ease out to full image, slow push, fade to black last 0.6 s.
+- Constant subtle drift (±4 px) so it never looks frozen. Clamp the view inside the image always.
+- Low-res source (<2000 px wide): keep shot views wider (≥40% of image width) so it doesn't get blurry, and mention it.
+
+## Audio
+- Synth bed with numpy/scipy (no downloads): soft pad + kick/hat ~100 bpm starting at the title, whoosh before every move, pop on each shot arrival, slam on title, ding on zoom-out.
+- Duck the bed under the VO (bed gain ~0.55 → ~0.25 while VO plays, 0.15 s smoothing), normalise to -0.5 dBFS, AAC 192k.
+
+## Engine (write to the working dir as `poster_zoom.py`, fill CONFIG)
+
+```python
+import math, subprocess, sys
+import numpy as np
+from PIL import Image, ImageDraw, ImageFilter
+
+CONFIG = dict(
+    image='INPUT.png', W=1920, H=1080, fps=30,
+    subject=(840, 440, 560),              # cx, cy, radius (image px) or None
+    title=(430, 22, 1250, 132), title_t=2.85,
+    shots=[((215, 180, 610, 302), 6.5)],  # (rect, arrival time) ... from VO timing
+    bottom=(0, 805, 1672, 941), bottom_t=(26.3, 32.0),  # or None
+    full_t=33.0, total=36.2,
+)
+C = CONFIG
+SRC = Image.open(C['image']).convert('RGB'); IW, IH = SRC.size
+W, H, FPS = C['W'], C['H'], C['fps']; AR = H / W
+
+def cl(x, a=0.0, b=1.0): return max(a, min(b, x))
+def eio(x): x = cl(x); return 4*x**3 if x < .5 else 1-(-2*x+2)**3/2
+def eob(x): x = cl(x); return 1+2.70158*(x-1)**3+1.70158*(x-1)**2
+def view_for(r, pad=1.45):
+    w = max((r[2]-r[0])*pad, (r[3]-r[1])*pad/AR); w = min(w, IW, IH/AR)
+    return ((r[0]+r[2])/2, (r[1]+r[3])/2, w)
+def clamp(cx, cy, w):
+    w = min(w, IW, IH/AR); h = w*AR
+    return cl(cx, w/2, IW-w/2), cl(cy, h/2, IH-h/2), w
+
+FULLW = min(IW, IH/AR)
+K = []  # (t, cx, cy, w, rect, dim, ease)
+if C['subject']:
+    sx, sy, sr = C['subject']
+    K += [(0, sx, sy, sr*1.6, None, 0, 'lin'), (C['title_t']-0.55, sx, sy, sr*1.5, None, 0, 'lin')]
+else:
+    K += [(0, IW/2, IH/2, FULLW, None, 0, 'lin'), (C['title_t']-0.55, IW/2, IH/2, FULLW*0.95, None, 0, 'lin')]
+tv = view_for(C['title'], 1.15)
+K.append((C['title_t'], *tv, C['title'], 0.5, 'eio'))
+ARRIVALS = [C['title_t']]
+for r, A in C['shots']:
+    p = K[-1]; K.append((A-0.6, p[1], p[2], p[3]*0.96, p[4], p[5], 'lin'))
+    K.append((A, *view_for(r), r, 0.55, 'eio')); ARRIVALS.append(A)
+if C['bottom']:
+    b = C['bottom']; b0, b1 = C['bottom_t']; bw = min((b[3]-b[1])*1.6/AR, IW); cy = (b[1]+b[3])/2
+    p = K[-1]; K.append((b0-0.7, p[1], p[2], p[3]*0.95, p[4], p[5], 'lin'))
+    K += [(b0, b[0]+bw/2, cy, bw, b, 0.45, 'eio'), (b1, b[2]-bw/2, cy, bw, b, 0.45, 'eio')]
+K.append((C['full_t'], IW/2, IH/2, FULLW, None, 0, 'eio'))
+K.append((C['total']-0.2, IW/2, IH/2, FULLW*0.96, None, 0, 'lin'))
+
+def lerp(a, b, u): return a+(b-a)*u
+def state(T):
+    for a, b in zip(K, K[1:]):
+        if a[0] <= T < b[0]:
+            u = (T-a[0])/(b[0]-a[0]); u = eio(u) if b[6] == 'eio' else u
+            ra, rb = a[4], b[4]
+            if ra and rb: r, d = tuple(lerp(p, q, u) for p, q in zip(ra, rb)), lerp(a[5], b[5], u)
+            elif rb: r, d = rb, b[5]*u
+            elif ra: r, d = ra, a[5]*(1-u)
+            else: r, d = None, 0
+            return lerp(a[1], b[1], u), lerp(a[2], b[2], u), lerp(a[3], b[3], u), r, d
+    k = K[-1] if T >= K[-1][0] else K[0]; return k[1], k[2], k[3], k[4], k[5]
+
+def darken(fr, mask, amount):
+    a = np.array(mask, dtype=np.float32)/255.0
+    al = (1-a)*amount if np.ndim(amount) == 0 else amount
+    return Image.fromarray((np.array(fr)*(1-al[..., None])).astype(np.uint8))
+
+def frame_at(T):
+    cx, cy, w, r, dim = state(T)
+    cx += 4*math.sin(T*.7); cy += 3*math.cos(T*.6)
+    for st in ARRIVALS:
+        if st <= T < st+0.3: w *= 1-(0.05 if st == ARRIVALS[0] else 0.025)*math.sin(math.pi*(T-st)/0.3)
+    cx, cy, w = clamp(cx, cy, w); h = w*AR; x0, y0 = cx-w/2, cy-h/2; s = w/W
+    fr = SRC.transform((W, H), Image.AFFINE, (s, 0, x0, 0, s, y0), resample=Image.BICUBIC)
+    to_s = lambda px, py: ((px-x0)/s/4, (py-y0)/s/4)
+    if C['subject'] and T < C['title_t']-0.25:
+        m = Image.new('L', (W//4, H//4), 0); sx, sy, sr = C['subject']; px, py = to_s(sx, sy)
+        R = sr/s/4*eob((T-0.25)/0.7)
+        if R > 0: ImageDraw.Draw(m).ellipse((px-R*.85, py-R, px+R*.85, py+R), fill=255)
+        m = m.filter(ImageFilter.GaussianBlur(10)).resize((W, H), Image.BILINEAR)
+        dark = 0.9*(1-cl((T-(C['title_t']-0.95))/0.6))
+        al = (1-np.array(m, dtype=np.float32)/255.0)*dark
+        if T < 0.25: al[:] = 1.0
+        fr = darken(fr, m, al)
+    elif r and dim > 0.01:
+        m = Image.new('L', (W//4, H//4), 0); a_ = to_s(r[0], r[1]); b_ = to_s(r[2], r[3])
+        ImageDraw.Draw(m).rounded_rectangle((a_[0]-6, a_[1]-6, b_[0]+6, b_[1]+6), radius=18, fill=255)
+        fr = darken(fr, m.filter(ImageFilter.GaussianBlur(6)).resize((W, H), Image.BILINEAR), dim)
+    tt = C['title_t']
+    if tt <= T < tt+0.3:
+        k = 1-(T-tt)/0.3
+        fr = fr.transform(fr.size, Image.AFFINE, (1, 0, -int(14*k*math.sin(T*95)), 0, 1, -int(10*k*math.cos(T*80))), fillcolor=(0, 0, 0))
+        if T < tt+0.12: fr = Image.blend(fr, Image.new('RGB', (W, H), 'white'), 0.6*(1-(T-tt)/0.12))
+    if T > C['total']-0.6: fr = Image.blend(fr, Image.new('RGB', (W, H)), cl((T-(C['total']-0.6))/0.6))
+    return fr
+
+if __name__ == '__main__':
+    mode = sys.argv[1]
+    if mode == 'sheet':
+        ts = [float(x) for x in sys.argv[2].split(',')]; tw = 480; th_ = int(tw*AR)
+        sh = Image.new('RGB', (tw*4, th_*math.ceil(len(ts)/4)))
+        for i, T in enumerate(ts): sh.paste(frame_at(T).resize((tw, th_)), ((i % 4)*tw, (i//4)*th_))
+        sh.save('sheet.png')
+    elif mode == 'render':  # python poster_zoom.py render START_FRAME END_FRAME out.mp4
+        a, b, out = int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]
+        p = subprocess.Popen(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-',
+                              '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', out], stdin=subprocess.PIPE)
+        for n in range(a, b): p.stdin.write(frame_at(n/FPS).tobytes())
+        p.stdin.close(); p.wait()
+```
+
+Render: `N=total*fps`, run `render 0 N/2 a.mp4` and `render N/2 N b.mp4` in parallel, concat with the ffmpeg concat demuxer (`-c:v copy`), mux with the mixed wav (`-c:a aac -b:a 192k -shortest -movflags +faststart`).
+
+## Audio mix (write as `mix.py`)
+Build a bed wav of length `total` with numpy: whoosh = band-passed noise swept 600→4000 Hz with sin² envelope (0.45 s) placed 0.5 s before each arrival; pop = 0.09 s sine chirp 500→1200 Hz at each shot arrival; slam = decaying 125→35 Hz sine + low-passed noise burst at title; ding = 1318+1976+2637 Hz decaying sines at full zoom-out; music from the title onward = soft pad (Am–F–C–G triads, low-passed 1.8 kHz) + kick each beat + hat on off-beats at 100 bpm, fading out over the last 1.5 s. Then load the VO (resampled to 44.1 kHz mono), place it at 0.35 s, build a VO-activity envelope (±0.15–0.2 s, 0.15 s smoothing), mix = bed*(0.55-0.3*env) + vo, normalise to 0.95 peak, write 16-bit wav.

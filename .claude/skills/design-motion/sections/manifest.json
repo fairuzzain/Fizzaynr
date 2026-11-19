@@ -1,0 +1,26 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill": "design-motion",
+  "version": 1,
+  "note": "PASSIVE registry (v2 plan T9 / CM2). Fields are IDs, file paths, human titles, and human-readable trigger text ONLY. The skeleton's decision-tree prose is the ONLY place that decides WHEN to read a section; required section reads are checked by the design-motion-showcase case in test/skill-e2e-design.test.ts. No machine predicate here — see docs/designs/v2_PLAN.md:663.",
+  "sections": [
+    {
+      "id": "fidelity",
+      "file": "fidelity.md",
+      "title": "Fidelity: rebuild the exact frame and the capture contract",
+      "trigger": "rebuilding the frame in Step 2 — the per-source rebuild, background, layout and the page's capture contract"
+    },
+    {
+      "id": "motion",
+      "file": "motion.md",
+      "title": "Motion: empty state, load, stories, cycle",
+      "trigger": "building the motion in Step 4 — the choreography kinds, one story per visual, the loop cycle, easing and the defaults"
+    },
+    {
+      "id": "figma",
+      "file": "figma.md",
+      "title": "Figma source (optional, needs a token)",
+      "trigger": "the source is a Figma link and Step 0 printed FIGMA_TOKEN: set — the REST reference render and the layer export table"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://gstack.dev/schemas/section-manifest.json",
+  "skill": "benchmark",
+  "version": 1,
+  "note": "PASSIVE registry (v2 plan T9 / CM2). id/file/title/trigger text ONLY. The skeleton's Phase 5 decides WHEN to read; no machine predicate here (plan D3).",
+  "sections": [
+    {
+      "id": "vet-the-number",
+      "file": "vet-the-number.md",
+      "title": "Vet the number: the seven questions (limiter, tuning, limits, errors, repeatability, relevance, did the work happen) and the verdict line",
+      "trigger": "reporting a comparison, speedup or regression (Phase 5), or any measured delta"
+    }
+  ]
+}
