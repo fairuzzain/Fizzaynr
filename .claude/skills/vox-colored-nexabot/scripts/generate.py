@@ -75,7 +75,31 @@ def to_png(src, dest):
     Path(src).unlink(missing_ok=True)
 
 
+def image_nexabot_model(nb, run, clip, model):
+    """Nexabot Image Generator: POST /api/v1/image (premium models, synchronous, 0.1 credit)."""
+    from common import NEXABOT_BASE
+    out = run / "images" / f"{clip['id']}.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    body = {"model": model, "prompt": clip["image_prompt"], "aspect": env("ASPECT_RATIO", "16:9"),
+            "resolution": env("NEXABOT_IMAGE_RESOLUTION", "2K")}
+    err = None
+    for attempt in (1, 2):
+        r = nb.s.post(NEXABOT_BASE + "/api/v1/image", json=body, timeout=600)
+        d = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+        if r.status_code < 400 and d.get("ok"):
+            tmp = out.with_suffix(".dl")
+            tmp.write_bytes(nb.s.get(d["url"], timeout=300).content)
+            to_png(tmp, out)
+            log(f"[image] {clip['id']} done ({model})")
+            return None
+        err = f"{r.status_code}: {d.get('error') or r.text[:300]}"
+        log(f"[image] {clip['id']} attempt {attempt} failed: {err}")
+    return f"{clip['id']}: {err}"
+
+
 def image_nexabot(nb, run, clip):
+    if env("NEXABOT_IMAGE_MODEL"):
+        return image_nexabot_model(nb, run, clip, env("NEXABOT_IMAGE_MODEL"))
     out = run / "images" / f"{clip['id']}.png"
     body = {"mode": "img", "prompt": clip["image_prompt"], "aspect": NEXABOT_ASPECT[env("ASPECT_RATIO", "16:9")]}
     for attempt in (1, 2):
@@ -197,6 +221,10 @@ def main():
     backend = env("IMAGE_BACKEND", "openai") if a.stage == "images" else "nexabot"
     engine = a.engine or env("VIDEO_ENGINE", "veo")
     unit = SEEDANCE_COST if a.stage == "videos" and engine == "seedance" else CREDIT_COST
+    if a.stage == "videos" and engine != "seedance":
+        unit = float(env("VIDEO_CREDIT_COST", "0.3"))      # Omni Flash 1.2 sfv
+    if a.stage == "images" and env("NEXABOT_IMAGE_MODEL"):
+        unit = 0.1
     cost = 0 if backend in ("codex", "openai") else len(todo) * unit
     via = backend if a.stage == "images" else f"nexabot {engine}"
     print(f"{len(todo)} {a.stage} via {via} · ~{cost:.2f} credits")

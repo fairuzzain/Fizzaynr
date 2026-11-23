@@ -112,6 +112,25 @@ def add_pauses(wav, words, pause):
     return audio_duration(wav)
 
 
+def eleven_tts(nb, text, voice_id, wav):
+    """Nexabot Voice Generator (ElevenLabs): POST /api/v1/voice, synchronous, 0.02 credit.
+    Used when NEXABOT_VOICE_ID is set (e.g. for Malay, which the Gemini `tts` voices reject)."""
+    from common import NEXABOT_BASE
+    body = {"text": text, "voice_id": voice_id, "speed": float(env("VOICE_SPEED", "1"))}
+    if env("VOICE_LANGUAGE_CODE"):
+        body["language_code"] = env("VOICE_LANGUAGE_CODE")
+    r = nb.s.post(NEXABOT_BASE + "/api/v1/voice", json=body, timeout=900)
+    d = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+    if r.status_code >= 400 or not d.get("ok"):
+        return f"voice -> {r.status_code}: {d.get('error') or r.text[:300]}"
+    wav.parent.mkdir(parents=True, exist_ok=True)
+    tmp = wav.with_suffix(".dl")
+    tmp.write_bytes(nb.s.get(d["url"], timeout=600).content)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(tmp), "-ac", "1", "-ar", "24000", str(wav)], check=True)
+    tmp.unlink()
+    return None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run_dir")
@@ -124,6 +143,7 @@ def main():
     chapters = load_json(run / "script.json")["chapters"]
     nb = None if a.align_only else Nexabot()
     voice = env("NEXABOT_VOICE", "Charon")
+    voice_id = env("NEXABOT_VOICE_ID")
 
     for ch in chapters:
         n = ch["index"]
@@ -131,7 +151,10 @@ def main():
             continue
         wav = run / "audio" / f"chapter_{n:02d}.wav"
         if not a.align_only:
-            path, err = nb.run({"mode": "tts", "prompt": ch["narration"], "voice": voice}, wav, timeout=600)
+            if voice_id:
+                err = eleven_tts(nb, ch["narration"], voice_id, wav)
+            else:
+                _, err = nb.run({"mode": "tts", "prompt": ch["narration"], "voice": voice}, wav, timeout=600)
             if err:
                 sys.exit(f"chapter {n}: TTS {err}")
         elif not wav.exists():
