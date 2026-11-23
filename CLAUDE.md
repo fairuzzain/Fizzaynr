@@ -19,6 +19,10 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 - Ejaan dan kosa kata Malaysia, bukan Indonesia (contoh: *tak, nak, awak, tengok, percuma, kat*;
   bukan *gak, mau, kamu, lihat, gratis, di sini*). Mata wang RM, format nombor `ms-MY`.
 - Transkripsi/ASR dan TTS: kod bahasa `ms` secara default (`--lang ms`, `TTS_LANGUAGE=ms`).
+- **TTS Bahasa Melayu = Nexabot `POST /api/v1/voice`** `{"text", "voice_id"}` (suara ElevenLabs/MiniMax
+  yang menyokong `ms` dari `GET /api/v1/voices`; terus pulangkan `url` audio + `timestamps` per perkataan).
+  Mode `tts` biasa (suara Gemini: Puck, Charon...) menolak teks BM. Suara pustaka ElevenLabs yang tiada
+  dalam senarai Nexabot gagal (500). Jangan guna suara `id-ID-*` (Indonesia).
 - Prompt untuk model imej/video boleh dalam Bahasa Inggeris (hasil lebih baik), tetapi dialog dan
   teks yang dipaparkan di dalamnya tetap Bahasa Melayu Malaysia.
 - Bahasa lain hanya jika pengguna minta secara jelas. Peraturan ini mengatasi default bahasa dalam skill.
