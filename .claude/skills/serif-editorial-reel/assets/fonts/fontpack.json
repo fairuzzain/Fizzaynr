@@ -1,0 +1,43 @@
+{
+ "families": {
+  "poppins": "Poppins",
+  "plus-jakarta-sans": "Plus Jakarta Sans",
+  "montserrat": "Montserrat",
+  "urbanist": "Urbanist",
+  "outfit": "Outfit",
+  "sora": "Sora",
+  "manrope": "Manrope",
+  "space-grotesk": "Space Grotesk",
+  "inter": "Inter",
+  "instrument-serif": "Instrument Serif",
+  "dm-serif-display": "DM Serif Display",
+  "fraunces": "Fraunces",
+  "bodoni-moda": "Bodoni Moda",
+  "cormorant-garamond": "Cormorant Garamond",
+  "playfair-display": "Playfair Display",
+  "anton": "Anton",
+  "bebas-neue": "Bebas Neue",
+  "archivo-black": "Archivo Black",
+  "unbounded": "Unbounded",
+  "syne": "Syne",
+  "jetbrains-mono": "JetBrains Mono"
+ },
+ "presets": {
+  "poppins":           {"no": "S1", "for": "stmr", "label": "Poppins Klasik", "desc": "bawaan, geometris ramah", "main": "poppins"},
+  "jakarta":           {"no": "S2", "for": "stmr", "label": "Jakarta Modern", "desc": "lebih rapat dan modern, desainer Indonesia", "main": "plus-jakarta-sans"},
+  "montserrat":        {"no": "S3", "for": "stmr", "label": "Montserrat Tegas", "desc": "lebar, kuat, cocok promo", "main": "montserrat"},
+  "urbanist":          {"no": "S4", "for": "stmr", "label": "Urbanist Bersih", "desc": "tipis-bersih, terasa premium", "main": "urbanist"},
+  "jakarta-anton":     {"no": "S5", "for": "stmr", "label": "Jakarta + Anton", "desc": "angka besar dan kata hantaman memakai Anton (huruf besar)", "main": "plus-jakarta-sans", "display": ["anton", 400, "normal"]},
+  "poppins-unbounded": {"no": "S6", "for": "stmr", "label": "Poppins + Unbounded", "desc": "angka besar memakai Unbounded yang lebar", "main": "poppins", "display": ["unbounded", 800, "normal"]},
+
+  "klasik":       {"no": "E1", "for": "editorial", "label": "Klasik Serif", "desc": "bawaan: Inter + Playfair italic", "body": "inter", "key": ["playfair-display", 800, "italic"]},
+  "tipis":        {"no": "E2", "for": "editorial", "label": "Tipis Mahal", "desc": "Inter + Instrument Serif italic, tipis dan mahal", "body": "inter", "key": ["instrument-serif", 400, "italic"]},
+  "fashion":      {"no": "E3", "for": "editorial", "label": "Fashion", "desc": "Manrope + Bodoni italic, kontras tinggi", "body": "manrope", "key": ["bodoni-moda", 700, "italic"]},
+  "hangat":       {"no": "E4", "for": "editorial", "label": "Hangat", "desc": "Jakarta + Fraunces italic, ramah dan berkarakter", "body": "plus-jakarta-sans", "key": ["fraunces", 700, "italic"]},
+  "elegan":       {"no": "E5", "for": "editorial", "label": "Elegan", "desc": "Manrope + Cormorant italic, klasik mewah", "body": "manrope", "key": ["cormorant-garamond", 700, "italic"]},
+  "majalah":      {"no": "E6", "for": "editorial", "label": "Majalah", "desc": "Inter + DM Serif Display italic, tebal editorial", "body": "inter", "key": ["dm-serif-display", 400, "italic"]},
+  "tegas":        {"no": "E7", "for": "editorial", "label": "Tegas", "desc": "Inter + Anton, kata kunci HURUF BESAR", "body": "inter", "key": ["anton", 400, "normal"], "upper": true},
+  "teknologi":    {"no": "E8", "for": "editorial", "label": "Teknologi", "desc": "Space Grotesk + Sora tebal", "body": "space-grotesk", "key": ["sora", 800, "normal"]},
+  "modern-bulat": {"no": "E9", "for": "editorial", "label": "Modern Bulat", "desc": "Outfit + Unbounded lebar", "body": "outfit", "key": ["unbounded", 800, "normal"]}
+ }
+}

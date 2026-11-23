@@ -1,0 +1,14 @@
+interface:
+  display_name: Video Launch Kit
+  short_description: Siapkan caption, thumbnail, dan judul dari video jadi.
+  default_prompt: Pakai $video-launch-kit untuk menyiapkan paket upload dari video
+    ini.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

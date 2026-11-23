@@ -1,0 +1,269 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Serif Editorial Reel</title>
+<style>
+@font-face{font-family:I;src:url(font/inter-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:I;src:url(font/inter-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:I;src:url(font/inter-latin-600-normal.woff2);font-weight:600}
+@font-face{font-family:I;src:url(font/inter-latin-700-normal.woff2);font-weight:700}
+@font-face{font-family:I;src:url(font/inter-latin-800-normal.woff2);font-weight:800}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-700-italic.woff2);font-weight:700;font-style:italic}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-800-italic.woff2);font-weight:800;font-style:italic}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-900-italic.woff2);font-weight:900;font-style:italic}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+:root{--red:#ff2f2f;--green:#36f281;--glowR:0 0 10px rgba(255,30,30,.9),0 0 26px rgba(255,0,0,.6),0 2px 8px rgba(0,0,0,.8);--glowG:0 0 10px rgba(30,235,110,.85),0 0 26px rgba(0,220,90,.5),0 2px 8px rgba(0,0,0,.8);--ink:#fff;--sub:rgba(255,255,255,.72);--line:rgba(255,255,255,.22);--panel:rgba(16,16,20,.78);--panel2:rgba(255,255,255,.06);--glow:0 0 12px rgba(255,255,255,.45),0 2px 10px rgba(0,0,0,.9),0 0 24px rgba(0,0,0,.6)}
+/* ---------- mode TERANG (scene di atas lightBg): tanpa glow, tinta gelap ---------- */
+.lt{--red:#d0101c;--green:#0c9a4b;--glowR:0 6px 20px rgba(208,16,28,.22);--glowG:0 6px 20px rgba(12,154,75,.2);--ink:#141416;--sub:rgba(20,20,22,.62);--line:rgba(20,20,22,.18);--panel:#ffffff;--panel2:rgba(20,20,22,.05);--glow:0 1px 0 rgba(255,255,255,.7),0 10px 28px rgba(0,0,0,.10)}
+.cap.lt .n{color:#151517;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.cap.lt .s{color:#111113;text-shadow:0 8px 26px rgba(0,0,0,.12)}
+.cap.lt .r,.cap.lt .R{color:#d0101c;text-shadow:0 6px 22px rgba(208,16,28,.22)}
+.cap.lt .g{color:#0c9a4b;text-shadow:0 6px 22px rgba(12,154,75,.2)}
+.cap.lt .m .tx{color:#fff}
+.lt .mono{color:var(--ink)}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:I,sans-serif;color:#fff}
+#cam{position:absolute;inset:0}
+.L{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+#vidW{position:absolute;inset:0;filter:contrast(1.06) saturate(.9) brightness(.97)}
+#vidW img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#grade{background:radial-gradient(ellipse 85% 70% at 50% 42%,rgba(0,0,0,0) 52%,rgba(0,0,0,.55) 100%)}
+.a{position:absolute;white-space:nowrap}
+/* ---------- caption ---------- */
+.cap{position:absolute;left:540px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.ln{display:flex;align-items:center;justify-content:center;white-space:nowrap;line-height:1.08}
+.cw{display:inline-block;margin:0 .12em;opacity:0}
+.n{font:600 44px I;letter-spacing:-.01em;color:#fff;text-shadow:0 0 10px rgba(255,255,255,.5),0 1px 2px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.95),0 0 36px rgba(0,0,0,.8)}
+.s{font:italic 800 98px PF;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.6),0 0 40px rgba(255,255,255,.25),0 3px 14px rgba(0,0,0,.9),0 0 46px rgba(0,0,0,.65)}
+.r{font:italic 800 100px PF;color:var(--red);text-shadow:0 0 5px rgba(255,130,130,.95),0 0 18px rgba(255,30,30,.9),0 0 48px rgba(255,0,0,.65),0 3px 12px rgba(0,0,0,.9),0 0 60px rgba(0,0,0,.5)}
+.g{font:italic 800 100px PF;color:var(--green);text-shadow:0 0 5px rgba(170,255,200,.95),0 0 18px rgba(30,235,110,.85),0 0 48px rgba(0,220,90,.55),0 3px 12px rgba(0,0,0,.9),0 0 60px rgba(0,0,0,.5)}
+.R{font:italic 900 170px PF;line-height:1;color:var(--red);text-shadow:0 0 6px rgba(255,130,130,.95),0 0 24px rgba(255,30,30,.9),0 0 64px rgba(255,0,0,.7),0 0 130px rgba(255,0,0,.4),0 4px 16px rgba(0,0,0,.9)}
+.m{position:relative;font:italic 800 86px PF;color:#fff;padding:0 .2em .05em}
+.m .bar{position:absolute;left:0;top:12%;width:100%;height:84%;background:linear-gradient(90deg,#b80a14,#ff2a2a);box-shadow:0 0 40px rgba(255,20,20,.65);filter:blur(1.2px);transform-origin:0 50%;z-index:0;border-radius:3px}
+.m .tx{position:relative;z-index:1;text-shadow:0 2px 8px rgba(80,0,0,.6),0 0 14px rgba(255,255,255,.35)}
+.mono{font-family:JB,monospace}
+.ic{display:inline-block;-webkit-mask-position:center;-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat}
+/* ---------- phone mockup ---------- */
+.p3{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1600px;perspective-origin:540px 1200px}
+.p3 > div{transform-style:preserve-3d}
+.card{position:absolute;left:-135px;top:-270px;width:270px;height:540px;transform-style:preserve-3d}
+.phone{position:absolute;inset:0;border-radius:46px;background:linear-gradient(150deg,#5a5a64 0%,#24242a 22%,#0e0e11 55%,#2c2c33 85%,#5a5a64 100%);box-shadow:0 44px 90px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.1)}
+.rim{position:absolute;inset:3px;border-radius:43px;background:#050506}
+.screen{position:absolute;inset:9px;border-radius:38px;overflow:hidden;background:#000}
+.island{position:absolute;top:12px;left:50%;width:80px;height:23px;margin-left:-40px;border-radius:12px;background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+.btn{position:absolute;width:4px;border-radius:2px;background:linear-gradient(90deg,#26262c,#5c5c66)}
+.gloss{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.04) 30%,rgba(255,255,255,0) 48%);pointer-events:none}
+.sheen{position:absolute;top:-20%;left:0;width:45%;height:140%;background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.35) 50%,rgba(255,255,255,0) 100%);transform:translateX(-160%) skewX(-12deg)}
+.tag{position:absolute;left:12px;bottom:14px;padding:6px 10px 6px 9px;border-radius:9px;background:rgba(10,10,12,.66);border:1px solid rgba(255,255,255,.22);font:500 12px JB;letter-spacing:.12em;color:#fff;display:flex;align-items:center;gap:6px;opacity:0}
+</style></head><body><div id="stage">
+<div id="cam">
+ <div class="L" id="vidL"><div id="vidW"></div></div>
+ <div class="L" id="grade"></div>
+ <div class="L" id="under"></div>
+ <div class="L" id="xbg"></div>
+ <div class="L" id="ov"></div>
+</div>
+<div class="L" id="flash"></div>
+<div class="L" id="grain"></div>
+</div>
+<script src="gsap.min.js"></script><script>
+(async()=>{try{
+await Promise.all(['400 40px I','500 40px I','600 40px I','700 40px I','800 40px I',
+ 'italic 700 40px PF','italic 800 40px PF','italic 900 40px PF',
+ '400 40px JB','500 40px JB','700 40px JB'].map(f=>document.fonts.load(f).catch(()=>{})));
+const stage=document.getElementById('stage'),cam=document.getElementById('cam'),vidW=document.getElementById('vidW'),
+ ov=document.getElementById('ov'),under=document.getElementById('under'),xbg=document.getElementById('xbg'),
+ flash=document.getElementById('flash'),grainEl=document.getElementById('grain');
+
+/* ==== CONFIG START (diisi build.py dari project.json) ==== */
+const MAIN='main';            // folder vf/<MAIN> berisi frame video utama
+const MAIN_FRAMES=1525;       // jumlah frame video utama
+const VEND=50.80;             // detik terakhir video utama
+const INS=45.3, DUR=6.5;      // sisipkan DUR detik hening mulai detik INS (0 kalau tidak ada)
+const TAIL=0.8;               // ekor setelah VO habis
+const TOTAL=+(VEND+DUR+TAIL).toFixed(3);
+const T=t=>t>=INS?+(t+DUR).toFixed(3):t;
+const SCRIM_FROM=5.03;        // caption scrim gelap aktif mulai detik ini
+/* ==== CONFIG END ==== */
+
+const tl=gsap.timeline({paused:true});
+const SFX=[];const sfx=(t,type,g=1)=>SFX.push([+t.toFixed(3),type,g]);
+const perFrame=[],VIDS=[],floaters=[];
+const RED='#ff2f2f',GREEN='#36f281';
+const GLOW_W='0 0 12px rgba(255,255,255,.45),0 2px 10px rgba(0,0,0,.9),0 0 24px rgba(0,0,0,.6)';
+const GLOW_R='0 0 10px rgba(255,30,30,.9),0 0 26px rgba(255,0,0,.6),0 2px 8px rgba(0,0,0,.8)';
+const GLOW_G='0 0 10px rgba(30,235,110,.85),0 0 26px rgba(0,220,90,.5),0 2px 8px rgba(0,0,0,.8)';
+
+/* ---------- helper dasar ---------- */
+function mk(p,html='',cls='',css={}){const e=document.createElement('div');if(cls)e.className=cls;e.innerHTML=html;Object.assign(e.style,css);p.appendChild(e);return e;}
+function A(p,x,y,html,cls='',css={}){const e=mk(p,html,'a '+cls,Object.assign({left:x+'px',top:y+'px'},css));gsap.set(e,{xPercent:-50,yPercent:-50});return e;}
+function P(p,x,y,html,cls='',css={}){return mk(p,html,'a '+cls,Object.assign({left:x+'px',top:y+'px'},css));}
+function icon(name,size,color='#fff'){return `<span class="ic" style="width:${size}px;height:${size}px;background:${color};-webkit-mask-image:url(icon/${name}.svg)"></span>`}
+function grp(t0,t1,p=ov){const g=mk(p,'','L');tl.set(g,{visibility:'hidden'},0);tl.set(g,{visibility:'visible'},t0);if(t1!=null)tl.set(g,{visibility:'hidden'},t1);return g;}
+function shake(t,amp=14,d=.32){tl.to(cam,{keyframes:[{x:amp,y:-amp*.6},{x:-amp*.8,y:amp*.5},{x:amp*.5,y:amp*.3},{x:-amp*.3,y:-amp*.2},{x:0,y:0}],duration:d,ease:'none'},t);}
+
+/* ---------- scramble text ---------- */
+const GL='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#%&/<>*';
+function scr(el,text,t0,d=.55,t1=null,dout=.35){perFrame.push(t=>{const fr=Math.round(t*30);let s='';
+ if(t<t0){el.textContent='';return;}
+ const p=(t-t0)/d;
+ for(let i=0;i<text.length;i++){const thr=i/text.length*.6;const c=text[i];
+  if(t1!=null&&t>=t1){const q=(t-t1)/dout;if(q>=thr+.4)s+=' ';else if(q>=thr)s+=c===' '?' ':GL[(i*5+fr*11)%GL.length];else s+=c;continue;}
+  if(c===' '){s+=(p>=thr)?' ':'';continue;}
+  if(p>=thr+.4)s+=c;else if(p>=thr)s+=GL[(i*7+fr*13)%GL.length];}
+ el.textContent=s;});}
+
+/* ---------- video utama ---------- */
+const vimg=document.createElement('img');vidW.appendChild(vimg);let vcur=-1;
+function srcT(t){if(DUR&&t>=INS&&t<INS+DUR)return INS;return DUR&&t>=INS+DUR?Math.min(t-DUR,VEND):Math.min(t,VEND);}
+async function ivUpdate(t){const f=Math.min(MAIN_FRAMES-1,Math.floor(srcT(t)*30+1e-6));
+ if(f!==vcur){vcur=f;vimg.src=`vf/${MAIN}/${String(f+1).padStart(4,'0')}.jpg`;await vimg.decode().catch(()=>{});}}
+
+/* Program zoom: [mulai, selesai, skala, originX, originY, drift] (ZOOM diisi build.py) */
+const Z=(typeof ZOOM!=='undefined'&&ZOOM.length)?ZOOM:[[0,5.03,1.00,540,1060,.06],[5.03,TOTAL+1,1.05,600,470,.02]];
+perFrame.push(t=>{const z=Z.find(z=>t>=z[0]&&t<z[1])||Z[Z.length-1];
+ const p=Math.min(1,(t-z[0])/(z[1]-z[0]));
+ vidW.style.transformOrigin=`${z[3]}px ${z[4]}px`;
+ vidW.style.transform=`scale(${(z[2]*(1+z[5]*p)).toFixed(5)})`;});
+
+/* ---------- grain ---------- */
+const gc=document.createElement('canvas');gc.width=gc.height=256;const gx=gc.getContext('2d');const gid=gx.createImageData(256,256);
+let seed=12345;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+for(let i=0;i<256*256;i++){const v=Math.floor(rnd()*255);gid.data[i*4]=gid.data[i*4+1]=gid.data[i*4+2]=v;gid.data[i*4+3]=255;}
+gx.putImageData(gid,0,0);const GURL=gc.toDataURL();
+Object.assign(grainEl.style,{backgroundImage:`url(${GURL})`,opacity:.075,mixBlendMode:'overlay'});
+gsap.set(flash,{opacity:0});
+
+/* ---------- scrim caption ---------- */
+const scrim=mk(under,'','',{position:'absolute',left:0,top:0,width:'1080px',height:'1920px',
+ background:'radial-gradient(ellipse 640px 290px at 540px 940px,rgba(0,0,0,.58) 0%,rgba(0,0,0,.3) 55%,rgba(0,0,0,0) 100%)',opacity:0});
+tl.set(scrim,{opacity:1},SCRIM_FROM);
+
+/* ---------- sistem caption ---------- */
+const SZ={n:44,s:98,r:100,g:100,R:170,m:86};const RANK={n:0,m:1,s:2,r:2,g:2,R:3};
+function wIn(s,t,cls){
+ tl.set(s,{display:'inline-block'},t);
+ if(cls==='n')tl.fromTo(s,{opacity:0,y:14,filter:'blur(10px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.22,ease:'power2.out'},t);
+ else if(cls==='m'){tl.fromTo(s,{opacity:0},{opacity:1,duration:.05},t);
+  tl.fromTo(s.querySelector('.bar'),{scaleX:0},{scaleX:1,duration:.32,ease:'power3.out'},t);
+  tl.fromTo(s.querySelector('.tx'),{opacity:0,x:-18,filter:'blur(8px)'},{opacity:1,x:0,filter:'blur(0px)',duration:.3,ease:'power3.out'},t+.06);}
+ else if(cls==='R')tl.fromTo(s,{opacity:0,scale:1.5,filter:'blur(22px) brightness(2.6)'},{opacity:1,scale:1,filter:'blur(0px) brightness(1)',duration:.34,ease:'power3.out'},t);
+ else tl.fromTo(s,{opacity:0,scale:1.35,filter:'blur(16px)'},{opacity:1,scale:1,filter:'blur(0px)',duration:.3,ease:'power3.out'},t);}
+const CAPS=[];
+function lineSize(L){return Math.max(...L.map(([a,b,c='n',st])=>st&&st.fontSize?parseFloat(st.fontSize):SZ[c]));}
+/**
+ * cap(tOut, y, lines, off)
+ *   lines : [[ [teks, detik, kelas?, styleOpsional?], ... ], ...]
+ *   off   : offset x per baris. Kosongkan untuk otomatis (zig-zag).
+ */
+function cap(t1,y,lines,off,gaps,opt={}){
+ const c=mk(ov,'','cap'+(opt.light?' lt':''),{top:y+'px'});gsap.set(c,{xPercent:-50,yPercent:-50});let t0=1e9;
+ const sizes=lines.map(lineSize);
+ if(!off){const big=sizes.map(s=>s>60);
+  off=lines.length===1?[0]:lines.length===2?(big[1]&&!big[0]?[-46,40]:big[0]&&!big[1]?[30,-46]:[-34,34]):[-50,0,50];}
+ lines.forEach((L,li)=>{const ln=mk(c,'','ln');
+  let top='n',topSt=null;L.forEach(([a,b,cl='n',st])=>{if(RANK[cl]>=RANK[top]){top=cl;topSt=st;}});
+  const strut=document.createElement('span');strut.className='cw '+top;strut.textContent='​';
+  Object.assign(strut.style,{display:'inline-block',width:'0',margin:'0',padding:'0',visibility:'hidden'});
+  if(topSt&&topSt.fontSize)strut.style.fontSize=topSt.fontSize;ln.appendChild(strut);
+  if(li>0){const m=Math.max(sizes[li],sizes[li-1]);let gp=m>60?-Math.round(m*.13):-4;
+   if(sizes[li]<60&&sizes[li-1]>=150)gp=2;if(gaps&&gaps[li]!=null)gp=gaps[li];ln.style.marginTop=gp+'px';}
+  ln.style.transform=`translateX(${off[li]||0}px)`;
+  const firstBig=L.findIndex(([a,b,cl='n'])=>cl!=='n');
+  L.forEach(([txt,t,cls='n',st],wi)=>{const s=document.createElement('span');s.className='cw '+cls;s.style.display='none';
+   if(cls==='m')s.innerHTML=`<span class="bar"></span><span class="tx">${txt}</span>`;else s.textContent=txt;
+   if(cls==='n'&&firstBig>wi&&li>0){s.style.alignSelf='flex-start';s.style.marginTop=Math.round(sizes[li]*.16)+'px';}
+   if(st)Object.assign(s.style,st);ln.appendChild(s);
+   const tt=T(t)-.04;t0=Math.min(t0,tt);wIn(s,tt,cls);s._t=T(t);});});
+ tl.set(c,{visibility:'hidden'},0);tl.set(c,{visibility:'visible'},t0-.01);
+ tl.to(c,{opacity:0,duration:.1},T(t1)-.1);tl.set(c,{visibility:'hidden'},T(t1));
+ CAPS.push([c,t0,T(t1)]);return c;}
+
+/* Posisi baku caption */
+const YC=945;   // close-up
+const YK=865;   // ada kartu di bawah
+const YW=1450;  // wide shot
+
+/* ---------- image sequence di dalam elemen ---------- */
+function vid(parent,dir,n,t0,t1){const im=document.createElement('img');
+ im.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';
+ parent.appendChild(im);VIDS.push({im,dir,n,t0,t1,cur:-1});return im;}
+function vidUpdate(t){const ps=[];
+ for(const v of VIDS){if(t<v.t0-.8||t>v.t1+.1)continue;
+  let f=Math.floor((t-v.t0)*30+1e-6);f=((f%v.n)+v.n)%v.n;
+  if(f!==v.cur){v.cur=f;v.im.src=`vf/${v.dir}/${String(f+1).padStart(4,'0')}.jpg`;ps.push(v.im.decode().catch(()=>{}));}}
+ return Promise.all(ps);}
+
+/* ---------- mockup HP ---------- */
+function phone(parent){
+ const c=mk(parent,'','card');const fl=mk(c,'','',{position:'absolute',inset:'0',transformStyle:'preserve-3d'});
+ const body=mk(fl,'','phone');
+ mk(body,'','btn',{right:'-4px',top:'150px',height:'80px'});
+ mk(body,'','btn',{left:'-4px',top:'118px',height:'44px'});
+ mk(body,'','btn',{left:'-4px',top:'172px',height:'44px'});
+ mk(body,'','rim');const sc=mk(body,'','screen');
+ return {card:c,flip:fl,screen:sc,
+  finish(){mk(sc,'','gloss');const sh=mk(sc,'','sheen');mk(sc,'','island');return sh;}};}
+
+/* ---------- lower third ---------- */
+function lowerThird(t0,t1,l1,l2,y=652){const g=grp(t0-.02,t1+.4);
+ const bar=P(g,60,y,'','',{width:'4px',height:'88px',background:RED,boxShadow:'0 0 10px #ff2020,0 0 24px rgba(255,0,0,.7)',transformOrigin:'50% 0%'});
+ tl.fromTo(bar,{scaleY:0},{scaleY:1,duration:.3,ease:'power3.out'},t0);
+ tl.to(bar,{scaleY:0,duration:.25,ease:'power2.in'},t1+.1);
+ const a=P(g,82,y+6,'','mono',{font:'500 27px JB',letterSpacing:'.04em',color:'#fff',textShadow:GLOW_W});
+ const b=P(g,82,y+52,'','mono',{font:'400 19px JB',color:'rgba(255,255,255,.85)',textShadow:'0 2px 8px rgba(0,0,0,.9)'});
+ scr(a,l1,t0+.08,.55,t1,.35);scr(b,l2,t0+.22,.6,t1+.05,.35);
+ for(let k=0;k<5;k++)sfx(t0+.1+k*.09,'type',.4);}
+
+/* ---------- latar scene tambahan (tanpa video) ---------- */
+function extraBg(tIn,tOut){
+ Object.assign(xbg.style,{background:'radial-gradient(ellipse 120% 70% at 50% 18%,#26262e 0%,#141418 42%,#08080a 100%)',opacity:0});
+ const b1=mk(xbg,'','',{position:'absolute',left:'90px',top:'-60px',width:'900px',height:'900px',borderRadius:'50%',background:'radial-gradient(circle,rgba(20,170,80,.22) 0%,rgba(0,0,0,0) 65%)'});
+ const b2=mk(xbg,'','',{position:'absolute',left:'-300px',top:'1100px',width:'1100px',height:'1100px',borderRadius:'50%',background:'radial-gradient(circle,rgba(70,70,90,.35) 0%,rgba(0,0,0,0) 65%)'});
+ const gr=mk(xbg,'','',{position:'absolute',inset:'0',backgroundImage:`url(${GURL})`,opacity:.16,mixBlendMode:'overlay'});
+ mk(xbg,'','',{position:'absolute',inset:'0',backgroundImage:'linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px)',backgroundSize:'90px 90px',WebkitMaskImage:'radial-gradient(ellipse at 50% 45%,#000 30%,transparent 75%)'});
+ mk(xbg,'','',{position:'absolute',inset:'0',background:'radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)'});
+ perFrame.push(t=>{b1.style.transform=`translate(${Math.sin(t*.5)*60}px,${Math.cos(t*.4)*40}px)`;
+  b2.style.transform=`translate(${Math.cos(t*.35)*80}px,${Math.sin(t*.45)*60}px)`;
+  const fr=Math.round(t*30);gr.style.backgroundPosition=`${(fr*47)%256}px ${(fr*89)%256}px`;});
+ tl.to(xbg,{opacity:1,duration:.5,ease:'power2.inOut'},tIn);
+ tl.to(xbg,{opacity:0,duration:.45,ease:'power2.inOut'},tOut);}
+
+/* ---------- latar TERANG (scene light, untuk campuran gelap-terang) ---------- */
+// lightBg(tIn, tOut, {tone:'paper'|'white', wipe:'up'|'circle'}) -> layer. Isi scene di atasnya pakai grp() + class 'lt',
+// caption pakai cap(..., {light:true}). Masuk dengan panel naik / lingkaran membesar, keluar sebaliknya.
+function lightBg(tIn,tOut,o={}){
+ const tone=o.tone==='white'?['#ffffff','#f3f3f5','#e6e6ea']:['#f7f3ea','#efe9dc','#e2dac8'];
+ const L=mk(xbg,'','L',{background:`radial-gradient(ellipse 120% 80% at 50% 30%,${tone[0]} 0%,${tone[1]} 55%,${tone[2]} 100%)`});
+ mk(L,'','',{position:'absolute',inset:'0',backgroundImage:'linear-gradient(rgba(0,0,0,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.045) 1px,transparent 1px)',backgroundSize:'90px 90px',WebkitMaskImage:'radial-gradient(ellipse at 50% 45%,#000 30%,transparent 78%)'});
+ const gr=mk(L,'','',{position:'absolute',inset:'0',backgroundImage:`url(${GURL})`,opacity:.07,mixBlendMode:'multiply'});
+ perFrame.push(t=>{const fr=Math.round(t*30);gr.style.backgroundPosition=`${(fr*31)%256}px ${(fr*67)%256}px`;});
+ tl.set(L,{visibility:'hidden'},0);tl.set(L,{visibility:'visible'},tIn);
+ if((o.wipe||'up')==='circle'){tl.fromTo(L,{clipPath:'circle(0px at 540px 960px)'},{clipPath:'circle(1300px at 540px 960px)',duration:.5,ease:'power3.inOut'},tIn);
+  tl.to(L,{clipPath:'circle(0px at 540px 960px)',duration:.4,ease:'power3.in'},tOut-.4);}
+ else{tl.fromTo(L,{y:1920},{y:0,duration:.42,ease:'power3.inOut'},tIn);tl.to(L,{y:-1920,duration:.38,ease:'power3.in'},tOut-.38);}
+ tl.set(L,{visibility:'hidden'},tOut);sfx(tIn,'whoosh');return L;}
+
+/* =====================================================================
+   KOMPONEN SIAP PAKAI (assets/components.js, disisipkan build.py)
+   ===================================================================== */
+/* === COMPONENTS === */
+
+/* =====================================================================
+   SCENE PROYEK (build/scenes.js, disisipkan build.py).
+   Pola: const g=grp(tMulai,tSelesai); lalu isi dengan P/A/mk + tl.fromTo, atau panggil komponen.
+   Resep: references/scene-recipes.md
+   ===================================================================== */
+/* === SCENES === */
+
+/* ---------------------------------------------------------------- */
+
+window.SFX=SFX;window.TOTAL=TOTAL;window.CAPS=CAPS;
+window.seek=async function(t){tl.seek(t,false);
+ const fr=Math.round(t*30);grainEl.style.backgroundPosition=`${(fr*73)%256}px ${(fr*151)%256}px`;
+ floaters.forEach(([el,amp,ph])=>el.style.translate=`0 ${(Math.sin(t*2.0+ph)*amp).toFixed(2)}px`);
+ perFrame.forEach(f=>f(t));
+ await Promise.all([ivUpdate(t),vidUpdate(t)]);};
+await seek(0);window.READY=true;
+}catch(e){window.TEMPLATE_ERROR=(e&&e.stack)||String(e);console.error(e);}})();
+</script></body></html>
