@@ -23,6 +23,10 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
   yang menyokong `ms` dari `GET /api/v1/voices`; terus pulangkan `url` audio + `timestamps` per perkataan).
   Mode `tts` biasa (suara Gemini: Puck, Charon...) menolak teks BM. Suara pustaka ElevenLabs yang tiada
   dalam senarai Nexabot gagal (500). Jangan guna suara `id-ID-*` (Indonesia).
+- **Urutan VO/TTS:** (1) Nexabot `/api/v1/voice` dahulu; (2) Gemini TTS sebagai pilihan kedua
+  (`GEMINI_API_KEY`, model `gemini-3.8-flash-tts`, suara cth. `Puck`) hanya jika Nexabot gagal atau pengguna
+  minta. Gemini membaca arahan gaya dengan kuat: hantar teks skrip sahaja, atau potong bahagian arahan
+  di awal audio. Gemini tiada timestamp perkataan: dapatkan masa dengan `wordtime.py --lang ms`.
 - Prompt untuk model imej/video boleh dalam Bahasa Inggeris (hasil lebih baik), tetapi dialog dan
   teks yang dipaparkan di dalamnya tetap Bahasa Melayu Malaysia.
 - Bahasa lain hanya jika pengguna minta secara jelas. Peraturan ini mengatasi default bahasa dalam skill.
