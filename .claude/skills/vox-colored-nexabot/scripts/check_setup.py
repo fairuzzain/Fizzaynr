@@ -13,7 +13,7 @@ if not nexabot_key():
 else:
     try:
         c = Nexabot().credit()
-        print(f"Nexabot balance: {c.get('credit')} credits ({c.get('credit_cost')} per request)")
+        print(f"Nexabot balance: {c.get('credit')} credits (video {c.get('video_credit_cost')}, other {c.get('credit_cost')} per request)")
     except Exception as e:
         problems.append(f"Nexabot API not reachable or key rejected: {e}")
 if not importlib.util.find_spec("faster_whisper"):

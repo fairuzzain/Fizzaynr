@@ -1,6 +1,6 @@
 ---
 name: travelcut
-description: Turn real trip photos into a finished cinematic 9:16 travel film - reads and scores every photo, picks the strongest 6-16, finds and levels the best vertical frame inside each one (auto-crop with before/after sheets), animates each crop with Nexabot sfv (Veo start frame), makes the music with Nexabot, and edits the clips to the beat at REAL SPEED with diagonal whips, zoom punches, light dissolves, per-colour-world grades and the clips' own ambience. Use when the user drops trip / holiday / vacation / travel photos and asks for a travel film, travel reel, "video percutian", "jadikan gambar trip ni video", "cinematic travel video", or names /travelcut or TRAVELCUT. Event / launch / BTS recaps go to recap-reel instead.
+description: Turn real trip photos into a finished cinematic 9:16 travel film - reads and scores every photo, picks the strongest 6-16, finds and levels the best vertical frame inside each one (auto-crop with before/after sheets), animates each crop with Nexabot sfv (Omni Flash start frame), makes the music with Nexabot, and edits the clips to the beat at REAL SPEED with diagonal whips, zoom punches, light dissolves, per-colour-world grades and the clips' own ambience. Use when the user drops trip / holiday / vacation / travel photos and asks for a travel film, travel reel, "video percutian", "jadikan gambar trip ni video", "cinematic travel video", or names /travelcut or TRAVELCUT. Event / launch / BTS recaps go to recap-reel instead.
 argument-hint: "[photos or folder] [10|15|30 s] [feel] [music file]"
 ---
 
@@ -23,7 +23,7 @@ S="$ROOT/.claude/skills/travelcut/scripts"     # system python (numpy, PIL, cv2,
 R="${RUNS_DIR:-$ROOT/runs}/travelcut/<slug>"               # one folder per film, e.g. cappadocia-2026
 ```
 Always pass **absolute** `--out` paths to nexabot.ts (relative ones resolve inside the Nexabot kit folder).
-Cost: 0.15 credit per request (clip, image or music). Failed / filtered jobs are refunded.
+Cost: 0.3 credit per clip (Omni Flash), 0.15 per image or music request (0 for clips on API Unlimited). Failed / filtered jobs are refunded.
 
 **Best input** (tell the user if they ask what to send): 6–20 photos with good light, one clear
 subject each, and something that can move (water, steam, crowds, hair, flags, a road ahead). Wide or
@@ -96,7 +96,7 @@ Write `$R/videos/clips.json`: one `sfv` clip per shot, names `c01`… matching `
 For a hero shot you want two angles from, add `c01b` with a different camera move.
 Prompts: `references/prompts.md` (TravelCut template, unchanged in spirit). Then
 `bun $NB batch $R\videos\clips.json --dry` and show the user a compact table + **one total**:
-`0.15 × (clips + 1 music [+ 1 style test is part of the clips])` credits, and the wait
+`0.3 × clips + 0.15 × 1 music` credits (the style test is one of the clips), and the wait
 (~2–6 min per batch of 4 on Nexabot). There is no quality choice to offer: Nexabot clips are
 1080p 9:16 at the same price. Ask once for the whole batch; if already approved, don't ask again.
 A clip regenerated later is announced with its cost first.
@@ -133,7 +133,7 @@ A clip regenerated later is announced with its cost first.
 python $S\clean.py $R          # delogo BEFORE scaling → clean/*.mp4 at 1080x1920, source fps, muted; sheets/ at 1 fps
 ```
 **Review clips first**: Read `sheets/_all.png`. Per clip check the first frame matches the photo,
-identity, hands, anatomy, warping, flicker, melting text; Veo often draws stray text/numbers or
+identity, hands, anatomy, warping, flicker, melting text; the video model often draws stray text/numbers or
 drifts after ~4–5 s, so note each clip's **clean range**. Regenerate only clips that cannot be
 saved (announce the cost). Remove any shot whose staging looks physically odd, even if spectacular.
 
@@ -151,7 +151,7 @@ Write `$R/edit.json` (schema at the top of `scripts/cut.py`):
   `match`.
 - **Grade** per world in `worlds` (warmth, saturation, contrast, exposure), gentle, skin natural;
   light `vignette` (0.2).
-- **Sound**: music + continuous ambience from each clip's own Veo audio (`ambience_gain_db`, per-shot
+- **Sound**: music + continuous ambience from each clip's own audio (`ambience_gain_db`, per-shot
   `amb_db`), with J-cuts (`jcut` 0.3 s: the next place is heard before it is seen). No whooshes for
   camera moves. If the user asks for sound effects anyway, they go through the SFX pipeline
   (global CLAUDE.md: openverse-sfx → real-sfx → earshot), never synthesized here.
@@ -164,7 +164,7 @@ python $S\cut.py $R --preview      # 540x960, fast; prints each shot's source ra
 Read `qa_cuts.png` (4 frames around every cut) and the printed plan: every cut "on beat"/"on
 half-beat", no shot reported "window ran past the clip" that lost its key action, no junk frames.
 Fix edit.json and re-preview (free). Then `python $S\cut.py $R` → `final.mp4` (H.264 high,
-yuv420p, 24 fps = Veo's rate, AAC 48 kHz, −14 LUFS, true peak ≤ −1 dBTP, last ~1 s faded).
+yuv420p, 24 fps, AAC 48 kHz, −14 LUFS, true peak ≤ −1 dBTP, last ~1 s faded).
 
 ## 8. Check and deliver
 - cut.py prints duration, size, fps, integrated loudness and true peak; also look at the first and
@@ -187,7 +187,8 @@ render it with Nexabot (state clip count and cost) and stop.
 ## Gotchas
 - No image generation needed: the user's photos are the start frames. Only if the user has < 5
   usable photos, offer extra B-roll frames made with ChatGPT images (`codex-image/openai_image.py`, cost per image) and say they are generated, not theirs.
-- Clips are ~10 s; prompts ask for the key action in the first 4 s, the rest is spare range.
-- The Gemini mark sits at x 855, y 1695, 95×95 on 1080×1920; clean.py removes it before scaling.
+- Omni Flash clips default to 15 s (`duration` 1-60 in the clip JSON); prompts ask for the key action in the first 4 s, the rest is spare range.
+- Omni Flash clips have no watermark (per the API docs): run clean.py with `--no-delogo`. The old Veo
+  Gemini mark sat at x 855, y 1695, 95×95 on 1080×1920; clean.py still removes it by default.
 - cut.py reads ambience from `videos/<clip>.mp4` (raw) and picture from `clean/` — keep both.
 - Never pipe cut.py into `head` (broken pipe kills the render); use `tail`.

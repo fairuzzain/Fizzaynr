@@ -1,6 +1,6 @@
 ---
 name: vox
-description: The ONE Vox video skill - Vox-style cinematic diorama explainer made with Nexabot (TTS, img keyframes, Veo sfv clips, ffmpeg cut). Use for ANY Vox request - "buat video gaya Vox", "vox video", "vox collage", "explainer video", "news video", "why does X happen". Points to the vox-video-nexabot skill.
+description: The ONE Vox video skill - Vox-style cinematic diorama explainer made with Nexabot (TTS, img keyframes, Omni Flash sfv clips, ffmpeg cut). Use for ANY Vox request - "buat video gaya Vox", "vox video", "vox collage", "explainer video", "news video", "why does X happen". Points to the vox-video-nexabot skill.
 argument-hint: "[story/topic, number of chapters 1-4]"
 ---
 

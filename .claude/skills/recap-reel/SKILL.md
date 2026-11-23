@@ -1,6 +1,6 @@
 ---
 name: recap-reel
-description: Turn a handful of photos (event, launch, behind-the-scenes, team, product, travel) into a fast beat-cut cinematic recap reel like the FOH Media "LIVEX 2026" reel - every photo animated into a Veo clip with Nexabot sfv, music generated with Nexabot music, beat-detected, then cut in code with flash frames, whip blur, black title card with text-window reveal, negative-to-B&W hits, triptych/grid splits, warm grade, grain and synth whooshes. Use when the user gives several images and asks to "animate gambar ni jadi video", "buat recap reel / event recap / highlight video", "video macam reel ni", "BTS reel", "hype video dari gambar", or names /recap-reel.
+description: Turn a handful of photos (event, launch, behind-the-scenes, team, product, travel) into a fast beat-cut cinematic recap reel like the FOH Media "LIVEX 2026" reel - every photo animated into an Omni Flash clip with Nexabot sfv, music generated with Nexabot music, beat-detected, then cut in code with flash frames, whip blur, black title card with text-window reveal, negative-to-B&W hits, triptych/grid splits, warm grade, grain and synth whooshes. Use when the user gives several images and asks to "animate gambar ni jadi video", "buat recap reel / event recap / highlight video", "video macam reel ni", "BTS reel", "hype video dari gambar", or names /recap-reel.
 argument-hint: "[photos or folder] [title text] [16:9|9:16] [length s]"
 ---
 
@@ -10,7 +10,7 @@ Reference look: `references/style.md` (read it) and the two 8 fps contact sheets
 `references/reference_sheet_0-6s.png`, `references/reference_sheet_6-12s.png` (look at them once).
 
 Everything generative goes through **Nexabot** (never a paid image/video/music API): `sfv` for each photo's clip,
-`music` for the soundtrack. 0.15 credit per request, failed jobs are refunded.
+`music` for the soundtrack. 0.3 credit per clip (Omni Flash), 0.15 per music request; failed jobs are refunded.
 
 ```
 ROOT="$(git rev-parse --show-toplevel)"; set -a; [ -f "$ROOT/.env" ] && . "$ROOT/.env"; set +a   # repo root + overrides
@@ -44,7 +44,7 @@ vary the moves across clips, describe only motion that fits the photo).
 Write the music prompt (also in `references/prompts.md`).
 
 Show the user: frame list, each clip's camera move in one line, the music prompt, and the cost:
-`0.15 × (clips + 1 music)`. Run `bun $NB batch $R\videos\clips.json --dry` for the count.
+`0.3 × clips + 0.15` (music). Run `bun $NB batch $R\videos\clips.json --dry` for the count.
 **Wait for approval.**
 
 ## 3. Generate
@@ -58,18 +58,18 @@ Show the user: frame list, each clip's camera move in one line, the music prompt
    Then `python $S\beats.py $R\audio\music.mp3 --out $R\audio\beats.json --span <beats needed>`
    (beats needed ≈ length_s × bpm / 60). Note `bpm`, `suggested_start` (skips a quiet intro),
    `strong` beats (use them for flash / title hits). If the track is shorter than the reel, or has
-   no drive, generate one more with a clearer prompt (tell the user: +0.15). Fallback only if
+   no drive, generate one more with a clearer prompt (tell the user: +0.3). Fallback only if
    Nexabot music fails twice: a track from `${MUSIC_DIR:-$ROOT/assets/music}/`.
    A safety-filter rejection is refunded; reword neutrally.
 
 ## 4. Clean + look
 ```
-python $S\clean.py $R            # delogo (Gemini mark) → clean/*.mp4 at reel size, 25 fps, muted; sheets/
+python $S\clean.py $R            # delogo (old Veo Gemini mark; add --no-delogo for Omni Flash clips, which have none) → clean/*.mp4 at reel size, 25 fps, muted; sheets/
 ```
 Read `sheets/_all.png` (1 tile per second per clip). For each clip note the usable windows: good
-motion, faces intact, no stray text/numbers (Veo often draws junk after ~4–5 s), no morphing.
+motion, faces intact, no stray text/numbers (the video model often draws junk after ~4–5 s), no morphing.
 Rule (cut AI clips by content): pick each window from the strip and keep natural speed
-(`speed` 1; 0.5–0.8 only to stretch a calm moment). One 10 s clip usually gives 2–4 shots from
+(`speed` 1; 0.5–0.8 only to stretch a calm moment). One 15 s clip usually gives 2–4 shots from
 different seconds; vary `zoom`/`pan` so repeats read as new angles.
 
 ## 5. Edit plan → render
@@ -100,13 +100,13 @@ say so; a different cut/length/title/logo from the same clips is free.
 - Watermark: clean.py removes it before scaling; never scale raw clips first.
 - `img` is not needed here (the user's photos are the frames). If the user has fewer than 3
   photos, offer extra B-roll frames made with ChatGPT images (`codex-image/openai_image.py`; venue detail, crowd, lights) — they cost too.
-- Nexabot clips carry Veo audio; clean.py mutes it on purpose (the reel is music-led).
+- Nexabot clips carry their own audio; clean.py mutes it on purpose (the reel is music-led).
 - Keep people's likeness: no prompts that change faces, add celebrities or invent logos.
 - Learned on "Kembara Kerjaya" (Oct 2026): the words "face" / "hijab" in the prompt tripped the
   safety filter on a photo of real people; "Keep every person, outfit and the whole scene exactly
   as in the start frame" passed for all 11 photos. Rejections are refunded — reword and retry.
 - `JSON Parse error: Unrecognized token '<'` = Nexabot nginx 502 at submit (server side, not the
   file size). Retry the failed names a few minutes later with `--parallel 1`; nothing is charged.
-- Event posters / text-heavy graphics: don't animate them (Veo garbles text). Blur-fit them to the
+- Event posters / text-heavy graphics: don't animate them (the video model garbles text). Blur-fit them to the
   reel size and make a still clip in `clean/` (`ffmpeg -loop 1 -t 5`) for a zooming end card.
 - Never pipe render.py into `head` (the broken pipe kills the render); use `tail`.

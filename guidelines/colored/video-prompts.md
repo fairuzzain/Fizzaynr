@@ -2,7 +2,7 @@
 
 **/vox in color.** Identical to `guidelines/video-prompts.md` (same blocks, SHOT beats, camera
 library, AUDIO table, sequencing rules); only the style and AVOID blocks below change so the
-clip keeps the keyframe's hand-tinted color. The video model (Nexabot `sfv`, Veo) gets the
+clip keeps the keyframe's hand-tinted color. The video model (Nexabot `sfv`, Omni Flash 1.2) gets the
 keyframe as the exact first frame. Four blocks in order: **STYLE BLOCK → SHOT → AUDIO → AVOID**.
 
 ---
@@ -22,12 +22,12 @@ keyframe as the exact first frame. Four blocks in order: **STYLE BLOCK → SHOT 
 ## 2. SHOT, camera, escalation, AUDIO, sequencing
 
 Use `guidelines/video-prompts.md` sections 2, 3 and 6 unchanged, with two rules learned on
-Nexabot/Veo:
-- **Describe beats literally, never by a capitalised beat name.** Veo paints capitalised prompt
+Nexabot (Omni Flash; rules learned on Veo, still apply):
+- **Describe beats literally, never by a capitalised beat name.** The model paints capitalised prompt
   words into the frame ("ALERT WASH"). Write "the whole background floods to hot red in one
   beat", once per video, on the biggest beat.
 - **Keep text still.** Words and numbers already in the frame must not be covered, moved or
-  re-drawn; Veo garbles text in motion. Animate the objects around them.
+  re-drawn; the model garbles text in motion. Animate the objects around them.
 
 ---
 

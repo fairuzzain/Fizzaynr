@@ -1,6 +1,6 @@
 ---
 name: vox-colored-nexabot
-description: Vox Colored (Nexabot) - the /vox diorama explainer in vintage hand-tinted color (same aged-paper collage, keylined cutouts and giant numbers, colorized photos). Produce a researched, Vox-style news/politics explainer video end to end - current-events research, narration script, Nexabot TTS voice-over with word timestamps from a local faster-whisper pass, keyframes from the project style sheet (Nexabot img or Codex), Veo start-frame clips via the Nexabot API timed to the speech, and an ffmpeg final cut with music. Use when the user asks for a Nexabot Vox video, Vox Video without ElevenLabs/kie/Magnific, or runs /vox-colored. Same pipeline as vox-video-nexabot, colored style sheet and prompt system.
+description: Vox Colored (Nexabot) - the /vox diorama explainer in vintage hand-tinted color (same aged-paper collage, keylined cutouts and giant numbers, colorized photos). Produce a researched, Vox-style news/politics explainer video end to end - current-events research, narration script, Nexabot TTS voice-over with word timestamps from a local faster-whisper pass, keyframes from the project style sheet (Nexabot img or Codex), Omni Flash start-frame clips via the Nexabot API timed to the speech, and an ffmpeg final cut with music. Use when the user asks for a Nexabot Vox video, Vox Video without ElevenLabs/kie/Magnific, or runs /vox-colored. Same pipeline as vox-video-nexabot, colored style sheet and prompt system.
 argument-hint: "[optional guidance: story/topic, number of chapters 1-4]"
 ---
 
@@ -16,10 +16,11 @@ Style board: `assets/style_reference_colored.png` (the approved v3 test frame).
 Prompt rules: `guidelines/colored/`. Image prompts put the SHOT first, then `STYLE:` + the block.
 
 Voice, video and (by default) images go through the **Nexabot API** (`NEXABOT_API_KEY`,
-`https://nexabot.id`, 0.15 credit per request, refunded on failure). Word timestamps come from
+`https://nexabot.id`, 0.3 credit per video clip on `omni_flash`, 0.15 per `img`/`tts`/`music`
+request, refunded on failure; API reference: `docs/nexabot-api.md`). Word timestamps come from
 a local faster-whisper pass. With `IMAGE_BACKEND=codex` the keyframes are made free by Codex
 CLI with the style sheet attached. Note: a Nexabot *web* Unlimited plan does NOT cover API
-requests; only the "API Unlimited" plan does (submit response then shows `"credit_cost": 0`).
+requests; only the "API Unlimited" plan does, for video only (submit response then shows `"credit_cost": 0`).
 
 Guidance from the user (may be empty): `$ARGUMENTS`
 
@@ -80,8 +81,8 @@ Write `$R/script.json`:
 
 Show the user: the chosen story (and why, if you chose it), the narration per chapter, the
 key sources, a rough visual beat list (one line per planned clip, marking any
-public-figure clips), and the **credit estimate**: 0.15 × (chapters for TTS + clips for
-video + clips for images when `IMAGE_BACKEND=nexabot`). **Wait for approval before any
+public-figure clips), and the **credit estimate**: 0.15 × (chapters for TTS + clips for images
+when `IMAGE_BACKEND=nexabot`) + 0.3 × clips for video. **Wait for approval before any
 paid API call.** Apply requested
 edits and re-confirm only if the changes are substantial.
 
@@ -136,16 +137,16 @@ the Style Block from `guidelines/colored/image-prompts.md` verbatim, then a SHOT
 of the clip: background, foreground/midground elements at named depths, focus, and the text
 on screen. Single 16:9 frame, not a style sheet. No timecodes.
 
-**Video model** (Nexabot `sfv`, Veo): **the keyframe is the first frame** of the clip, so
+**Video model** (Nexabot `sfv`, `model: omni_flash` = Omni Flash 1.2): **the keyframe is the first frame** of the clip, so
 design the image as the exact opening of the shot and let the SHOT describe motion away from
-it. Clips run ~8 s and come with Veo's own sound; only the first 0.25 s + the clip's window is
-used, which also skips Veo's habit of drawing stray labels/numbers after ~4-5 s.
+it. Clips run `VIDEO_DURATION` s (default 10; the API takes 1-60) and come with their own sound; only the first 0.25 s + the clip's window is
+used, which also skips the video model's habit of drawing stray labels/numbers after ~4-5 s.
 
 **Video prompt**: the four blocks from `guidelines/colored/video-prompts.md` (STYLE BLOCK A or B
 chosen per clip → SHOT → AUDIO → AVOID), verbatim — they already open with "The provided
 image is the exact first frame". Vary camera moves and backgrounds clip to clip, use the
 color flood at most once per video, describe every beat literally (never a capitalised beat
-name — Veo paints those words into the frame), and continue geometry across clips.
+name — the model paints those words into the frame), and continue geometry across clips.
 
 **Timing cues**: add them when they genuinely help sync, typically a 6 s clip (or any clip)
 where the narration names something mid-clip that should visibly happen at that moment
@@ -192,27 +193,24 @@ $PY $S/generate.py videos $R --dry    # count + credits
 $PY $S/generate.py videos $R          # parallel (MAX_PARALLEL); same --only / --force flags
 ```
 
-**Seedance option** ("guna seedance"): add `--engine seedance` (or `VIDEO_ENGINE=seedance` in `.env`).
-Nexabot Seedance 2.5, 15 s clips at 1284x716 from the keyframe, 0.2 credit each (always charged,
-refunded on failure), jobs queue in 60 s batches. Its clips have NO Gemini watermark: assemble with
-`WATERMARK_BOX=off`. `src` may then go up to 15 − display_duration; text in a Seedance clip stays
-clean for about 8-9 s, then starts to soften (first tested on "Wahyu Pertama", 2026-11-01).
+Seedance 2.5 and Veo were removed from the Nexabot API on 2026-11-11 (`/api/v1/seedance` is gone,
+`model` other than `omni_flash` returns 400); every clip now uses Omni Flash 1.2.
 
 For a new topic/look, generate ONE clip first (`--only ch1_c01`), pull a frame and check it
 before the rest. Each failed task is retried once automatically. A refusal "Konten ditolak
-filter keamanan" is refunded. For persistent failures (Veo safety filter), soften the prompt (less political charge, more distance, no
+filter keamanan" is refunded. For persistent failures (safety filter), soften the prompt (less political charge, more distance, no
 violence) and rerun with `--only`. Never add names to get past a failure.
 
 ## 7b. Choose each clip's cut (do not skip)
 
-The 10 s Nexabot clips usually put their best action (number ticking over, stamp, arrival on
-the destination tag, the settle) in the middle or end, and Veo sometimes writes prompt words or stray numbers into a few seconds. So never just take the first seconds:
+The Nexabot clips usually put their best action (number ticking over, stamp, arrival on
+the destination tag, the settle) in the middle or end, and the model sometimes writes prompt words or stray numbers into a few seconds. So never just take the first seconds:
 make a 1 fps strip of every clip
 (`ffmpeg -i clips/<id>.mp4 -vf "fps=1,scale=256:-1,tile=10x1" -frames:v 1 build/raw_<id>.png`,
 stack them with `vstack`), look at it, and set per clip in `plan.json`:
 - `src`: start second in the source so the window `src … src + display_duration` holds the
   best action, lands the key visual on the word it illustrates, ends on a settle, and skips
-  any garbled text. It must stay ≤ 10 − display_duration.
+  any garbled text. It must stay ≤ VIDEO_DURATION − display_duration.
 - `speed`: keep 1.0 (natural motion); go below 1 only when the clean part is shorter than
   the window.
 Then sample 4 frames per clip from `final.mp4` and check them.
@@ -223,11 +221,10 @@ Then sample 4 frames per clip from `final.mp4` and check them.
 $PY $S/assemble.py $R                 # --music path to force a track
 ```
 
-This removes the Gemini ✦ watermark with `delogo` (box set in `assemble.py`, override
-`WATERMARK_BOX=x,y,w,h` as frame fractions; the landscape box is mirrored from the measured
-portrait one, so check the bottom-right corner of the first final frame), trims 0.25 s off
+Omni Flash clips have no watermark, so `delogo` is off by default (`WATERMARK_BOX=on` brings back
+the old Veo box, or `x,y,w,h` as frame fractions for a custom one). It trims 0.25 s off
 the head of every clip, plays clips at `CLIP_SPEED` (default 1.0; a clip's own
-`speed` in plan.json wins, e.g. 0.6 to stay inside Veo's clean first seconds), cuts each clip frame-accurately to its
+`speed` in plan.json wins, e.g. 0.6 to stay inside the clip's clean first seconds), cuts each clip frame-accurately to its
 narration window (holding the last frame if a clip runs short), keeps clip sound effects at
 low volume (`CLIP_AUDIO_VOLUME`), lays narration on top, and adds one random track from
 `assets/music/` at `MUSIC_VOLUME` with fades. Output: `$R/final.mp4`.

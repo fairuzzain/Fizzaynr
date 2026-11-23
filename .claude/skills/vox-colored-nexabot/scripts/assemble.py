@@ -40,12 +40,15 @@ def video_size(path):
 
 
 def delogo(path):
-    """delogo filter for the Gemini watermark of a Nexabot (Veo) clip, as fractions of the frame.
+    """delogo filter for the Gemini watermark of old Nexabot Veo clips, as fractions of the frame.
+    Omni Flash clips have no watermark, so the default is off (WATERMARK_BOX=on restores the box).
     Portrait box measured on 1080x1920 clips (x 855, y 1695, 95x95); landscape mirrors its margins
     and should be checked on a test clip. Override with WATERMARK_BOX=x,y,w,h (fractions) or 'off'."""
-    box = env("WATERMARK_BOX", "")
+    box = env("WATERMARK_BOX", "off")
     if box == "off":
         return ""
+    if box == "on":
+        box = ""
     w, h = video_size(path)
     if box:
         fx, fy, fw, fh = map(float, box.split(","))
@@ -89,7 +92,7 @@ def main():
             slow = f"setpts=(PTS-STARTPTS)/{speed}," if speed != 1.0 else ""
             vf = (f"{delogo(src) if c.get('delogo', True) else ''}{slow}scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1,"
                   f"fps={FPS},tpad=stop_mode=clone:stop_duration=3")
-            # optional plan.json "src": where in the 10 s source this clip's window starts (default TRIM_START);
+            # optional plan.json "src": where in the VIDEO_DURATION-second source this clip's window starts (default TRIM_START);
             # pick it from a 1 fps strip so the clip's best action lands on the narration
             cmd = ["ffmpeg", "-y", "-v", "error", "-ss", str(c.get("src", TRIM_START)), "-i", str(src)]
             if has_audio(src):

@@ -10,9 +10,9 @@ Source: a Kling 2.5 (Higgsfield) prompt guide + a pass-through whoosh SFX
 (`assets/pass_through_sfx.mp3`, 9.6 s, sound 1.56–7.8 s, peak ≈ 3.0 s = the moment of passing through).
 Prompts: `references/prompts.md` (read it - the guide's master prompt and its 10 variations).
 
-**Nexabot has no start+end-frame mode** (checked GET /api/v1/modes on 2026-10-31: `sfv` takes 1 image).
-So Image 1 is the start frame and the destination (Image 2) is **described in words** inside the prompt;
-Veo draws scene 2 itself. One real continuous shot - never fake it by joining an Image 2 clip with a
+**Nexabot has no start+end-frame mode** (rechecked GET /api/v1/modes on 2026-11-23: `sfv` takes 1 image; `i2v` takes 1-3 ingredient images, not a start+end pair).
+So Image 1 is the start frame and the destination (Image 2) is **described in words** inside the prompt.
+The video model (Omni Flash) draws scene 2 itself. One real continuous shot - never fake it by joining an Image 2 clip with a
 code transition (the user rejected that approach; it was built once and deleted). If the user
 needs scene 2 to match their Image 2 exactly, say so plainly: that needs a true first+last-frame model.
 
@@ -22,7 +22,7 @@ NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
 S="$ROOT/.claude/skills/window-pass-through/scripts"    # system Python (cv2, numpy, PIL)
 R="${RUNS_DIR:-$ROOT/runs}/window-pass-through/<slug>"               # one folder per shot
 ```
-Always pass **absolute** `--out` paths to nexabot.ts. 0.15 credit per request; safety-filter rejections are refunded.
+Always pass **absolute** `--out` paths to nexabot.ts. 0.3 credit per clip (Omni Flash); safety-filter rejections are refunded.
 
 ## 0. Brief (ask once, in Malay if the user writes Malay)
 Get or default:
@@ -52,7 +52,7 @@ one opening, forward only. Write it to `$R\clips.json`:
 [{"name":"pass","mode":"sfv","prompt":"...","ratio":2,"resolution":1080,"media":["frames/start.png"]}]
 ```
 Show the user: the start frame, the opening and the camera path in one line, the destination
-description, and the cost (`bun $NB batch $R\clips.json --dry` → 0.15 per clip). **Wait for approval.**
+description, and the cost (`bun $NB batch $R\clips.json --dry` → 0.3 per clip). **Wait for approval.**
 
 ## 3. Generate (one test first)
 `bun $NB batch $R\clips.json --parallel 1` → `$R\pass.mp4` (+ `nexabot-results.json`).
@@ -60,13 +60,13 @@ Then analyse it:
 ```
 python $S\pass_through.py analyse $R\pass.mp4
 ```
-This removes the Gemini ✦ watermark (`pass_clean.mp4`), writes a labelled 1 fps contact sheet
+This runs delogo on the old Veo Gemini ✦ corner (Omni Flash clips have none; a blur of that corner is the only side effect) (`pass_clean.mp4`), writes a labelled 1 fps contact sheet
 (`pass_sheet.png`) and a 4 fps strip around the most likely crossing (`pass_strip.png`), and prints
 the top crossing candidates (biggest frame-to-frame change). **Look at both images** and decide:
 - the crossing time (camera goes through the glass/opening),
-- the clean range: Veo adds stray text/numbers or morphs after ~5–6 s - end before that,
+- the clean range: the model adds stray text/numbers or morphs after ~5–6 s - end before that,
 - whether it worked. Retry once with a reworded prompt if the camera never reaches the opening,
-  stops at the glass, cuts instead of travelling, or scene 2 is wrong (+0.15, tell the user). Typical fixes:
+  stops at the glass, cuts instead of travelling, or scene 2 is wrong (+0.3, tell the user). Typical fixes:
   name the opening's position in frame ("the lit pod in the upper left"), add "the camera passes
   through the glass without stopping", shorten the destination description to its 3–4 strongest details.
 
@@ -75,7 +75,7 @@ the top crossing candidates (biggest frame-to-frame change). **Look at both imag
 python $S\pass_through.py render $R\pass.mp4 --cross <s> --in <s> --len <s> [--veo-gain 0.35] [--sfx-gain 1.0]
 ```
 Trims `pass_clean.mp4` to `[in, in+len]` at natural speed (no slow-down), places the SFX so its peak
-lands exactly on `--cross`, mixes it over Veo's own sound (ducked to `--veo-gain`, 0 to mute), fades
+lands exactly on `--cross`, mixes it over the clip's own sound (ducked to `--veo-gain`, 0 to mute), fades
 the tail, and writes `$R\pass_final.mp4`. Keep at least ~1.5 s before the crossing so the move reads.
 Check the result: extract 3 frames (before / at / after the crossing) and listen to where the hit lands.
 
@@ -88,4 +88,4 @@ ffmpeg concat after rendering each hop's SFX.
 
 ## Delivery
 Send `pass_final.mp4` (give its full path) and report: credits used, crossing time, clean range used,
-and anything Veo got wrong in scene 2.
+and anything the model got wrong in scene 2.

@@ -2,17 +2,17 @@
 
 Source: ANDR3 AI, "AI Motion Graphics Videos" (X article, 24 Jun 2026). Their chain is
 Pinterest "collage art" refs → ChatGPT as creative director → Gemini Omni in Google Flow → 2+ takes →
-best parts combined in an editor. Here Claude is the creative director and Nexabot (Veo) renders.
+best parts combined in an editor. Here Claude is the creative director and Nexabot (Omni Flash) renders.
 
 ## 1. Creative-director pass (Claude does this, no tool)
 
 Look at every style reference and write `style.md` for the run: the visual language described
 **directly**, as if already fully understood. Never write "reference", "uploaded image", "style
-reference" or "based on the references" in style.md or in any clip prompt - Veo has never seen them.
+reference" or "based on the references" in style.md or in any clip prompt - the video model has never seen them.
 
 Cover, in concrete words (materials, colours, edges, how things move):
 - Animation - frame rate feel, jitter, how objects swap and reposition
-- Typography look (Veo will NOT draw it - it is added in post; style.md only says where labels sit)
+- Typography look (the video model will NOT draw it - it is added in post; style.md only says where labels sit)
 - Camera - zooms, punch-ins, whip pans, pullbacks, board rotations, macro texture shots
 - Movement - how paper, tape, photos, cutout heads and the paper puppet move
 - Texture - halftone, paper grain, torn edges, tape, stamps, drop shadows
@@ -31,13 +31,13 @@ No references given → use the default style below unchanged.
 - **Mood:** highly energetic, bold, tactile, cinematic editorial; fast, playful, premium, handmade.
 - **Palette:** off-white paper, charcoal black, electric yellow accents; occasional muted red or teal
   only for contrast, yellow stays the main accent.
-- **Typography (post, not Veo):** fast kinetic pop-ups, bold condensed type, stamp texture,
+- **Typography (post, not the video model):** fast kinetic pop-ups, bold condensed type, stamp texture,
   word-by-word impact timing, oversized editorial headlines, paper-label captions, black ink on
   electric yellow.
 
 ## 2. Scene plan (the article's OUTPUT list, one row per beat)
 
-For every beat (≈ 6-9 s of voice-over, one Veo clip) decide:
+For every beat (≈ 6-9 s of voice-over, one Omni Flash clip) decide:
 shot · composition · camera move · object movement · character treatment (floating head cutout /
 full-body paper puppet / Polaroid frame / none) · transition into the next beat · texture focus ·
 the 1-3 emphasis words that pop in post · timing (where in the beat the hit lands).
@@ -70,9 +70,9 @@ labels and blank stamps only. No smooth 3D render, no motion blur, no extra peop
 ```
 
 Rules:
-- Keep "no readable text" in every prompt: Veo garbles words and starts adding stray labels after
+- Keep "no readable text" in every prompt: the video model garbles words and starts adding stray labels after
   ~4-5 s. All words are added in post by `build.py`.
-- One camera idea per clip. Describe actions with times; Veo follows 2-3 timed actions well, not 6.
+- One camera idea per clip. Describe actions with times; the model follows 2-3 timed actions well, not 6.
 - Safety-filter rejection (refunded): reword neutrally and resend.
 - Presenter beats use `i2v` with the presenter photo only (a clean photo, no text on it - `i2v` copies
   text from ingredient images). Beats without the presenter use `sfv` from a text-free ChatGPT image (`codex-image/openai_image.py`; Nexabot `img` as fallback)

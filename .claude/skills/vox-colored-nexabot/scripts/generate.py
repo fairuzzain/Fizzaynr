@@ -10,9 +10,10 @@ Images (IMAGE_BACKEND in .env):
                billed by that provider, parallel (OPENAI_PARALLEL, default 3)
   "codex"   -> Codex CLI on the ChatGPT login with assets/style_reference_colored.png as reference,
                free, one image at a time (parallel Codex runs collide on temp files)
-Videos (VIDEO_ENGINE in .env, or --engine):
-  "veo"      -> Nexabot `sfv` (Veo, ~10 s, the keyframe is the first frame), 0.15 credit each
-  "seedance" -> Nexabot Seedance 2.5 (15 s, keyframe as start frame), 0.2 credit each, always charged
+Videos:
+  Nexabot `sfv` on omni_flash (Omni Flash 1.2, the keyframe is the first frame), VIDEO_DURATION s
+  (default 10), VIDEO_RESOLUTION 720|1080, 0.3 credit each (0 on API Unlimited). Veo and Seedance
+  were removed from the API on 2026-11-11.
 
 Reads prompts from <run_dir>/plan.json, writes <run_dir>/images/<id>.png and
 <run_dir>/clips/<id>.mp4. Existing outputs are skipped unless --force or listed in --only.
@@ -27,7 +28,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from common import (CODEX_IMAGE_HINT as CODEX_IMAGE, OPENAI_IMAGE, CREDIT_COST, SEEDANCE_COST, NEXABOT_ASPECT, NEXABOT_RATIO, Nexabot,
+from common import (CODEX_IMAGE_HINT as CODEX_IMAGE, OPENAI_IMAGE, CREDIT_COST, VIDEO_COST, VIDEO_MODEL, CLIP_SECONDS, NEXABOT_ASPECT, NEXABOT_RATIO, Nexabot,
                     data_uri, env, find_style_reference, load_json, save_json)
 
 lock = threading.Lock()
@@ -133,22 +134,16 @@ def image_openai(run, clip, style):
     return f"{clip['id']}: {err}"
 
 
-def run_video(nb, run, clip, engine="veo"):
+def run_video(nb, run, clip):
     local = run / "images" / f"{clip['id']}.png"
     if not local.exists():
         return f"{clip['id']}: no image - run the images step first"
-    ratio = NEXABOT_RATIO[env("ASPECT_RATIO", "16:9")]
-    if engine == "seedance":
-        # prompt max 2000 chars; jobs queue in 60 s batches, so allow a long wait
-        body = {"mode": "seedance", "prompt": clip["video_prompt"][:2000], "duration": 15, "ratio": ratio,
-                "media": [data_uri(local)]}
-    else:
-        body = {"mode": "sfv", "prompt": clip["video_prompt"], "media": [data_uri(local)], "ratio": ratio,
-                "resolution": int(env("VIDEO_RESOLUTION", "720"))}
+    body = {"mode": "sfv", "model": VIDEO_MODEL, "prompt": clip["video_prompt"], "media": [data_uri(local)],
+            "ratio": NEXABOT_RATIO[env("ASPECT_RATIO", "16:9")], "duration": CLIP_SECONDS,
+            "resolution": int(env("VIDEO_RESOLUTION", "720"))}
     for attempt in (1, 2):
         try:
-            path, err = nb.run(body, run / "clips" / f"{clip['id']}.mp4",
-                               timeout=2700 if engine == "seedance" else 1500)
+            path, err = nb.run(body, run / "clips" / f"{clip['id']}.mp4", timeout=1500)
         except RuntimeError as e:
             path, err = None, str(e)
         if path:
@@ -165,7 +160,6 @@ def main():
     ap.add_argument("--only", help="comma-separated clip ids")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--dry", action="store_true", help="print the job count and cost, generate nothing")
-    ap.add_argument("--engine", choices=["veo", "seedance"], help="video engine (default VIDEO_ENGINE or veo)")
     a = ap.parse_args()
     run = Path(a.run_dir)
     plan_path = run / "plan.json"
@@ -195,10 +189,9 @@ def main():
         return
 
     backend = env("IMAGE_BACKEND", "openai") if a.stage == "images" else "nexabot"
-    engine = a.engine or env("VIDEO_ENGINE", "veo")
-    unit = SEEDANCE_COST if a.stage == "videos" and engine == "seedance" else CREDIT_COST
+    unit = VIDEO_COST if a.stage == "videos" else CREDIT_COST
     cost = 0 if backend in ("codex", "openai") else len(todo) * unit
-    via = backend if a.stage == "images" else f"nexabot {engine}"
+    via = backend if a.stage == "images" else f"nexabot sfv {VIDEO_MODEL} {CLIP_SECONDS}s"
     print(f"{len(todo)} {a.stage} via {via} · ~{cost:.2f} credits")
     if a.dry:
         return
@@ -228,7 +221,7 @@ def main():
     elif backend == "nexabot":
         nb = Nexabot()
         print(f"balance: {nb.credit().get('credit')} credits")
-        job = (lambda c: image_nexabot(nb, run, c)) if a.stage == "images" else (lambda c: run_video(nb, run, c, engine))
+        job = (lambda c: image_nexabot(nb, run, c)) if a.stage == "images" else (lambda c: run_video(nb, run, c))
         # Concurrent `img` jobs came back as copies of one image (2026-10-30), so images run one at a time
         workers = 1 if a.stage == "images" else int(env("MAX_PARALLEL", "4"))
     else:

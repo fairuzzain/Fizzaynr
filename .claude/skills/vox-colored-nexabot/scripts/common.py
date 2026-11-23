@@ -24,11 +24,18 @@ NEXABOT_KEY_FILE = Path(os.getenv("NEXABOT_KEY_FILE") or
                         Path(os.getenv("MOTION_KIT") or PROJECT_ROOT / "vendor" / "Motion_as_kit") / ".env.nexabot")
 CODEX_IMAGE_HINT = Path(os.getenv("CODEX_IMAGE_PS1") or PROJECT_ROOT / ".claude" / "skills" / "codex-image" / "codex-image.ps1")
 OPENAI_IMAGE = PROJECT_ROOT / ".claude" / "skills" / "codex-image" / "openai_image.py"
-CREDIT_COST = 0.15        # per request without the API Unlimited plan (refunded on failure)
-SEEDANCE_COST = 0.2       # Seedance 2.5 (own endpoint), always charged, refunded on failure
+# Nexabot API (https://nexabot.id/developers, checked 2026-11-23). Failed jobs are refunded.
+CREDIT_COST = 0.15        # img / music / tts on /api/v1/api, without the API Unlimited plan
+VIDEO_COST = 0.3          # any video mode (t2v/sfv/i2v/r2v/extend) on omni_flash; 0 on API Unlimited
+IMAGE_COST = 0.1          # sync premium image models, POST /api/v1/image (always charged)
+VOICE_COST = 0.02         # sync ElevenLabs voice, POST /api/v1/voice (always charged)
+VIDEO_MODEL = "omni_flash"  # Omni Flash 1.2, the only video model since 2026-11-11 (omni/veo -> 400)
+VIDEO_MODES = ("t2v", "sfv", "i2v", "r2v", "extend")
+RESULT_TTL_MIN = 30       # result files are deleted 30 min after a job finishes (then 410)
 
 TRIM_START = 0.25          # seconds cut from the head of every generated clip
-GEN_DURATIONS = (4, 8)     # clip length classes used by segment.py (Nexabot Veo clips run 10 s)
+GEN_DURATIONS = (4, 8)     # clip length classes used by segment.py
+CLIP_SECONDS = int(os.getenv("VIDEO_DURATION") or 10)  # omni_flash `duration` sent per clip (API allows 1-60, default 15)
 IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".webp")
 AUDIO_EXTS = (".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac")
 NEXABOT_RATIO = {"16:9": 1, "9:16": 2}      # video `ratio`
@@ -78,8 +85,8 @@ def nexabot_key():
 
 
 class Nexabot:
-    """POST /api/v1/api -> poll /api/v1/jobs/<id> -> GET /api/v1/jobs/<id>/download.
-    A body with mode "seedance" goes to /api/v1/seedance (and /api/v1/seedance/<id>) instead."""
+    """Async: POST /api/v1/api -> poll GET /api/v1/jobs/<id> -> GET /api/v1/jobs/<id>/download.
+    Sync (final file `url` in the reply): POST /api/v1/image, POST /api/v1/voice."""
 
     def __init__(self):
         key = nexabot_key()
@@ -88,39 +95,54 @@ class Nexabot:
         self.s = requests.Session()
         self.s.headers["x-api-key"] = key
 
-    def credit(self):
-        r = self.s.get(NEXABOT_BASE + "/api/v1/api/credit", timeout=60)
+    def _get(self, path):
+        r = self.s.get(NEXABOT_BASE + path, timeout=60)
         r.raise_for_status()
         return r.json()
 
-    @staticmethod
-    def _paths(body):
-        """(submit path, job path prefix): Seedance 2.5 has its own endpoint, not listed in /modes."""
-        if body.get("mode") == "seedance":
-            return "/api/v1/seedance", "/api/v1/seedance"
-        return "/api/v1/api", "/api/v1/jobs"
+    def credit(self):
+        return self._get("/api/v1/api/credit")
 
-    def submit(self, body):
-        submit_path, _ = self._paths(body)
-        if body.get("mode") == "seedance":
-            body = {k: v for k, v in body.items() if k != "mode"}
+    def modes(self):
+        """Modes, video models and the `tts` voice names."""
+        return self._get("/api/v1/modes")
+
+    def image_models(self):
+        return self._get("/api/v1/image")
+
+    def voices(self):
+        """ElevenLabs voices for POST /api/v1/voice (voice_id, name, gender, languages, features)."""
+        return self._get("/api/v1/voices")
+
+    @staticmethod
+    def _json(r):
+        return r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+
+    def _post(self, path, body, label, timeout=300):
         for attempt in range(5):
-            r = self.s.post(NEXABOT_BASE + submit_path, json=body, timeout=300)
+            r = self.s.post(NEXABOT_BASE + path, json=body, timeout=timeout)
             if r.status_code in (429, 502, 503, 504):
                 time.sleep(5 * (attempt + 1))
                 continue
-            d = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+            d = self._json(r)
             if r.status_code >= 400 or not d.get("ok"):
-                raise RuntimeError(f"{body.get('mode', 'seedance')} submit -> {r.status_code}: {d.get('error') or r.text[:300]}")
-            return d["job_id"]
-        raise RuntimeError(f"{body.get('mode', 'seedance')} submit -> still {r.status_code} after retries")
+                raise RuntimeError(f"{label} -> {r.status_code}: {d.get('error') or r.text[:300]}")
+            return d
+        raise RuntimeError(f"{label} -> still {r.status_code} after retries")
 
-    def wait(self, job_id, timeout=1200, interval=4, jobs="/api/v1/jobs"):
-        """Poll until done/failed. Returns (job, None) or (None, error)."""
+    def submit(self, body):
+        body = dict(body)
+        if body.get("mode") in VIDEO_MODES:
+            body.setdefault("model", VIDEO_MODEL)
+        return self._post("/api/v1/api", body, f"{body.get('mode')} submit")["job_id"]
+
+    def wait(self, job_id, timeout=1200, interval=3):
+        """Poll every 2-5 s (the docs: faster gives nothing) until done/failed.
+        Returns (job, None) or (None, error)."""
         deadline = time.time() + timeout
         while time.time() < deadline:
             time.sleep(interval)
-            r = self.s.get(f"{NEXABOT_BASE}{jobs}/{job_id}", timeout=60)
+            r = self.s.get(f"{NEXABOT_BASE}/api/v1/jobs/{job_id}", timeout=60)
             if r.status_code in (429, 502, 503, 504):
                 continue
             r.raise_for_status()
@@ -130,13 +152,15 @@ class Nexabot:
                 return job, None
             if job.get("status") == "failed":
                 return None, f"job failed: {job.get('error')}"
-            interval = min(interval * 1.2, 10)
-        return None, f"timed out; job {job_id} can still be downloaded within 60 min"
+            interval = min(interval * 1.2, 5)
+        return None, f"timed out; job {job_id} may still finish - download within {RESULT_TTL_MIN} min of completion"
 
-    def download(self, job_id, dest, jobs="/api/v1/jobs"):
+    def download(self, job_id, dest):
         dest = Path(dest)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        with self.s.get(f"{NEXABOT_BASE}{jobs}/{job_id}/download", stream=True, timeout=600) as r:
+        with self.s.get(f"{NEXABOT_BASE}/api/v1/jobs/{job_id}/download", stream=True, timeout=600) as r:
+            if r.status_code == 410:
+                raise RuntimeError(f"job {job_id}: file expired ({RESULT_TTL_MIN} min after completion)")
             r.raise_for_status()
             with open(dest, "wb") as f:
                 for chunk in r.iter_content(1 << 16):
@@ -145,9 +169,33 @@ class Nexabot:
 
     def run(self, body, dest, timeout=1200):
         """Submit, wait and download in one go. Returns (path, None) or (None, error)."""
-        _, jobs = self._paths(body)
         job_id = self.submit(body)
-        job, err = self.wait(job_id, timeout=timeout, jobs=jobs, interval=10 if "seedance" in jobs else 4)
+        job, err = self.wait(job_id, timeout=timeout)
         if err:
             return None, err
-        return self.download(job_id, dest, jobs=jobs), None
+        return self.download(job_id, dest), None
+
+    def _fetch(self, url, dest):
+        dest = Path(dest)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        url = url if url.startswith("http") else NEXABOT_BASE + url
+        with self.s.get(url, stream=True, timeout=600) as r:
+            r.raise_for_status()
+            with open(dest, "wb") as f:
+                for chunk in r.iter_content(1 << 16):
+                    f.write(chunk)
+        return dest
+
+    def image(self, prompt, dest, model="nano_banana_2", **opts):
+        """Sync premium image (0.1 credit). opts: aspect="16:9", resolution="2K" for nano_banana*,
+        image_size="landscape_16_9" for gpt_image_* / mai_image_*. See image_models()."""
+        d = self._post("/api/v1/image", {"model": model, "prompt": prompt, **opts}, f"image {model}", timeout=300)
+        return self._fetch(d["url"], dest), d
+
+    def voice(self, text, voice_id, dest, language_code="id-ID", **opts):
+        """Sync ElevenLabs voice (0.02 credit, text <= 5000 chars). opts: speed 0.5-2, and
+        stability / similarity_boost / style 0-1 where the voice's features allow them.
+        Returns (path, reply); reply["timestamps"] = [{text, start}]."""
+        body = {"text": text, "voice_id": voice_id, "language_code": language_code, **opts}
+        d = self._post("/api/v1/voice", body, "voice", timeout=300)
+        return self._fetch(d["url"], dest), d

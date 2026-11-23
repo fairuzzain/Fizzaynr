@@ -19,7 +19,7 @@ NB="${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}"
 S="$ROOT/.claude/skills/collage-motion/scripts"      # system Python (PIL)
 R="${RUNS_DIR:-$ROOT/runs}/collage-motion/<slug>"                 # one folder per video
 ```
-Always pass **absolute** `--out` paths to nexabot.ts. 0.15 credit per request; filter rejections are refunded.
+Always pass **absolute** `--out` paths to nexabot.ts. 0.3 credit per clip (Omni Flash), 0.15 per image/TTS request; filter rejections are refunded.
 
 ## 0. Brief (ask once, in Malay if the user writes Malay)
 - **Voiceover script** - the user's, or write one (English VO always, even for Malay topics; short
@@ -34,7 +34,7 @@ Do not ask about anything with a sensible default.
 ## 1. Creative-director pass (no credits)
 1. Look at every style ref; write `$R\style.md` in direct visual language (prompts.md §1). Never
    mention references in it.
-2. Split the script into **beats** of one sentence / ≈ 6-9 s (≤ 22 words) - one Veo clip each.
+2. Split the script into **beats** of one sentence / ≈ 6-9 s (≤ 22 words) - one Omni Flash clip each.
 3. Write `$R\beats.md`: per beat the VO line, shot, camera, movement, character treatment, transition,
    emphasis words (prompts.md §2).
 4. Write `$R\takes\clips.json` from the template (prompts.md §3), takes `<id>_a` / `<id>_b`:
@@ -43,7 +43,7 @@ Do not ask about anything with a sensible default.
      (fallback if it fails twice: `bun $NB img "<...>" --aspect 5 --out ...`)
      (look at it; redo if it has text), then `"mode":"sfv","media":["../frames/s03.png"]`.
 5. Show the user: style summary (3 lines), the beat table, and the cost
-   (`bun $NB batch $R\takes\clips.json --dry` count + TTS beats + start frames, × 0.15). **Wait for approval.**
+   (`bun $NB batch $R\takes\clips.json --dry` count + × 0.3 + TTS beats + start frames × 0.15). **Wait for approval.**
 
 ## 2. Test, then generate
 - **One test first:** run beat 1 take a alone (a one-item JSON), then `python $S\build.py sheet $R`
@@ -56,10 +56,10 @@ Do not ask about anything with a sensible default.
 ## 3. Pick the best of each beat
 `python $S\build.py sheet $R` → delogoed `clean\*.mp4` + labelled 1 fps `sheets\*.png`. **Look at
 every sheet.** Per beat choose the take and the clean window: start (`in`) after any slow first
-second, end before Veo's stray text/morphs (~4-6 s). Window = VO length × speed; speed 0.5-1 stretches
+second, end before the model's stray text/morphs (~4-6 s). Window = VO length × speed; speed 0.5-1 stretches
 a short clean range. A beat may switch takes - split it into two plan beats with the VO split too
 only if really needed; otherwise one take per beat.
-If a beat has no usable take, reword and regenerate that beat only (+0.15, tell the user).
+If a beat has no usable take, reword and regenerate that beat only (+0.3, tell the user).
 
 ## 4. Cut
 Write `$R\plan.json` (format in the docstring of `build.py`): per beat `vo`, `clip`, `in`, `speed`,
@@ -70,9 +70,9 @@ stop-motion percussion, paper and claps, no vocals>" --out $R\audio\music.mp3`, 
 python $S\build.py render $R      # → $R\final.mp4
 ```
 Words are drawn by PIL (Impact, black ink on electric yellow paper label, stamp specks, ±5°,
-2-frame slap-in); `fps 12` steps the picture like stop-motion; Veo's own paper/tape sound stays under the VO
+2-frame slap-in); `fps 12` steps the picture like stop-motion; the clip's own paper/tape sound stays under the VO
 (`veo_gain`). Check: extract 3-4 frames at word hits and play the cut once for VO/word sync.
 
 ## Delivery
 Send `final.mp4` (give its full path) and report: credits used (clips + TTS + images + music), which
-take each beat used, and anything Veo got wrong (identity drift, stray text). Offer re-rolls of weak beats.
+take each beat used, and anything the video model got wrong (identity drift, stray text). Offer re-rolls of weak beats.

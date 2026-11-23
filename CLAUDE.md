@@ -16,7 +16,7 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 ## Defaults
 - **Images: ChatGPT images** for every skill — `python "$ROOT/.claude/skills/codex-image/openai_image.py"`
   (gpt-image models, `OPENAI_IMAGE_API_KEY`). Nexabot `img` only if it fails twice.
-- Video clips, music and TTS: Nexabot. Do not switch to paid video connectors.
+- Video clips, music and TTS: Nexabot (video model `omni_flash`; API notes in `docs/nexabot-api.md`). Do not switch to paid video connectors.
 - Never put API keys in chat, print them, or commit `.env`.
 
 ## Use Claude Code as little as possible (delegate the writing)

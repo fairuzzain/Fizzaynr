@@ -1,6 +1,6 @@
 ---
 name: vox-colored
-description: FULL-COLOR version of the Vox video skill - the same /vox aged-paper diorama (keylined cutouts, giant stat numbers on torn labels, maps, newsprint) in vintage hand-tinted color, made with Nexabot (TTS, img keyframes, Veo sfv clips, ffmpeg cut). Use for /vox-colored, "vox berwarna", "vox colored", "vox versi warna", or a colorful collage explainer. Points to the vox-colored-nexabot project skill. The black-and-white diorama stays /vox.
+description: FULL-COLOR version of the Vox video skill - the same /vox aged-paper diorama (keylined cutouts, giant stat numbers on torn labels, maps, newsprint) in vintage hand-tinted color, made with Nexabot (TTS, img keyframes, Omni Flash sfv clips, ffmpeg cut). Use for /vox-colored, "vox berwarna", "vox colored", "vox versi warna", or a colorful collage explainer. Points to the vox-colored-nexabot project skill. The black-and-white diorama stays /vox.
 argument-hint: "[story/topic, number of chapters 1-4]"
 ---
 
