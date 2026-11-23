@@ -1,0 +1,15 @@
+{
+  "enabledPlugins": {
+    "dark-motion@fizzaynr": true,
+    "script-to-motion-reel@fizzaynr": true,
+    "serif-editorial-reel@fizzaynr": true
+  },
+  "extraKnownMarketplaces": {
+    "fizzaynr": {
+      "source": {
+        "source": "directory",
+        "path": "./"
+      }
+    }
+  }
+}

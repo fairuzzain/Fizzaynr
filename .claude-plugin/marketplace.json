@@ -1,0 +1,23 @@
+{
+  "name": "fizzaynr",
+  "owner": {
+    "name": "fizzaynr"
+  },
+  "plugins": [
+    {
+      "name": "dark-motion",
+      "source": "./plugins/dark-motion",
+      "description": "Edit video orang berbicara (talking head, podcast, UGC; vertikal maupun horizontal) jadi reel vertikal 1080x1920 bertema gelap dengan motion graphic modern non-kartun: caption per kata yang dikunci ke suara, potong jeda otomatis, zoom berirama, latar blur, scene grafis, SFX halus, lalu dirender jadi MP4 di bawah 30 MB. Semua hal soal selera (warna, font, glow, potongan jeda, musik, penutup) ditanyakan dulu ke user. Pakai saat user minta mengedit video jadi reel, short, atau TikTok, menambah caption atau animasi ke video podcast/talking head, atau membuat motion graphic dari rekaman orang berbicara."
+    },
+    {
+      "name": "script-to-motion-reel",
+      "source": "./plugins/script-to-motion-reel",
+      "description": "Buat video motion graphic vertikal 1080x1920 (reel/promo) dari MP3 voiceover + transkrip + brand guideline + folder aset, dengan animasi kinetic yang dikunci ke tiap kata VO: kinetic typography, emoji 3D sebagai metafora, panel putih bergelombang, chip glossy, counter, mockup HP, kursor + klik, CTA komentar. Perkakas siap pakai (template, rakit, render yang bisa dilanjut, mixer -14 LUFS dengan SFX bawaan atau milik user, QA otomatis, contact sheet). Pakai saat user minta video motion graphic, reel promo, atau kinetic typography dari voiceover/naskah, atau menyebut script to motion."
+    },
+    {
+      "name": "serif-editorial-reel",
+      "source": "./plugins/serif-editorial-reel",
+      "description": "Bikin reel vertikal 1080x1920 bergaya editorial dari video talking + VO: scene motion graphic gelap dan terang (kertas krem) yang selang-seling, tipografi serif italic ala majalah, caption per kata yang dikunci ke ucapan (menyala di latar gelap, tinta gelap di latar terang), grafik garis tipis, mockup HP 3D, rekonstruksi UI, aman dari safe zone reels. Pakai saat user menyebut serif editorial, minta reel bergaya editorial/majalah, atau minta mengedit video talking head/podcast jadi reel motion graphic yang mencampur scene gelap dan terang."
+    }
+  ]
+}
