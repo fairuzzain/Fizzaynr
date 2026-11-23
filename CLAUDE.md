@@ -19,22 +19,19 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 - Ejaan dan kosa kata Malaysia, bukan Indonesia (contoh: *tak, nak, awak, tengok, percuma, kat*;
   bukan *gak, mau, kamu, lihat, gratis, di sini*). Mata wang RM, format nombor `ms-MY`.
 - Transkripsi/ASR dan TTS: kod bahasa `ms` secara default (`--lang ms`, `TTS_LANGUAGE=ms`).
-- **TTS Bahasa Melayu = Nexabot `POST /api/v1/voice`** `{"text", "voice_id"}` (suara ElevenLabs/MiniMax
-  yang menyokong `ms` dari `GET /api/v1/voices`; terus pulangkan `url` audio + `timestamps` per perkataan).
-  Mode `tts` biasa (suara Gemini: Puck, Charon...) menolak teks BM. Suara pustaka ElevenLabs yang tiada
-  dalam senarai Nexabot gagal (500). Jangan guna suara `id-ID-*` (Indonesia).
-- **Urutan VO/TTS:** (1) Nexabot `/api/v1/voice` dahulu; (2) Gemini TTS sebagai pilihan kedua
-  (`GEMINI_API_KEY`, model `gemini-3.8-flash-tts`, suara cth. `Puck`) hanya jika Nexabot gagal atau pengguna
-  minta. Gemini membaca arahan gaya dengan kuat: hantar teks skrip sahaja, atau potong bahagian arahan
-  di awal audio. Gemini tiada timestamp perkataan: dapatkan masa dengan `wordtime.py --lang ms`.
-- Prompt untuk model imej/video boleh dalam Bahasa Inggeris (hasil lebih baik), tetapi dialog dan
-  teks yang dipaparkan di dalamnya tetap Bahasa Melayu Malaysia.
-- Bahasa lain hanya jika pengguna minta secara jelas. Peraturan ini mengatasi default bahasa dalam skill.
+- **VO/TTS: `python tools/tts.py --text-file skrip.txt --out <run>/vo.mp3 --words <run>/words.json`**
+  (1) **Gemini TTS dahulu** (`GEMINI_API_KEY`, `gemini-3.8-flash-tts`, suara `Puck`); (2) **Nexabot
+  `POST /api/v1/voice`** sebagai sandaran (suara ElevenLabs/MiniMax yang menyokong `ms`, default Adrian;
+  pulangkan timestamp perkataan). `--provider nexabot` untuk paksa Nexabot.
+  - Gemini membaca arahan gaya dengan kuat: hantar teks skrip sahaja. Tiada timestamp: dapatkan masa
+    dengan `wordtime.py --lang ms` (semak; kalau tak stabil, agih masa ikut blok senyap).
+  - Mode Nexabot `tts` biasa (suara Gemini Puck/Charon di Nexabot) menolak teks BM; suara pustaka
+    ElevenLabs di luar senarai Nexabot gagal (500). Jangan guna suara `id-ID-*` (Indonesia).
 
 ## Defaults
 - **Images: ChatGPT images** for every skill — `python "$ROOT/.claude/skills/codex-image/openai_image.py"`
   (gpt-image models, `OPENAI_IMAGE_API_KEY`). Nexabot `img` only if it fails twice.
-- Video clips, music and TTS: Nexabot. Do not switch to paid video connectors.
+- Video clips and music: Nexabot. TTS: `tools/tts.py` (Gemini first, Nexabot fallback). Do not switch to paid video connectors.
 - Never put API keys in chat, print them, or commit `.env`.
 
 ## Use Claude Code as little as possible (delegate the writing)
