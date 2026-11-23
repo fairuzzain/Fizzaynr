@@ -1,0 +1,215 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Reel</title>
+<!--
+  Template Script to Motion Reel. JANGAN diedit per proyek.
+  assemble.py mengisi tiga penanda di bawah dari brand.json, project.json, words.json, dan scenes.js:
+    FONTFACE  -> @font-face keluarga "P"
+    CSSVARS   -> warna brand sebagai CSS variable
+    CONFIG    -> window.CFG (brand, words, pauses, total, clips)
+    SCENES    -> isi scenes.js
+-->
+<style>
+/*__FONTFACE__*/
+:root{/*__CSSVARS__*/}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:P,sans-serif;color:#fff;background:var(--bg)}
+#bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,var(--bgLift) 0%,var(--bg) 60%,var(--bgDeep) 100%);overflow:hidden}
+.blob{position:absolute;left:0;top:0;width:1500px;height:1500px;margin:-750px 0 0 -750px;border-radius:50%}
+#grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px);background-size:90px 90px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 25%,transparent 75%)}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 45%,rgba(0,0,0,.5) 100%)}
+#cam{position:absolute;inset:0}
+#grain{position:absolute;inset:0;z-index:70;opacity:.055;mix-blend-mode:overlay;pointer-events:none}
+.scene{position:absolute;inset:0;visibility:hidden;overflow:hidden}
+.a{position:absolute;white-space:nowrap;line-height:1.15}
+.w{display:inline-block;padding:0 .12em;border-radius:12px}
+.chip{padding:22px 50px;border-radius:32px;background:linear-gradient(180deg,#fff 0%,var(--tint1) 55%,var(--tint2) 100%);color:var(--chipInk);font-weight:600;font-size:56px;
+  box-shadow:0 22px 44px rgba(0,0,0,.5),inset 0 3px 0 #fff,inset 0 -8px 14px var(--accentShade);border:2px solid rgba(255,255,255,.95)}
+.badge{border-radius:50%;background:radial-gradient(circle at 34% 26%,#fff 0%,var(--tint1) 40%,var(--tint2) 78%,var(--tint3) 100%);box-shadow:0 24px 48px rgba(0,0,0,.45),inset 0 -10px 18px var(--accentShade),0 0 0 8px rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border-radius:30px;box-shadow:0 30px 60px rgba(0,0,0,.5);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;white-space:normal;text-align:center}
+.ic{display:inline-block;background:var(--accent);-webkit-mask-position:center;-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;vertical-align:middle}
+.disp{font-family:var(--fd),sans-serif}
+.caret{display:inline-block;width:4px;height:1em;background:currentColor;margin-left:4px;vertical-align:-.12em}
+</style></head><body>
+<div id="stage"><div id="bg"><div id="grid"></div><div id="vig"></div></div><div id="cam"></div><div id="grain"></div></div>
+<script src="gsap.min.js"></script>
+<script>window.CFG = /*__CONFIG__*/;</script>
+<script>
+(async()=>{try{
+const CFG=window.CFG, BR=CFG.brand;
+await Promise.all(['400','500','600','700','800','900','italic 500','italic 600','italic 700','italic 800','italic 900']
+  .map(w=>document.fonts.load(w+' 80px P').catch(()=>{})).concat([document.fonts.load('400 80px D').catch(()=>{}),document.fonts.load('800 80px D').catch(()=>{})]));
+const stage=document.getElementById('stage'),cam=document.getElementById('cam'),bgEl=document.getElementById('bg');
+const TOTAL=CFG.total;
+const tl=gsap.timeline({paused:true});
+const SFX=[]; // jenis: click pop bubble whoosh swish thud ding tick type riser error
+const sfx=(t,type,g=1)=>SFX.push([+(+t).toFixed(3),type,g]);
+const counters=[],floaters=[],perFrame=[],VIDS=[];
+const RED=BR.accent, ACC=BR.accent, ACC_HI=BR.accentHi, INK=BR.ink, PAPER=BR.paper;
+
+// ---------- waktu ----------
+// PAUSES dari project.json: [[detik_di_VO_asli, durasi_hening], ...]. T() = waktu VO asli -> waktu final.
+const PAUSES=(CFG.pauses||[]).map(([p,d])=>[+p,+d]).sort((a,b)=>a[0]-b[0]);
+const T=t=>+(t+PAUSES.reduce((s,[p,d])=>s+(p<=t+1e-6?d:0),0)).toFixed(3);
+const WORDS=CFG.words||[];
+const norm=s=>String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]/g,'');
+const NW=WORDS.map(([t,w])=>norm(w));
+// at('kata') / at('private group') / at('kata', 2): waktu FINAL kata itu (kemunculan ke-n). Error kalau tidak ada.
+function at(phrase,n=1){const ks=String(phrase).split(/\s+/).map(norm).filter(Boolean);let c=0;
+  for(let i=0;i+ks.length<=NW.length;i++){if(ks.every((k,j)=>NW[i+j]===k)&&++c===n)return T(WORDS[i][0]);}
+  throw new Error(`at(): "${phrase}" (ke-${n}) tidak ada di words.json`);}
+// W(i): waktu FINAL kata ke-i (indeks words.json, mulai 0)
+const W=i=>{if(!WORDS[i])throw new Error('W(): indeks kata '+i+' tidak ada');return T(WORDS[i][0]);};
+
+// ---------- helper dasar ----------
+function mk(parent,html='',cls='',css={}){const e=document.createElement('div');if(cls)e.className=cls;e.innerHTML=html;Object.assign(e.style,css);parent.appendChild(e);return e;}
+function A(parent,x,y,html,cls='',css={}){const e=mk(parent,html,'a '+cls,Object.assign({left:x+'px',top:y+'px'},css));gsap.set(e,{xPercent:-50,yPercent:-50});return e;} // posisi = titik tengah
+function icon(name,size,color=RED){return `<span class="ic" style="width:${size}px;height:${size}px;background:${color};-webkit-mask-image:url(icon/${name}.svg)"></span>`}
+function emoji(name,size){return `<img src="img/${name}.png" style="width:${size}px;height:${size}px;display:block">`}
+/* stack(items, yTengah, gap): susun elemen (dibuat dengan A()) jadi SATU blok rapat yang ditengahkan di yTengah.
+ gap = angka px atau array per sela; default 0,22 x tinggi elemen yang lebih kecil (maks 36). Teks yang berkaitan WAJIB lewat stack(). */
+function stack(items,y,gap){const hs=items.map(e=>e.offsetHeight);
+ const gp=i=>Array.isArray(gap)?gap[i]:(gap!=null?gap:Math.min(36,Math.round(Math.min(hs[i],hs[i+1])*.22)));
+ let tot=hs.reduce((a,b)=>a+b,0);for(let i=0;i<items.length-1;i++)tot+=gp(i);
+ let cy=y-tot/2;items.forEach((e,i)=>{e.style.top=(cy+hs[i]/2)+'px';cy+=hs[i]+(i<items.length-1?gp(i):0);});
+ return {top:y-tot/2,bottom:y+tot/2};}
+function C(el){const r=el.getBoundingClientRect();return {x:r.left+r.width/2,y:r.top+r.height/2,l:r.left,r:r.right,t:r.top,b:r.bottom,w:r.width,h:r.height}}
+function scene(start,end,cls='',css={}){const s=mk(cam,'','scene '+cls,css);tl.set(s,{visibility:'visible'},start);tl.set(s,{visibility:'hidden'},end);return s;}
+
+// baris kata: [teks, waktu, styleOpsional]
+function line(parent,x,y,list,css={}){const e=A(parent,x,y,'','',css);
+  e._spans=list.map(([txt,t,st])=>{const s=document.createElement('span');s.className='w';s.textContent=txt;if(st)Object.assign(s.style,st);e.appendChild(s);s._t=t;return s;});return e;}
+function wordsIn(e,kind='blur'){e._spans.forEach(s=>inA(s,s._t,kind));}
+
+function inA(el,t,kind='blur',d){
+ if(kind==='blur') tl.fromTo(el,{opacity:0,y:40,filter:'blur(18px)'},{opacity:1,y:0,filter:'blur(0px)',duration:d||.38,ease:'power3.out'},t);
+ else if(kind==='pop') tl.fromTo(el,{opacity:0,scale:0},{opacity:1,scale:1,duration:d||.45,ease:'back.out(2.2)'},t);
+ else if(kind==='zoom') tl.fromTo(el,{opacity:0,scale:1.8,filter:'blur(20px)'},{opacity:1,scale:1,filter:'blur(0px)',duration:d||.42,ease:'power3.out'},t);
+ else if(kind==='slam') tl.fromTo(el,{opacity:0,scale:2.2},{opacity:1,scale:1,duration:d||.22,ease:'power4.in'},t);
+ else if(kind==='right') tl.fromTo(el,{opacity:0,x:260,filter:'blur(16px)'},{opacity:1,x:0,filter:'blur(0px)',duration:d||.4,ease:'power3.out'},t);
+ else if(kind==='drop') tl.fromTo(el,{opacity:0,y:-160,rotation:gsap.utils.random(-14,14)},{opacity:1,y:0,rotation:gsap.utils.random(-3,3),duration:d||.5,ease:'back.out(1.6)'},t);
+ else if(kind==='fade') tl.fromTo(el,{opacity:0},{opacity:1,duration:d||.3},t);}
+function outA(el,t,kind='blur',d=.22){
+ if(kind==='blur') tl.to(el,{opacity:0,filter:'blur(18px)',scale:1.12,duration:d,ease:'power2.in'},t);
+ else if(kind==='up') tl.to(el,{opacity:0,y:-120,filter:'blur(14px)',duration:d,ease:'power2.in'},t);
+ else if(kind==='left') tl.to(el,{opacity:0,x:-260,filter:'blur(16px)',duration:d,ease:'power2.in'},t);
+ else if(kind==='shrink') tl.to(el,{opacity:0,scale:0,duration:d,ease:'back.in(2)'},t);}
+// highlight kata kunci: pil berubah warna + membesar sekejap
+function hlOn(span,t,bg='#fff',col=RED){tl.to(span,{backgroundColor:bg,color:col,duration:.12,ease:'none'},t);tl.fromTo(span,{scale:1},{scale:1.12,duration:.1,yoyo:true,repeat:1,ease:'power2.out',immediateRender:false},t);}
+function shake(t,amp=18,d=.35){tl.to(cam,{keyframes:[{x:amp,y:-amp*.6},{x:-amp*.8,y:amp*.5},{x:amp*.5,y:amp*.3},{x:-amp*.3,y:-amp*.2},{x:0,y:0}],duration:d,ease:'none'},t);}
+// mengambang naik-turun sinus
+function float(el,amp=10,ph=0){floaters.push([el,amp,ph]);}
+
+// ---------- angka berjalan ----------
+// count(el, t, durasi, sampai, dari=0, {fmt, tick:true}). Format default 1.483 (titik ribuan).
+function count(el,t,d,to,from=0,o={}){const v={v:from};counters.push([v,el,o.fmt]);
+  tl.fromTo(v,{v:from},{v:to,duration:d,ease:o.ease||'power2.out',immediateRender:true},t);if(o.tick!==false)sfx(t,'tick');return v;}
+
+// ---------- mengetik ----------
+// typeText(el, t, teks, jedaPerHuruf=.079, caret=true) -> waktu selesai. SFX 'type' per huruf (mixer menggabungkannya jadi suara ketik).
+function typeText(el,t,text,step=.079,caret=true,caretUntil=null){el.textContent='';const tx=document.createElement('span');el.appendChild(tx);
+  let cr=null;if(caret){cr=document.createElement('span');cr.className='caret';el.appendChild(cr);}
+  const end=t+text.length*step;
+  perFrame.push(tt=>{const n=tt<t?0:Math.min(text.length,Math.floor((tt-t)/step)+1);tx.textContent=text.slice(0,n);
+    if(cr)cr.style.opacity=(caretUntil!==null&&tt>caretUntil)?0:((n<text.length&&tt>=t)?1:(Math.floor(tt*2.2)%2?0:1));});
+  [...text].forEach((ch,i)=>{if(ch.trim())sfx(t+i*step,'type');});return end;}
+
+// ---------- kursor + klik ----------
+const CUR=`<svg width="70" height="86" viewBox="0 0 28 34"><path d="M2 1 L2 27 L8.5 21 L12.8 31 L17 29.2 L12.8 19.6 L21.5 19.6 Z" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round"/></svg>`;
+const cur=mk(stage,CUR,'',{position:'absolute',left:'0',top:'0',zIndex:60,opacity:0,filter:'drop-shadow(0 6px 10px rgba(0,0,0,.35))'});gsap.set(cur,{transformOrigin:'4px 2px'});
+cur.dataset.qaSkip='';
+function cursorPath(pts,hideAt){ // pts [[t,x,y],...]
+ tl.set(cur,{x:pts[0][1],y:pts[0][2]},pts[0][0]);tl.fromTo(cur,{opacity:0},{opacity:1,duration:.12,immediateRender:false},pts[0][0]);
+ for(let i=1;i<pts.length;i++)tl.to(cur,{x:pts[i][1],y:pts[i][2],duration:pts[i][0]-pts[i-1][0],ease:'power2.inOut'},pts[i-1][0]);
+ if(hideAt)tl.to(cur,{opacity:0,duration:.12},hideAt);}
+function click(t,x,y,parent){tl.to(cur,{scale:.8,duration:.06},t).to(cur,{scale:1,duration:.12},t+.06);
+ const r=mk(parent||stage,'','',{position:'absolute',left:(x-50)+'px',top:(y-50)+'px',width:'100px',height:'100px',borderRadius:'50%',border:'5px solid rgba(255,255,255,.9)',opacity:0,zIndex:55});
+ r.dataset.qaSkip='';tl.fromTo(r,{opacity:.9,scale:.2},{opacity:0,scale:1.5,duration:.4,ease:'power2.out',immediateRender:false},t);sfx(t,'click');}
+
+// ---------- panel putih bergelombang (transisi ke scene terang) ----------
+function wavePath(t,yTop,amp,ph,w=1080,h=2600){let d=`M0 ${yTop}`;for(let x=0;x<=w;x+=40){d+=` L${x} ${yTop+Math.sin(x/w*Math.PI*2*0.9+t*1.6+ph)*amp+Math.sin(x/w*Math.PI*1.3+t*1.1)*amp*.5}`;}return d+` L${w} ${h} L0 ${h} Z`;}
+function whiteRise(parent,t,d=.38,color='#fff'){const wrap=mk(parent,'','',{position:'absolute',left:0,top:0,width:'1080px',height:'2600px'});wrap.dataset.qaSkip='';
+ wrap.innerHTML=`<svg width="1080" height="2600" style="display:block"><path fill="${color}"/></svg>`;const p=wrap.querySelector('path');
+ perFrame.push(tt=>p.setAttribute('d',wavePath(tt,200,70,0)));tl.fromTo(wrap,{y:1950},{y:-400,duration:d,ease:'power3.inOut'},t);sfx(t,'whoosh');return wrap;}
+
+// ---------- video dari image sequence (frames.py) ----------
+// vid(parent, 'nama', n|null, t0, t1, css, loop, rate). n=null -> jumlah frame diambil dari frames.py.
+function vid(parent,dir,n,t0,t1,css={},loop=false,rate=1){if(n==null)n=(CFG.clips||{})[dir];if(!n)throw new Error(`vid(): klip "${dir}" belum diekstrak (jalankan frames.py)`);
+ const w=mk(parent,'','',Object.assign({overflow:'hidden'},css));const im=document.createElement('img');
+ im.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';w.appendChild(im);VIDS.push({im,dir,n,t0,t1,loop,rate,cur:-1});return w;}
+function vidUpdate(t){const ps=[];for(const v of VIDS){if(t<v.t0-0.8||t>v.t1+0.1)continue;let f=Math.floor((t-v.t0)*30*v.rate+1e-6);
+ if(v.loop)f=((f%v.n)+v.n)%v.n;else f=Math.max(0,Math.min(v.n-1,f));
+ if(f!==v.cur){v.cur=f;v.im.src=`vf/${v.dir}/${String(f+1).padStart(4,'0')}.jpg`;ps.push(v.im.decode().catch(()=>{}));}}return Promise.all(ps);}
+
+// ---------- mockup HP ----------
+// phone(parent, x, y, lebar=520) -> {el, screen}. Isi screen dengan vid()/gambar. Masuk: inA(el,...,'zoom') + rotasi 3D ringan.
+function phone(parent,x,y,w=520){const h=Math.round(w*2.05);
+ const el=A(parent,x,y,'','',{width:w+'px',height:h+'px',borderRadius:Math.round(w*.14)+'px',background:'#0b0b0d',padding:Math.round(w*.035)+'px',
+   boxShadow:'0 40px 90px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.14),inset 0 0 0 2px rgba(255,255,255,.08)'});
+ const screen=mk(el,'','',{position:'relative',width:'100%',height:'100%',borderRadius:Math.round(w*.11)+'px',overflow:'hidden',background:'#000'});
+ mk(el,'','',{position:'absolute',left:'50%',top:Math.round(w*.06)+'px',width:Math.round(w*.3)+'px',height:Math.round(w*.07)+'px',marginLeft:-Math.round(w*.15)+'px',borderRadius:'99px',background:'#000',zIndex:3});
+ return {el,screen};}
+
+// ---------- A + B = C (gabungan dua hal menjadi hasil) ----------
+// mergeTo(parent, t, htmlA, htmlB, htmlC, {y, gap, w, h}) -> {A,B,P,C,end}
+// Kartu A pop -> "+" -> kartu B pop -> (gap dtk) keduanya meluncur bertabrakan -> cincin + kartu C lahir.
+function mergeTo(parent,t,a,b,c,o={}){const y=o.y||900,gap=o.gap||1.0,w=o.w||380,h=o.h||300;
+ const card=html=>A(parent,540,y,html,'card',{width:w+'px',height:h+'px',padding:'24px'});
+ const A1=card(a),B1=card(b);gsap.set(A1,{x:-235});gsap.set(B1,{x:235});
+ inA(A1,t,'pop');sfx(t,'pop');
+ const P=A(parent,540,y,'+','',{fontSize:'130px',fontWeight:900,color:ACC_HI,textShadow:'0 10px 30px rgba(0,0,0,.4)'});inA(P,t+.22,'pop');
+ inA(B1,t+.4,'pop');sfx(t+.4,'pop');
+ const tm=t+.4+gap;
+ tl.to(P,{opacity:0,scale:0,duration:.14},tm-.24);
+ tl.to(A1,{x:-30,duration:.26,ease:'power3.in'},tm-.26);tl.to(B1,{x:30,duration:.26,ease:'power3.in'},tm-.26);
+ tl.to([A1,B1],{opacity:0,scale:.55,filter:'blur(14px)',duration:.16,ease:'power2.in'},tm);
+ shake(tm,12,.3);sfx(tm,'thud',.8);
+ const R=A(parent,540,y,'','',{width:'220px',height:'220px',borderRadius:'50%',border:`10px solid ${ACC_HI}`});R.dataset.qaSkip='';
+ tl.set(R,{opacity:0},0);tl.fromTo(R,{opacity:.95,scale:.3},{opacity:0,scale:3.2,duration:.55,ease:'power2.out',immediateRender:false},tm);
+ const C1=A(parent,540,y,c,'card',{width:Math.round(w*1.25)+'px',height:Math.round(h*1.15)+'px',padding:'28px',boxShadow:`0 30px 70px rgba(0,0,0,.55),0 0 0 6px ${ACC}`});
+ inA(C1,tm+.06,'zoom');sfx(tm+.16,'ding');
+ return {A:A1,B:B1,P,C:C1,end:tm+.5};}
+
+// ---------- panah ajakan tegas ----------
+// bigArrow(parent, x, y, t, {dir:'down'|'up'|'left'|'right', size:170}) -> el. Pop lalu memantul terus.
+function bigArrow(parent,x,y,t,o={}){const s=o.size||170,dir=o.dir||'down',rot={down:0,up:180,left:90,right:-90}[dir];
+ const id='ag'+Math.random().toString(36).slice(2,7);
+ const el=A(parent,x,y,`<svg width="${s}" height="${s}" viewBox="0 0 100 100" style="display:block;transform:rotate(${rot}deg);overflow:visible">
+  <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${ACC_HI}"/><stop offset="1" stop-color="${ACC}"/></linearGradient></defs>
+  <path d="M34 6 H66 V50 H90 L50 96 L10 50 H34 Z" fill="url(#${id})" stroke="#fff" stroke-width="5" stroke-linejoin="round"/></svg>`,'',
+  {filter:'drop-shadow(0 18px 30px rgba(0,0,0,.45))'});
+ inA(el,t,'pop');sfx(t,'pop');
+ const v={down:[0,1],up:[0,-1],left:[-1,0],right:[1,0]}[dir];
+ perFrame.push(tt=>{const k=tt<t+.45?0:Math.abs(Math.sin((tt-t-.45)*4.2))*20;el.style.translate=`${v[0]*k}px ${v[1]*k}px`;});
+ return el;}
+
+// ---------- background hidup ----------
+const blobs=BR.blobs.map((c,i)=>Object.assign({c},[
+ {s:1.0,ax:360,ay:480,fx:.21,fy:.15,px:0,py:1,cx:260,cy:520},
+ {s:.9,ax:380,ay:360,fx:.17,fy:.25,px:2,py:4,cx:880,cy:1500},
+ {s:.85,ax:340,ay:460,fx:.25,fy:.19,px:4,py:2,cx:820,cy:700},
+ {s:.8,ax:400,ay:420,fx:.15,fy:.29,px:1,py:5,cx:200,cy:1450},
+ {s:.7,ax:300,ay:300,fx:.31,fy:.21,px:3,py:0,cx:540,cy:1150}][i%5]));
+const gridEl=document.getElementById('grid');
+blobs.forEach(b=>{b.el=document.createElement('div');b.el.className='blob';b.el.style.background=`radial-gradient(circle, ${b.c} 0%, rgba(0,0,0,0) 66%)`;bgEl.insertBefore(b.el,gridEl);});
+const grain=document.getElementById('grain');
+{const cv=document.createElement('canvas');cv.width=cv.height=256;const cx=cv.getContext('2d');const id=cx.createImageData(256,256);
+ let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+ for(let i=0;i<id.data.length;i+=4){const v=Math.floor(rnd()*255);id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=255;}
+ cx.putImageData(id,0,0);grain.style.backgroundImage=`url(${cv.toDataURL()})`;}
+function bgUpdate(t){const fr=Math.round(t*30);grain.style.backgroundPosition=`${(fr*73)%256}px ${(fr*151)%256}px`;
+ blobs.forEach(b=>{const x=b.cx+Math.sin(t*b.fx*1.25+b.px)*b.ax,y=b.cy+Math.cos(t*b.fy*1.25+b.py)*b.ay;
+  b.el.style.transform=`translate(${x}px,${y}px) scale(${b.s*(1+.15*Math.sin(t*.4+b.px))})`;});}
+
+// ================= SCENE PROYEK (scenes.js) =================
+/*__SCENES__*/
+// ============================================================
+
+const fmtDef=v=>Math.round(v).toLocaleString('id-ID');
+window.SFX=SFX;window.TOTAL=TOTAL;
+window.seek=async function(t){tl.seek(t,false);bgUpdate(t);
+  counters.forEach(([o,el,fmt])=>el.textContent=(fmt||fmtDef)(o.v));
+  floaters.forEach(([el,amp,ph])=>el.style.translate=`0 ${Math.sin(t*2.2+ph)*amp}px`);
+  perFrame.forEach(f=>f(t));await vidUpdate(t);};
+await seek(0);window.READY=true;
+}catch(e){window.TEMPLATE_ERROR=(e&&e.stack)||String(e);console.error(e);}})();
+</script></body></html>

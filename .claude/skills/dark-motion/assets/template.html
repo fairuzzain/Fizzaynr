@@ -1,0 +1,457 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Dark Motion</title>
+<style>
+/* Font bawaan (folder font/ disalin otomatis oleh assemble.py) */
+@font-face{font-family:I;src:url(font/inter-latin-400-normal.woff2);font-weight:400;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-500-normal.woff2);font-weight:500;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-600-normal.woff2);font-weight:600;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-700-normal.woff2);font-weight:700;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-800-normal.woff2);font-weight:800;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-900-normal.woff2);font-weight:900;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:I;src:url(font/inter-latin-ext-400-normal.woff2);font-weight:400;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:I;src:url(font/inter-latin-ext-500-normal.woff2);font-weight:500;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:I;src:url(font/inter-latin-ext-600-normal.woff2);font-weight:600;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:I;src:url(font/inter-latin-ext-700-normal.woff2);font-weight:700;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:I;src:url(font/inter-latin-ext-800-normal.woff2);font-weight:800;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:I;src:url(font/inter-latin-ext-900-normal.woff2);font-weight:900;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-700-italic.woff2);font-weight:700;font-style:italic;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-800-italic.woff2);font-weight:800;font-style:italic;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-900-italic.woff2);font-weight:900;font-style:italic;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-ext-700-italic.woff2);font-weight:700;font-style:italic;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-ext-800-italic.woff2);font-weight:800;font-style:italic;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:PF;src:url(font/playfair-display-latin-ext-900-italic.woff2);font-weight:900;font-style:italic;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:JB;src:url(font/jetbrains-mono-latin-700-normal.woff2);font-weight:700}
+/* === USERFONT === */
+
+/* Mode font kata kunci: serif (Playfair italic) | sans (Inter tebal) | custom (font user) | preset (font pack E1-E9) */
+:root{--c1:#86EF5A;--c2:#3FA9FF;--ink:#fff;--k1ink:#0b0b0d;--k2ink:#0b0b0d;
+  --bf:I;                                  /* font teks biasa */
+  --kf:PF;--kfs:italic;--kw:800;--kwX:900;--kls:-.01em;
+  --ease:rgba(0,0,0,.5) 0%,rgba(0,0,0,.5) 36%,rgba(0,0,0,.42) 50%,rgba(0,0,0,.29) 64%,rgba(0,0,0,.15) 78%,rgba(0,0,0,.05) 90%,rgba(0,0,0,0) 100%}
+:root[data-font="sans"]{--kf:I;--kfs:normal;--kw:900;--kwX:900;--kls:-.035em}
+:root[data-font="custom"]{--kf:UF,I;--kfs:normal;--kw:700;--kwX:800;--kls:-.01em}
+:root[data-body="custom"]{--bf:UF,I}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:var(--bf),sans-serif;color:var(--ink)}
+#cam{position:absolute;inset:0}
+.L{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+#vidW{position:absolute;inset:0}
+#vidW>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+#grade{background:radial-gradient(ellipse 85% 70% at 50% 42%,rgba(0,0,0,0) 62%,rgba(0,0,0,.34) 100%)}
+/* .ab = elemen berposisi absolut (dipakai helper A() dan P()). JANGAN dipakai sebagai kelas teks. */
+.ab{position:absolute;white-space:nowrap}
+
+/* ---------- caption ---------- */
+.cap{position:absolute;left:540px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.ln{display:flex;align-items:center;justify-content:center;white-space:nowrap;line-height:1.08}
+.cw{display:inline-block;margin:0 .12em;opacity:0}
+/* teks biasa */
+.n{font-family:var(--bf),sans-serif;font-weight:700;font-size:52px;letter-spacing:-.01em;color:#fff;
+   text-shadow:0 1px 3px #000,0 2px 7px rgba(0,0,0,.95),0 0 16px rgba(0,0,0,.9),0 0 38px rgba(0,0,0,.75)}
+/* kata kunci: s = netral putih, k1 = aksen 1, k2 = aksen 2, X = kata hantaman, k = blok warna */
+.s,.k1,.k2,.X,.k{font-family:var(--kf);font-style:var(--kfs);font-weight:var(--kw);letter-spacing:var(--kls)}
+.s{font-size:98px;color:#fff;
+   text-shadow:0 2px 4px #000,0 3px 12px rgba(0,0,0,.95),0 0 26px rgba(0,0,0,.8),0 0 50px rgba(0,0,0,.6)}
+.k1{font-size:100px;color:var(--c1);
+   text-shadow:0 2px 4px rgba(0,0,0,.95),0 3px 16px rgba(0,0,0,.9),0 0 60px rgba(0,0,0,.6)}
+.k2{font-size:100px;color:var(--c2);
+   text-shadow:0 2px 4px rgba(0,0,0,.95),0 3px 16px rgba(0,0,0,.9),0 0 60px rgba(0,0,0,.6)}
+.X{font-size:190px;line-height:1;font-weight:var(--kwX);color:#fff;
+   text-shadow:0 3px 6px #000,0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.75)}
+/* blok warna solid: kata kunci di footage terang. Warna tulisannya dihitung otomatis dari kecerahan aksen. */
+.k{font-size:92px;line-height:1.04;color:var(--k1ink);background:var(--c1);padding:.03em .15em .09em;margin:0 !important;text-shadow:none}
+.k.alt{background:var(--c2);color:var(--k2ink)}
+.mono{font-family:JB,monospace}
+.ic{display:inline-block;-webkit-mask-position:center;-webkit-mask-size:contain;-webkit-mask-repeat:no-repeat}
+
+/* ---------- glow, dimatikan lewat GLOW=false ---------- */
+:root[data-glow="on"] .n{text-shadow:0 1px 3px #000,0 2px 7px rgba(0,0,0,.95),0 0 16px rgba(0,0,0,.9),0 0 38px rgba(0,0,0,.75),0 0 10px rgba(255,255,255,.4)}
+:root[data-glow="on"] .s{text-shadow:0 2px 4px #000,0 3px 12px rgba(0,0,0,.95),0 0 26px rgba(0,0,0,.8),0 0 16px rgba(255,255,255,.5),0 0 40px rgba(255,255,255,.22)}
+:root[data-glow="on"] .k1{text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 5px rgba(255,255,255,.55),0 0 18px var(--c1),0 0 46px color-mix(in srgb,var(--c1) 55%,transparent),0 3px 16px rgba(0,0,0,.9)}
+:root[data-glow="on"] .k2{text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 5px rgba(255,255,255,.55),0 0 18px var(--c2),0 0 46px color-mix(in srgb,var(--c2) 55%,transparent),0 3px 16px rgba(0,0,0,.9)}
+:root[data-glow="on"] .X{text-shadow:0 3px 6px #000,0 4px 18px rgba(0,0,0,.95),0 0 40px rgba(0,0,0,.75),0 0 18px rgba(255,255,255,.4)}
+
+/* ---------- mockup HP ---------- */
+.p3{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1600px;perspective-origin:540px 1200px}
+.p3>div{transform-style:preserve-3d}
+.card{position:absolute;left:-135px;top:-270px;width:270px;height:540px;transform-style:preserve-3d}
+.phone{position:absolute;inset:0;border-radius:46px;background:linear-gradient(150deg,#5a5a64 0%,#24242a 22%,#0e0e11 55%,#2c2c33 85%,#5a5a64 100%);box-shadow:0 44px 90px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.1)}
+.rim{position:absolute;inset:3px;border-radius:43px;background:#050506}
+.screen{position:absolute;inset:9px;border-radius:38px;overflow:hidden;background:#000}
+.island{position:absolute;top:12px;left:50%;width:80px;height:23px;margin-left:-40px;border-radius:12px;background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+.btn{position:absolute;width:4px;border-radius:2px;background:linear-gradient(90deg,#26262c,#5c5c66)}
+.gloss{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.04) 30%,rgba(255,255,255,0) 48%);pointer-events:none}
+.sheen{position:absolute;top:-20%;left:0;width:45%;height:140%;background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.35) 50%,rgba(255,255,255,0) 100%);transform:translateX(-160%) skewX(-12deg)}
+
+/* ---------- komponen umum ---------- */
+.frameC{position:absolute;overflow:hidden;border-radius:22px;background:#000;box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.14)}
+.frameC .im{position:absolute;inset:0;background-repeat:no-repeat;background-size:cover}
+.brk i{position:absolute;width:74px;height:74px;border:5px solid var(--c);filter:drop-shadow(0 0 10px var(--c))}
+.brk i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.brk i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.brk i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.brk i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.chip{position:absolute;display:flex;align-items:center;gap:12px;height:62px;padding:0 20px;border-radius:14px;background:rgba(7,9,10,.84);border:2px solid var(--c);box-shadow:0 0 26px color-mix(in srgb,var(--c) 55%,transparent);font:500 27px JB;letter-spacing:.05em;color:#fff;white-space:nowrap}
+.lbl{font:500 26px JB;letter-spacing:.08em;color:#fff;text-shadow:0 1px 3px #000,0 2px 8px #000,0 0 22px rgba(0,0,0,.9)}
+.l3{position:absolute;display:flex;align-items:center;gap:22px}
+.l3 .bar{width:5px;height:92px;background:var(--c1);box-shadow:0 0 18px color-mix(in srgb,var(--c1) 60%,transparent)}
+.l3 .t1{font:700 34px JB;letter-spacing:.04em;color:#fff;text-shadow:0 2px 8px #000}
+.l3 .t2{font:500 22px JB;letter-spacing:.12em;color:rgba(255,255,255,.72);margin-top:8px;text-transform:uppercase;text-shadow:0 2px 8px #000}
+</style></head><body><div id="stage">
+<div id="cam">
+ <div class="L" id="vidL"><div id="vidW"></div></div>
+ <div class="L" id="grade"></div>
+ <div class="L" id="under"></div>
+ <div class="L" id="xbg"></div>
+ <div class="L" id="ov"></div>
+</div>
+<div class="L" id="flash"></div>
+<div class="L" id="grain"></div>
+</div>
+<script>
+/* === ENGINE === */
+</script><script>
+(async()=>{
+/* ============ KONFIGURASI PROYEK ============
+   Diisi otomatis oleh assemble.py dari build/project.json. Jangan diedit di sini. */
+/* === CONFIG === */
+/* ============================================ */
+
+const R=document.documentElement;
+R.dataset.glow = GLOW ? 'on' : 'off';
+R.dataset.font = FONT_MODE;
+R.dataset.body = FONT_BODY;
+R.style.setProperty('--c1', C1);
+R.style.setProperty('--c2', C2);
+/* warna tulisan di atas blok aksen: gelap kalau aksennya terang, putih kalau aksennya gelap */
+function inkFor(hex){const h=hex.replace('#','');const n=parseInt(h.length===3?h.split('').map(c=>c+c).join(''):h.slice(0,6),16);
+ const ch=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});
+ return (.2126*ch[0]+.7152*ch[1]+.0722*ch[2])>.32?'#0b0b0d':'#ffffff';}
+R.style.setProperty('--k1ink', inkFor(C1));
+R.style.setProperty('--k2ink', inkFor(C2));
+
+const fontsToLoad=['400 40px I','500 40px I','600 40px I','700 40px I','800 40px I','900 40px I',
+ 'italic 700 40px PF','italic 800 40px PF','italic 900 40px PF','400 40px JB','500 40px JB','700 40px JB'];
+if(FONT_MODE==='custom'||FONT_BODY==='custom')fontsToLoad.push('400 40px UF','700 40px UF');
+if(FONT_MODE==='preset')fontsToLoad.push('400 40px PK','italic 400 40px PK','800 40px PK','italic 800 40px PK');
+if(FONT_BODY==='preset')fontsToLoad.push('400 40px PB','500 40px PB','600 40px PB','700 40px PB','800 40px PB');
+await Promise.all(fontsToLoad.map(f=>document.fonts.load(f).catch(()=>{})));
+
+const stage=document.getElementById('stage'),cam=document.getElementById('cam'),vidW=document.getElementById('vidW'),
+ ov=document.getElementById('ov'),under=document.getElementById('under'),xbg=document.getElementById('xbg'),
+ flash=document.getElementById('flash'),grainEl=document.getElementById('grain');
+
+const tl=gsap.timeline({paused:true});
+const SFX=[];const sfx=(t,type,g=1)=>{if(USE_SFX)SFX.push([+t.toFixed(3),type,g]);};
+const perFrame=[],VIDS=[],PRELOAD=[];
+
+/* ---------- helper dasar ---------- */
+function mk(p,html='',cls='',css={}){const e=document.createElement('div');if(cls)e.className=cls;e.innerHTML=html;Object.assign(e.style,css);p.appendChild(e);return e;}
+/* A(): elemen absolut berpusat di (x,y).  P(): elemen absolut dengan pojok kiri-atas di (x,y). */
+function A(p,x,y,html,cls='',css={}){const e=mk(p,html,'ab '+cls,Object.assign({left:x+'px',top:y+'px'},css));gsap.set(e,{xPercent:-50,yPercent:-50});return e;}
+function P(p,x,y,html,cls='',css={}){return mk(p,html,'ab '+cls,Object.assign({left:x+'px',top:y+'px'},css));}
+/* grp(t0,t1): wadah yang hanya terlihat dari t0 sampai t1. Hampir semua scene dimulai dari sini. */
+function grp(t0,t1,p=ov){const g=mk(p,'','L');tl.set(g,{visibility:'hidden'},0);tl.set(g,{visibility:'visible'},t0);if(t1!=null)tl.set(g,{visibility:'hidden'},t1);return g;}
+/* stack(items, yTengah, gap): susun elemen (dibuat dengan A()) jadi SATU blok rapat yang ditengahkan di yTengah.
+ gap = angka px atau array per sela; default 0,22 x tinggi elemen yang lebih kecil (maks 36). Teks yang berkaitan WAJIB lewat stack(). */
+function stack(items,y,gap){const hs=items.map(e=>e.offsetHeight);
+ const gp=i=>Array.isArray(gap)?gap[i]:(gap!=null?gap:Math.min(36,Math.round(Math.min(hs[i],hs[i+1])*.22)));
+ let tot=hs.reduce((a,b)=>a+b,0);for(let i=0;i<items.length-1;i++)tot+=gp(i);
+ let cy=y-tot/2;items.forEach((e,i)=>{e.style.top=(cy+hs[i]/2)+'px';cy+=hs[i]+(i<items.length-1?gp(i):0);});
+ return {top:y-tot/2,bottom:y+tot/2};}
+function hide(el){tl.set(el,{opacity:0},0);}
+function fadeIn(el,t,d=.4,from={y:30,filter:'blur(14px)'}){tl.fromTo(el,Object.assign({opacity:0},from),{opacity:1,x:0,y:0,scale:1,rotation:0,filter:'blur(0px)',duration:d,ease:'power3.out'},t);}
+function exit(g,t,d=.18){tl.to(g,{opacity:0,filter:'blur(10px)',duration:d,ease:'power2.in'},t-d);}
+function shake(t,amp=14,d=.32){tl.to(cam,{keyframes:[{x:amp,y:-amp*.6},{x:-amp*.8,y:amp*.5},{x:amp*.5,y:amp*.3},{x:-amp*.3,y:-amp*.2},{x:0,y:0}],duration:d,ease:'none'},t);}
+function pre(src){const i=new Image();i.src=src;PRELOAD.push(i);return src;}
+const svgNS=(w,h,inner,css='')=>`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none" style="display:block;${css}">${inner}</svg>`;
+
+/* === ICONS === */
+
+/* ---------- scrim: gradien hitam yang memudar halus ---------- */
+/* Dipakai setiap kali teks berdiri di atas footage terang atau ramai. */
+function scrimT(t0,t1,h=900){const e=mk(under,'','',{position:'absolute',left:0,right:0,top:0,height:h+'px',background:'linear-gradient(180deg,var(--ease))'});
+ hide(e);tl.to(e,{opacity:1,duration:.2},t0-.18);tl.to(e,{opacity:0,duration:.14},t1-.14);return e;}
+function scrimB(t0,t1,cy){const top=Math.max(0,cy-340);const e=mk(under,'','',{position:'absolute',left:0,right:0,top:top+'px',bottom:0,background:'linear-gradient(0deg,var(--ease))'});
+ hide(e);tl.to(e,{opacity:1,duration:.18},t0-.18);tl.to(e,{opacity:0,duration:.14},t1-.14);return e;}
+
+/* scrimM: pita gelap di tengah layar (caption di garis tengah dua panel) */
+function scrimM(t0,t1,cy){const e=mk(under,'','',{position:'absolute',left:0,right:0,top:(cy-260)+'px',height:'520px',
+ background:'linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.42) 30%,rgba(0,0,0,.5) 50%,rgba(0,0,0,.42) 70%,rgba(0,0,0,0) 100%)'});
+ hide(e);tl.to(e,{opacity:1,duration:.18},t0-.18);tl.to(e,{opacity:0,duration:.14},t1-.14);return e;}
+
+/* ---------- video utama + versi blur yang selalu sinkron ---------- */
+const vimg=document.createElement('img');vidW.appendChild(vimg);let vcur=-1;
+const BLURS=[];   // latar blur yang sedang dipakai scene
+async function ivUpdate(t){const f=Math.max(0,Math.min(MAIN_FRAMES-1,Math.floor(srcT(t)*30+1e-6)));
+ const ps=[];
+ if(f!==vcur){vcur=f;vimg.src=`vf/${MAIN}/${String(f+1).padStart(4,'0')}.jpg`;ps.push(vimg.decode().catch(()=>{}));}
+ for(const b of BLURS){ if(t<b.t0-.3||t>b.t1+.1)continue; if(b.cur!==f){b.cur=f;b.im.src=`vf/blur/${String(f+1).padStart(4,'0')}.jpg`;ps.push(b.im.decode().catch(()=>{}));} }
+ await Promise.all(ps);}
+
+/* ---------- latar scene: TIDAK PERNAH polos ---------- */
+/* 1. Footage sendiri yang diblur kuat + overlay hitam. Paling sering dipakai, paling murah. */
+function bgBlur(t0,t1,{over=.82,scale=1.08}={}){
+ const g=mk(xbg,'','L');const im=document.createElement('img');
+ im.style.cssText=`position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(${scale})`;g.appendChild(im);
+ BLURS.push({im,t0,t1,cur:-1});mk(g,'','',{position:'absolute',inset:0,background:`rgba(0,0,0,${over})`});
+ hide(g);tl.to(g,{opacity:1,duration:.22},t0);tl.to(g,{opacity:0,duration:.18},t1-.18);return g;}
+/* 2. Foto yang zoom pelan + overlay hitam 80-90%. */
+function bgPhoto(t0,t1,src,{over=.85,from=1,to=1.08,pos='50% 50%'}={}){
+ const g=mk(xbg,'','L');const im=mk(g,'','',{position:'absolute',inset:'-20px',backgroundImage:`url(${pre(src)})`,backgroundSize:'cover',backgroundPosition:pos});
+ tl.fromTo(im,{scale:from},{scale:to,duration:Math.max(.1,t1-t0),ease:'none'},t0);
+ mk(g,'','',{position:'absolute',inset:0,background:`rgba(0,0,0,${over})`});
+ hide(g);tl.to(g,{opacity:1,duration:.22},t0);tl.to(g,{opacity:0,duration:.18},t1-.18);return g;}
+/* 3. Image sequence lain (klip pendukung) yang diblur + overlay. */
+function bgVideo(t0,t1,dir,n,{over=.85,blur=26,ext='jpg'}={}){
+ const g=mk(xbg,'','L');const w=mk(g,'','',{position:'absolute',inset:0,filter:blur?`blur(${blur}px)`:'none',transform:'scale(1.12)'});
+ vid(w,dir,n,t0,t1,ext);mk(g,'','',{position:'absolute',inset:0,background:`rgba(0,0,0,${over})`});
+ hide(g);tl.to(g,{opacity:1,duration:.22},t0);tl.to(g,{opacity:0,duration:.18},t1-.18);return g;}
+
+/* ---------- zoom video utama ---------- */
+/* Program zoom: [mulai, selesai, skala, originX, originY, drift]. Diisi otomatis oleh autocap.py
+   (zoom berirama), atau pakai setZoom([...]) sendiri di scenes.js. */
+let Z=[[0,1e9,1.00,540,960,.02]];
+function setZoom(a){if(Array.isArray(a)&&a.length)Z=a;}
+perFrame.push(t=>{const z=Z.find(z=>t>=z[0]&&t<z[1])||Z[Z.length-1];
+ const p=Math.min(1,Math.max(0,(t-z[0])/Math.max(.001,z[1]-z[0])));
+ vidW.style.transformOrigin=`${z[3]}px ${z[4]}px`;
+ vidW.style.transform=`scale(${(z[2]*(1+z[5]*p)).toFixed(5)})`;});
+
+/* ---------- image sequence di dalam elemen ---------- */
+function vid(parent,dir,n,t0,t1,ext='jpg'){const im=document.createElement('img');
+ im.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';
+ parent.appendChild(im);VIDS.push({im,dir,n,t0,t1,ext,cur:-1});return im;}
+function vidUpdate(t){const ps=[];
+ for(const v of VIDS){if(t<v.t0-.8||t>v.t1+.1)continue;
+  let f=Math.floor((t-v.t0)*30+1e-6);f=((f%v.n)+v.n)%v.n;
+  if(f!==v.cur){v.cur=f;v.im.src=`vf/${v.dir}/${String(f+1).padStart(4,'0')}.${v.ext}`;ps.push(v.im.decode().catch(()=>{}));}}
+ return Promise.all(ps);}
+
+/* ---------- grain halus ---------- */
+const gc=document.createElement('canvas');gc.width=gc.height=256;const gx=gc.getContext('2d');const gid=gx.createImageData(256,256);
+let seed=12345;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+for(let i=0;i<256*256;i++){const v=Math.floor(rnd()*255);gid.data[i*4]=gid.data[i*4+1]=gid.data[i*4+2]=v;gid.data[i*4+3]=255;}
+gx.putImageData(gid,0,0);const GURL=gc.toDataURL();
+/* Grain membuat file jauh lebih besar (bergerak ~4x, diam ~2x). Karena file final harus < 30 MB,
+   'auto' = grain diam hanya untuk video <= 30 dtk, selain itu mati. 'move' hanya kalau user minta dan videonya pendek. */
+const GRAIN_MODE = GRAIN==='auto' ? (TOTAL<=30?'static':'off') : GRAIN;
+if(GRAIN_MODE!=='off')Object.assign(grainEl.style,{backgroundImage:`url(${GURL})`,opacity:.06,mixBlendMode:'overlay'});
+gsap.set(flash,{opacity:0});
+
+/* ---------- sistem caption ---------- */
+const SZ={n:52,s:98,k1:100,k2:100,k:92,X:190};const RANK={n:0,k:2,s:2,k1:2,k2:2,X:3};
+const base=c=>String(c||'n').split(' ')[0];
+function wIn(s,t,cls){
+ tl.set(s,{display:'inline-block'},t);
+ const b=base(cls);
+ if(b==='n')tl.fromTo(s,{opacity:0,y:14,filter:'blur(10px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.22,ease:'power2.out'},t);
+ else if(b==='X')tl.fromTo(s,{opacity:0,scale:1.5,filter:'blur(22px) brightness(2.6)'},{opacity:1,scale:1,filter:'blur(0px) brightness(1)',duration:.34,ease:'power3.out'},t);
+ else tl.fromTo(s,{opacity:0,scale:1.35,filter:'blur(16px)'},{opacity:1,scale:1,filter:'blur(0px)',duration:.3,ease:'power3.out'},t);}
+const CAPS=[];
+function lineSize(L){return Math.max(...L.map(([a,b,c='n',st])=>st&&st.fontSize?parseFloat(st.fontSize):SZ[base(c)]));}
+/**
+ * cap(tOut, y, lines, off, gaps)
+ *   lines : [[ [teks, detik, kelas?, styleOpsional?], ... ], ...]
+ *   kelas : 'n' | 's' | 'k1' | 'k2' | 'k' (blok warna) | 'k alt' (blok warna aksen 2) | 'X'
+ *   off   : offset x per baris; kosongkan untuk zig-zag otomatis. Baris blok 'k' sebaiknya [0].
+ *   gaps  : margin-top per baris; untuk baris 'k' pakai 10-16 supaya blok tidak menempel.
+ */
+function cap(t1,y,lines,off,gaps){
+ const c=mk(ov,'','cap',{top:y+'px'});gsap.set(c,{xPercent:-50,yPercent:-50});let t0=1e9;
+ const sizes=lines.map(lineSize);
+ const hasK=lines.map(L=>L.some(([a,b,cl])=>base(cl)==='k'));
+ if(!off){const big=sizes.map(s=>s>60);
+  off=lines.length===1?[0]:lines.length===2?(big[1]&&!big[0]?[-46,40]:big[0]&&!big[1]?[30,-46]:[-34,34]):[-50,0,50];
+  off=off.map((o,i)=>hasK[i]?0:o);}
+ lines.forEach((L,li)=>{const ln=mk(c,'','ln');
+  let top='n',topSt=null;L.forEach(([a,b,cl='n',st])=>{if(RANK[base(cl)]>=RANK[base(top)]){top=cl;topSt=st;}});
+  const strut=document.createElement('span');strut.className='cw '+top;strut.textContent='​';
+  Object.assign(strut.style,{display:'inline-block',width:'0',margin:'0',padding:'0',visibility:'hidden',background:'none'});
+  if(topSt&&topSt.fontSize)strut.style.fontSize=topSt.fontSize;ln.appendChild(strut);
+  if(li>0){const m=Math.max(sizes[li],sizes[li-1]);let gp=m>60?-Math.round(m*.13):-4;
+   if(sizes[li]<60&&sizes[li-1]>=150)gp=2;if(hasK[li]||hasK[li-1])gp=12;if(gaps&&gaps[li]!=null)gp=gaps[li];ln.style.marginTop=gp+'px';}
+  ln.style.transform=`translateX(${off[li]||0}px)`;
+  const firstBig=L.findIndex(([a,b,cl='n'])=>base(cl)!=='n');
+  L.forEach(([txt,t,cls='n',st],wi)=>{const s=document.createElement('span');s.className='cw '+cls;s.style.display='none';
+   s.textContent=txt;
+   if(base(cls)==='n'&&firstBig>wi&&li>0&&base(top)!=='k'){s.style.alignSelf='flex-start';s.style.marginTop=Math.round(sizes[li]*.16)+'px';}
+   if(st)Object.assign(s.style,st);ln.appendChild(s);
+   const tt=t-.04;t0=Math.min(t0,tt);wIn(s,tt,cls);s._t=t;});});
+ tl.set(c,{visibility:'hidden'},0);tl.set(c,{visibility:'visible'},t0-.01);
+ tl.to(c,{opacity:0,duration:.1},t1-.1);tl.set(c,{visibility:'hidden'},t1);
+ CAPS.push([c,t0,t1]);return c;}
+/* pintasan: nn() teks biasa, kk() blok warna dengan sudut membulat di sisi luar */
+const nn=(w,t,sz=52)=>[w,t,'n',{fontSize:sz+'px'}];
+const kk=(w,t,sz=92,pos=3,alt=false)=>[w,t,alt?'k alt':'k',
+ {fontSize:sz+'px',borderRadius:pos===3?'14px':pos===1?'14px 0 0 14px':pos===2?'0 14px 14px 0':'0'}];
+
+/* Posisi baku caption */
+const YT=300;   // di atas, dipakai bersama scrimT
+const YC=1400;  // close-up
+const YW=1490;  // wide shot
+
+/* ---------- label nama (lower third) ---------- */
+/* label(t0,t1,'NAMA','peran', {x,y}) — untuk narasumber atau topik. Jangan mengarang nama. */
+function label(t0,t1,title,sub='',{x=150,y=200}={}){
+ const g=grp(t0-.05,t1);const e=P(g,x,y,`<div class="bar"></div><div><div class="t1"></div>${sub?'<div class="t2"></div>':''}</div>`,'l3');
+ const t1el=e.querySelector('.t1'),t2el=e.querySelector('.t2');
+ const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+ perFrame.push(t=>{const u=(t-t0)/.45;
+  const sc=(s,u)=>s.split('').map((c,i)=>u>=i/s.length?c:(c===' '?' ':CH[(i*7+Math.floor(t*30))%CH.length])).join('');
+  t1el.textContent=u<=0?'':sc(title,u); if(t2el)t2el.textContent=u<=.3?'':sc(sub,(u-.3)/.8);});
+ tl.fromTo(e.querySelector('.bar'),{scaleY:0},{scaleY:1,duration:.3,ease:'power3.out'},t0);
+ tl.fromTo(e,{opacity:0,x:-20},{opacity:1,x:0,duration:.3,ease:'power3.out'},t0);
+ exit(g,t1);return e;}
+
+/* ---------- mockup HP ---------- */
+function phone(parent){
+ const c=mk(parent,'','card');const fl=mk(c,'','',{position:'absolute',inset:'0',transformStyle:'preserve-3d'});
+ const body=mk(fl,'','phone');
+ mk(body,'','btn',{right:'-4px',top:'150px',height:'80px'});
+ mk(body,'','btn',{left:'-4px',top:'118px',height:'44px'});
+ mk(body,'','btn',{left:'-4px',top:'172px',height:'44px'});
+ mk(body,'','rim');const sc=mk(body,'','screen');
+ return {card:c,flip:fl,screen:sc,
+  finish(){mk(sc,'','gloss');const sh=mk(sc,'','sheen');mk(sc,'','island');return sh;}};}
+function brackets(p,x,y,w,h,c=C1){const e=P(p,x,y,'<i></i><i></i><i></i><i></i>','brk',{width:w+'px',height:h+'px'});e.style.setProperty('--c',c);return e;}
+function chip(p,x,y,txt,c=C1,ic){const e=P(p,x,y,(ic?icon(ic,34,c):'')+`<span>${txt}</span>`,'chip');e.style.setProperty('--c',c);return e;}
+
+
+/* =====================================================================
+   HELPER LANJUTAN (dari revisi nyata user). Resep lengkap di references/scene-recipes.md
+   ===================================================================== */
+
+/* Latar FULL MOTION GRAPHIC: gelap, grid halus bergerak, dua cahaya lembut yang bergeser.
+   Untuk bagian yang user minta "tanpa wajah". Satu panggilan menutup satu rentang utuh
+   (jangan dipecah per scene, supaya tidak ada kedip wajah di antara scene). */
+function gfxBg(t0,t1,{glowA=null,glowB='rgba(226,166,79,.22)',grid=true}={}){
+  const g=mk(xbg,'','L',{background:'#08080a'});
+  const gA=mk(g,'','',{position:'absolute',width:'1300px',height:'1300px',left:'-420px',top:'-260px',borderRadius:'50%',
+    background:`radial-gradient(circle,${glowA||'color-mix(in srgb,var(--c1) 30%,transparent)'} 0%,transparent 60%)`});
+  const gB=mk(g,'','',{position:'absolute',width:'1200px',height:'1200px',left:'300px',top:'1000px',borderRadius:'50%',
+    background:`radial-gradient(circle,${glowB} 0%,transparent 60%)`});
+  const gr=grid?mk(g,'','',{position:'absolute',left:'-120px',top:'-120px',width:'1320px',height:'2160px',
+    backgroundImage:'linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px)',
+    backgroundSize:'60px 60px'}):null;
+  mk(g,'','',{position:'absolute',inset:0,background:'radial-gradient(ellipse 75% 60% at 50% 45%,transparent 0%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.92) 100%)'});
+  perFrame.push(t=>{const u=t-t0;
+    gA.style.transform=`translate(${(Math.sin(u*.35)*120).toFixed(1)}px,${(Math.cos(u*.27)*90).toFixed(1)}px)`;
+    gB.style.transform=`translate(${(Math.cos(u*.31)*110).toFixed(1)}px,${(Math.sin(u*.23)*120).toFixed(1)}px)`;
+    if(gr)gr.style.transform=`translateY(${((u*14)%60).toFixed(2)}px)`;});
+  hide(g); tl.to(g,{opacity:1,duration:.25},t0); if(t1<TOTAL)tl.to(g,{opacity:0,duration:.2},t1-.2);
+  return g;}
+
+/* Kartu gambar berpusat di (x,y). pos = background-position (fokus wajah: '50% 30%'). */
+function imgCard(p,x,y,w,h,src,pos='50% 50%'){const c=A(p,x,y,'','frameC',{width:w+'px',height:h+'px'});
+  mk(c,'','im',{backgroundImage:`url(${pre(src)})`,backgroundPosition:pos});return c;}
+/* Hasil yang "lahir": dari skala .62 dan terang 2.6 ke normal. */
+function popIn(el,t,d=.42){tl.fromTo(el,{opacity:0,scale:.62,filter:'brightness(2.6) blur(8px)'},{opacity:1,scale:1,filter:'brightness(1) blur(0px)',duration:d,ease:'power3.out'},t);}
+/* Kilatan cahaya bulat saat dua hal bertabrakan. */
+function burstAt(p,x,y,t,size=900){const b=A(p,x,y,'','',{width:size+'px',height:size+'px',borderRadius:'50%',
+    background:'radial-gradient(circle,rgba(255,236,210,.85) 0%,color-mix(in srgb,var(--c1) 45%,transparent) 22%,transparent 60%)'});
+  tl.fromTo(b,{opacity:0,scale:.2},{opacity:1,scale:1,duration:.14,ease:'power2.out'},t);
+  tl.to(b,{opacity:0,scale:1.4,duration:.35,ease:'power2.out'},t+.14);return b;}
+/* Chip berpusat horizontal di x. */
+function chipC(p,x,y,txt,c=C1,ic,t){const e=chip(p,0,0,txt,c,ic);Object.assign(e.style,{left:x+'px',top:y+'px'});gsap.set(e,{xPercent:-50});
+  if(t!=null)tl.fromTo(e,{opacity:0,y:24,filter:'blur(10px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.3,ease:'power3.out'},t);return e;}
+/* Tanda plus di antara dua kartu. */
+function plusSign(p,x,y,t,size=64){const e=A(p,x,y,icon('plus',size,C1),'',{filter:'drop-shadow(0 0 14px var(--c1))'});
+  tl.fromTo(e,{opacity:0,scale:.3,rotation:-90},{opacity:1,scale:1,rotation:0,duration:.3,ease:'back.out(1.8)'},t);return e;}
+/* GABUNG: kartu-kartu (dibuat dengan A()/imgCard, posisinya diketahui) meluncur ke (x,y), bertabrakan, hilang
+   dalam kilatan. cards = [[el, xAwal, yAwal], ...]. Mengembalikan detik tabrakan; panggil popIn(hasil, detik itu). */
+function mergeTo(p,cards,x,y,t,{hide=[],plus=null}={}){
+  const k=t+.38;
+  hide.forEach(e=>tl.to(e,{opacity:0,filter:'blur(8px)',duration:.2,ease:'power2.in'},t));
+  if(plus)tl.to(plus,{opacity:0,scale:.2,duration:.15},t+.1);
+  cards.forEach(([el,x0,y0])=>{tl.to(el,{x:x-x0,y:y-y0,scale:.5,duration:.38,ease:'power3.in'},t);
+    tl.to(el,{opacity:0,filter:'brightness(2.6) blur(6px)',duration:.1},k-.06);});
+  burstAt(p,x,y,k-.04); sfx(t,'sweep',.8); sfx(k,'sub',.6);
+  return k;}
+
+/* Tiga HP berisi klip: tengah besar, dua samping miring. clips = [{dir,n,t,off}] urutan: kiri, kanan, tengah.
+   t = detik HP muncul (tepat di kata yang relevan), off = detik awal klip yang diputar. */
+function phoneTrio(p,t1,clips,{y=820,cy=800,xs=[272,808,540],sc=[.95,.95,1.32]}={}){
+  clips.forEach((c,i)=>{const mid=i===2, x=xs[i], s=sc[i], ry=mid?0:(i===0?20:-20);
+    const wr=P(p,x,mid?cy:y,'','',{width:'0px',height:'0px',zIndex:mid?3:1});
+    const hp=phone(wr); hp.flip.style.transform=`perspective(1600px) rotateY(${ry}deg)`;
+    vid(hp.screen,c.dir,c.n,c.t-(c.off||0),t1); hp.finish();
+    if(!mid)mk(hp.screen,'','',{position:'absolute',inset:0,background:'rgba(0,0,0,.28)'});
+    tl.fromTo(wr,{opacity:0,y:420,scale:s*.9,filter:'blur(10px)'},{opacity:1,y:0,scale:s,filter:'blur(0px)',duration:.5,ease:'power3.out'},c.t-.08);
+    tl.to(wr,{y:-18,duration:Math.max(.2,t1-c.t-.5),ease:'sine.inOut'},c.t+.45);
+    sfx(c.t,'air',.9);});}
+
+/* Dinding video bergulir di latar (scene angka/daftar). dirs = image sequence klip bersih (frames.py --clips-only). */
+function videoWall(t0,t1,dirs,n,{over=.74}={}){
+  const wall=mk(xbg,'','L'); hide(wall);
+  tl.fromTo(wall,{opacity:0,scale:1.15},{opacity:1,scale:1,duration:.45,ease:'power3.out'},t0);
+  if(t1<TOTAL)tl.to(wall,{opacity:0,duration:.2},t1-.2);
+  [-110,210,530,850].forEach((cx,ci)=>{
+    const col=mk(wall,'','',{position:'absolute',left:cx+'px',top:'-260px',width:'300px'});
+    for(let r=0;r<4;r++){const tile=mk(col,'','',{position:'absolute',left:0,top:(r*554)+'px',width:'300px',height:'534px',borderRadius:'18px',overflow:'hidden',
+        boxShadow:'0 0 0 1px rgba(255,255,255,.08)'});
+      vid(tile,dirs[(ci*4+r)%dirs.length],n,t0-(ci*.7+r*1.3),t1);}
+    tl.fromTo(col,{y:ci%2?60:-60},{y:ci%2?-170:170,duration:t1-t0,ease:'none'},t0);});
+  mk(wall,'','',{position:'absolute',inset:0,background:`rgba(4,4,6,${over})`});
+  mk(wall,'','',{position:'absolute',inset:0,background:'radial-gradient(ellipse 70% 55% at 50% 50%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.7) 100%)'});
+  return wall;}
+
+/* LOGO DIBANGUN ULANG. JANGAN tempel logo utuh di lingkaran/kotak hitam.
+   emblem = simbol saja (dipotong dari logo, latar hitamnya dipekatkan; lihat scene-recipes O1), digabung dengan
+   mix-blend-mode:screen sehingga hitamnya hilang. Teks logo diketik ulang dengan gradien warna logo.
+   lines = [['ULTIMATE',104],['HYPER REALISTIC',70]], tag = baris kecil di bawah, times = [tEmblem, tBaris1, tBaris2, ..., tTag]. */
+const GOLD='linear-gradient(180deg,#fff3d2 0%,#f2cd82 42%,#c98f3e 78%,#9c6a2a 100%)';
+function logoBuild(p,cx,cy,s,{emblem=null,lines=[],tag='',times=[],grad=GOLD,tagColor='#efc985',spin=9}={}){
+  const out={};let ti=0;const tt=()=>times[Math.min(ti++,times.length-1)];
+  let y=cy;
+  if(emblem){const E=380*s, tE=tt();
+    const emW=A(p,cx,cy-190*s,'','',{width:E+'px',height:E+'px'});
+    mk(emW,'','',{position:'absolute',left:(-E*.25)+'px',top:(-E*.25)+'px',width:(E*1.5)+'px',height:(E*1.5)+'px',borderRadius:'50%',
+      background:'radial-gradient(circle,rgba(242,190,110,.26) 0%,transparent 62%)'});
+    const em=mk(emW,'','',{position:'absolute',inset:0,backgroundImage:`url(${pre(emblem)})`,backgroundSize:'cover',
+      mixBlendMode:'screen',WebkitMaskImage:'radial-gradient(circle closest-side,#000 90%,transparent 100%)'});
+    if(spin)perFrame.push(t=>{em.style.transform=`rotate(${((t-tE)*spin).toFixed(2)}deg)`;});
+    tl.fromTo(emW,{opacity:0,scale:.6,filter:'blur(18px) brightness(2.4)'},{opacity:1,scale:1,filter:'blur(0px) brightness(1)',duration:.55,ease:'power3.out'},tE);
+    out.emblem=emW; y=cy+10*s;} else {ti++;}
+  out.lines=lines.map(([txt,size],i)=>{const sz=size*s; y+=sz*(i?0.6:0.5);
+    const e=A(p,cx,y,txt,'',{fontFamily:'var(--bf),sans-serif',fontWeight:'900',fontSize:sz+'px',lineHeight:'1',letterSpacing:i?'.02em':'.06em',
+      background:grad,WebkitBackgroundClip:'text',backgroundClip:'text',color:'transparent',
+      filter:'drop-shadow(0 0 18px rgba(240,180,90,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.8))'});
+    tl.fromTo(e,{opacity:0,y:26,filter:'blur(14px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.4,ease:'power3.out'},tt());
+    y+=sz*.45; return e;});
+  if(tag){y+=40*s;const bar=`<span style="display:inline-block;width:${70*s}px;height:2px;background:${tagColor};vertical-align:middle;margin:0 ${18*s}px"></span>`;
+    out.tag=A(p,cx,y,bar+tag+bar,'',{font:`600 ${Math.round(26*s)}px JB`,letterSpacing:'.2em',color:tagColor,textShadow:'0 0 12px rgba(240,180,90,.45),0 2px 6px #000'});
+    tl.fromTo(out.tag,{opacity:0,y:26,filter:'blur(14px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.4,ease:'power3.out'},tt());}
+  return out;}
+
+/* PANAH CTA tebal: panah datar solid dua warna (sisi kanan sedikit lebih gelap), memantul pelan.
+   Ikon garis tipis (arrow-down) terlalu lemah untuk ajakan; pakai ini. dir: 'down' | 'up'. */
+function bigArrow(p,x,y,w=190,{c1='#FF4A14',c2='#E1380C',dir='down',t=null}={}){
+  const id='ar'+Math.random().toString(36).slice(2,7);
+  const svg=svgNS(200,220,`<defs><clipPath id="${id}"><rect x="100" y="-20" width="140" height="260"/></clipPath></defs>
+    <g stroke-linejoin="round" stroke-width="16">
+      <path d="M68 8 H132 V104 H188 L100 210 L12 104 H68 Z" fill="${c1}" stroke="${c1}"/>
+      <path d="M68 8 H132 V104 H188 L100 210 L12 104 H68 Z" fill="${c2}" stroke="${c2}" clip-path="url(#${id})"/>
+    </g>`,`width:${w}px;height:${w*1.1}px;overflow:visible;${dir==='up'?'transform:rotate(180deg)':''}`);
+  const e=A(p,x,y,`<div class="bob">${svg}</div>`,'',{filter:`drop-shadow(0 0 26px ${c1}73) drop-shadow(0 10px 18px rgba(0,0,0,.6))`});
+  if(t!=null){tl.fromTo(e,{opacity:0,y:-60,scale:.7},{opacity:1,y:0,scale:1,duration:.4,ease:'back.out(1.6)'},t);
+    const bob=e.querySelector('.bob');
+    perFrame.push(tt=>{if(tt<t+.4)return;bob.style.transform=`translateY(${(Math.abs(Math.sin((tt-t-.4)*3.4))*26*(dir==='up'?-1:1)).toFixed(1)}px)`;});}
+  return e;}
+
+/* === CAPTIONS === */
+
+/* === SCENES === */
+
+window.SFX=SFX;window.TOTAL=TOTAL;window.CAPS=CAPS;
+await Promise.all(PRELOAD.map(i=>i.decode().catch(()=>{})));
+window.seek=async function(t){tl.seek(t);
+ const fr=Math.round(t*30);
+ if(GRAIN_MODE==='move')grainEl.style.backgroundPosition=`${(fr*73)%256}px ${(fr*151)%256}px`;
+ perFrame.forEach(f=>f(t));
+ await Promise.all([ivUpdate(t),vidUpdate(t)]);};
+await seek(0);window.READY=true;
+})().catch(e=>{console.error('TEMPLATE ERROR',e);window.TEMPLATE_ERROR=String(e&&e.stack||e);});
+</script></body></html>
