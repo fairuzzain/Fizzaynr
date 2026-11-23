@@ -5,6 +5,13 @@ description: Make a 30-45 second product launch video in code with Claude Code, 
 
 # Launch video, built in code
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 A launch video sells one thing in 30-45 seconds. You build it as one HTML file with `window.seek(seconds)`, then export to MP4.
 
 **Before you start:** read `brand.md` and `MOTION.md` if they exist. If not, run `brand-intake` first, or ask for hex codes, a font and a logo file. Never call a result on-brand without them.

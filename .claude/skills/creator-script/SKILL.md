@@ -4,6 +4,13 @@ description: 'Buat script talking head dan voiceover yang natural, siap rekam, d
 ---
 # Creator Script Skill
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Buat script talking head dan voiceover yang terdengar natural seperti orang berbicara, bukan artikel kaku. Skill ini membantu user menulis naskah yang siap dibacakan manual (tampil muka atau audio-only) maupun dimasukkan ke AI voiceover/video, dengan pilihan cepat (**Quick Mode**) atau personalisasi penuh (**Deep Context Mode**).
 
 ## Kapan Digunakan
@@ -52,7 +59,7 @@ Ajukan pertanyaan bertahap agar user nyaman menjawab. Lewati pertanyaan yang jaw
 
 **Putaran 2 - Gaya Bicara, Karakter & Format:**
 
-1. Gaya bicara dan sapaan favoritmu seperti apa? (Misalnya: aku-kamu, gue-lo, saya-Anda; santai, tegas/blak-blakan, hangat, atau storytelling.)
+1. Gaya bicara dan sapaan favoritmu seperti apa? (Misalnya: saya-awak, aku-korang, saya-anda; santai, tegas/blak-blakan, hangat, atau storytelling.)
 2. Apa sudut pandang khas, pengalaman, atau keunggulan yang membedakanmu dari kreator/kompetitor lain?
 3. Ada kata-kata, topik, atau gaya penyampaian yang HARUS dihindari?
 4. Format utamamu lebih sering ke mana (vertikal 30-90 detik, horizontal/podcast, tampil muka atau audio-only/faceless) dan CTA apa yang paling sering kamu pakai?
@@ -95,8 +102,8 @@ Terapkan standar berikut pada setiap script yang dihasilkan (baik Quick Mode mau
 
 - Tulis seperti sedang berbicara langsung ke satu orang di depan kamera atau mikrofon, bukan membacakan esai atau artikel blog.
 - Gunakan kalimat pendek dan menengah secara bergantian agar ritme napas nyaman saat dibacakan manual maupun dirender AI TTS/video.
-- Hindari jargon kaku dan kata klise pembuka seperti "Halo guys, selamat datang kembali di channel saya".
-- Gunakan sapaan yang konsisten dari awal sampai akhir sesuai preferensi user (default Indonesia santai: aku-kamu atau kamu, kecuali user memilih lain).
+- Hindari jargon kaku dan kata klise pembuka seperti "Hai semua, selamat kembali ke channel saya".
+- Gunakan sapaan yang konsisten dari awal sampai akhir sesuai preferensi user (default Bahasa Melayu Malaysia santai: saya-awak atau aku-korang, kecuali user memilih lain; ejaan dan kosa kata Malaysia, bukan Indonesia).
 
 ### Struktur Retensi Talking Head
 
@@ -107,7 +114,7 @@ Terapkan standar berikut pada setiap script yang dihasilkan (baik Quick Mode mau
 
 ### Format Output & Durasi
 
-- Default: tampilkan script dengan label struktur tipis (`[HOOK]`, `[BRIDGE]`, `[ISI]`, `[CLOSING & CTA]`) ditambah catatan estimasi durasi baca di bagian atas (patokan tempo Indonesia wajar sekitar 130-150 kata per menit; selalu tandai sebagai estimasi).
+- Default: tampilkan script dengan label struktur tipis (`[HOOK]`, `[BRIDGE]`, `[ISI]`, `[CLOSING & CTA]`) ditambah catatan estimasi durasi baca di bagian atas (patokan tempo Bahasa Melayu wajar sekitar 130-150 kata per menit; selalu tandai sebagai estimasi).
 - Jangan menyisipkan arahan kamera rumit, timecode palsu, atau label emosi berlebihan di dalam kalimat ucapan kecuali user memintanya.
 - Jika user meminta "teks bersih saja", "untuk teleprompter", atau "untuk TTS", berikan **hanya kata-kata yang diucapkan** tanpa label struktur maupun pengantar tambahan.
 
@@ -120,13 +127,4 @@ Terapkan standar berikut pada setiap script yang dihasilkan (baik Quick Mode mau
 
 ## Profil Konteks Tersimpan
 
-Status: Aktif (Adinagara — Ultimate Hyper Realistic AI Photo & Video Workflow)
-
-- **Identitas & Bidang:** Adinagara (`@adinagara.space`), praktisi digital marketing & kreator konten (8+ tahun pengalaman) di bidang video AI.
-- **Produk / Penawaran Utama & Website:** **Ultimate Hyper Realistic AI Photo & Video Workflow** (`https://adinagara.com/ai-workflow`) — paket sekali bayar berisi 113++ studi kasus AI siap contek (teks + video step-by-step, *character sheet*, foto referensi, *prompt*, *tools*, *editing*, dan estimasi biaya), materi fundamental, 6 Instant Generator, 20++ Custom GPT/Gems, 59+ AI Talent, grup Telegram 2 arah (1.416++ member), *free update*, serta program Super Affiliate (komisi 70%). Harga normal Rp249.000, promo Rp199.000 (atau harga spesial Rp159.200 dengan kode kupon `22NOV`, kuota harian terbatas).
-- **Tema Konten & Tujuan Utama:** Edukasi & demo workflow pembuatan foto dan video AI realistis berkualitas tinggi, dengan tujuan utama **konversi jualan**.
-- **Target Audiens & Pain Points:** Orang yang ingin membuat video AI berkualitas dan realistis, tetapi masih sering gagal, hasilnya tidak natural, dan menghabiskan waktu serta biaya karena *trial-error*.
-- **Gaya Bicara, Sapaan & Tone:** Sapaan **saya–kamu**, lugas, praktis, dan berorientasi pada solusi nyata.
-- **Sudut Pandang Khas (Differentiator):** Membuat video AI realistis bukan sekadar soal *tools*, melainkan soal **workflow yang benar** dari awal sampai akhir — audiens cukup menyontek 113++ workflow yang sudah teruji tanpa harus *trial-error* dari nol.
-- **Pantangan (Do's & Don'ts):** Tidak ada pantangan khusus; jaga agar semua klaim tetap realistis sesuai fakta produk.
-- **Format Utama & CTA Favorit:** Video **vertikal / Reels** (30–90 detik), dengan CTA mengarahkan audiens mengakses `adinagara.com/ai-workflow` (cek link di bio/caption atau klaim kupon promo yang berlaku).
+Status: Belum diisi. Jalankan Deep Context Mode atau lampirkan `creator-context.md` untuk mengisinya.

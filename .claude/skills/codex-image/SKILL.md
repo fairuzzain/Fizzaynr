@@ -3,6 +3,13 @@ name: codex-image
 description: DEFAULT image engine for every skill - ChatGPT images (gpt-image models) through openai_image.py on the repo provider; Nexabot `img` is only the fallback. Use for any still image a skill needs - start frames, keyframes, B-roll, posters, thumbnails, image-to-image edits, character/style consistency from a reference image, key/sprite sheets. Saves verified PNGs and keeps the calling skill's prompt, aspect ratio, filenames and folder.
 ---
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 > **Default is ChatGPT images** (`openai_image.py` below) for every image, with or without a
 > reference. Fallback only when it fails twice: Nexabot
 > `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" img "<prompt>" --aspect 1|2|5 --out <path>.png`

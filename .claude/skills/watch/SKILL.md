@@ -9,6 +9,13 @@ metadata:
 
 # /watch
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Run the bundled Python script. With the **gemini** engine (a `GEMINI_API_KEY` is configured) Google's video model watches the video and the report carries its timestamped answer for you to relay. With the **local** engine the script produces timestamped frames and a transcript; view the frames and answer from that evidence. Native captions come first; the chosen local or cloud backend is only a fallback. Transcript-only evidence cannot establish visual facts.
 
 ## Resolve the skill and interpreter

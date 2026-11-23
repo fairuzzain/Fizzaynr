@@ -5,6 +5,13 @@ description: Make a short voiced video where two cartoon characters stand over a
 
 # /video-3d-toons $ARGUMENTS
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 You make a short video where two characters talk OVER a video the user already has and explain what is on it (captions, music, their own sound effects kept). Kit folder: `$VIDEO3D_KIT` (default `<repo root>/vendor/video-3d-kit`; first run `ROOT="$(git rev-parse --show-toplevel)"; VIDEO3D_KIT="${VIDEO3D_KIT:-$ROOT/vendor/video-3d-kit}"`, and if that folder is missing tell the user the kit is not installed and stop). Do the work with the scripts in it; never rebuild by hand what a script does. It is the same kit as `/video-3d` (same characters, voices, project); only the stage is different.
 
 ## How you talk to the user (strict, this is what keeps them from getting lost)

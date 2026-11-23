@@ -204,7 +204,7 @@ function bgUpdate(t){const fr=Math.round(t*30);grain.style.backgroundPosition=`$
 /*__SCENES__*/
 // ============================================================
 
-const fmtDef=v=>Math.round(v).toLocaleString('id-ID');
+const fmtDef=v=>Math.round(v).toLocaleString('ms-MY');
 window.SFX=SFX;window.TOTAL=TOTAL;
 window.seek=async function(t){tl.seek(t,false);bgUpdate(t);
   counters.forEach(([o,el,fmt])=>el.textContent=(fmt||fmtDef)(o.v));

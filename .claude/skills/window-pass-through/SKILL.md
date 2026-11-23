@@ -6,6 +6,13 @@ argument-hint: "[image 1] [image 2 or destination description] [9:16|16:9]"
 
 # Window pass-through (Image 1 → through an opening → scene 2, one shot)
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Source: a Kling 2.5 (Higgsfield) prompt guide + a pass-through whoosh SFX
 (`assets/pass_through_sfx.mp3`, 9.6 s, sound 1.56–7.8 s, peak ≈ 3.0 s = the moment of passing through).
 Prompts: `references/prompts.md` (read it - the guide's master prompt and its 10 variations).

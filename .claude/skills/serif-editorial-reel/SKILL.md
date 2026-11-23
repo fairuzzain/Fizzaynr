@@ -5,6 +5,13 @@ description: "Bikin reel vertikal 1080x1920 bergaya editorial dari video talking
 
 # Serif Editorial Reel
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Skill ini mengubah **satu video orang berbicara** (podcast, talking head, UGC) menjadi reel vertikal 1080x1920 30fps dengan motion graphic kelas atas: gelap, sinematik, teks menyala, animasi halus, tanpa satu pun elemen yang terlihat kartun.
 
 Skill ini berlaku untuk topik apa pun (edukasi, produk, jasa, cerita, promosi). Isi scene selalu diturunkan dari naskah dan aset user, bukan dari contoh bawaan.

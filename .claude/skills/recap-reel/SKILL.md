@@ -6,6 +6,13 @@ argument-hint: "[photos or folder] [title text] [16:9|9:16] [length s]"
 
 # Recap reel (photos → Nexabot clips + Nexabot music → beat cut)
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Reference look: `references/style.md` (read it) and the two 8 fps contact sheets
 `references/reference_sheet_0-6s.png`, `references/reference_sheet_6-12s.png` (look at them once).
 

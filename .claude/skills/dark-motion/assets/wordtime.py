@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Waktu per kata dari suara (dipakai kalau user tidak punya file subtitle).
 
-  python3 wordtime.py <video_atau_audio> <out.json> [--lang id] [--models DIR]
+  python3 wordtime.py <video_atau_audio> <out.json> [--lang ms] [--models DIR]
 
---lang : kode bahasa video (id, en, ms, ...). "auto" = deteksi otomatis.
+--lang : kode bahasa video (ms = Bahasa Melayu, default; en, id, ...). "auto" = deteksi otomatis.
 Keluaran: [[detik, "kata"], ...] di timeline video kerja.
 
 Pertama kali dipakai di sebuah sesi, script ini memasang paket sherpa-onnx (sekitar 20 MB, dari PyPI)
@@ -64,7 +64,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("src"); ap.add_argument("out")
     ap.add_argument("--models", default=os.path.expanduser("~/.cache/dark-motion/models"))
-    ap.add_argument("--lang", default="id")
+    ap.add_argument("--lang", default="ms")
     ap.add_argument("--threads", type=int, default=max(1, os.cpu_count() or 2)); ap.add_argument("--step", type=float, default=0)
     args = ap.parse_args()
     if args.lang == "auto": args.lang = ""

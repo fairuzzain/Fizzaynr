@@ -5,6 +5,13 @@ description: Turn a title or topic into a finished, voiced motion-graphics expla
 
 # Title → Motion-as-Code video
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 You are making a new voiced motion-graphics video in the style of the user's **Motion as Code** kit.
 Every frame is a deterministic function of time, written as TypeScript "plates" (scenes) that animate
 on the word timings of the voiceover. The template kit is `$MOTION_KIT` (default `<repo root>/vendor/Motion_as_kit`; env `MOTION_KIT`

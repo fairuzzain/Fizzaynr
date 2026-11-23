@@ -5,6 +5,13 @@ description: "Edit video orang berbicara (talking head, podcast, UGC; vertikal m
 
 # Dark Motion
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Skill ini mengubah **rekaman orang berbicara** jadi video vertikal 1080x1920 30fps yang gelap, bersih, dan terasa mahal. Animasinya halus dan tidak ada satu pun elemen kartun. Topiknya bebas: isi layar selalu diturunkan dari ucapan dan aset user, bukan dari contoh di skill ini.
 
 **Yang tetap, apa pun permintaannya:** tema gelap, tanpa elemen kartun, animasi simpel tapi rapi, dan setiap kata muncul tepat saat diucapkan.
@@ -126,7 +133,7 @@ $PY $SK/assets/prep.py build "video1.mp4" "video2.mp4" [--mode track|fit|stack] 
 
 # b. waktu tiap kata: dari subtitle user, ATAU dari suara
 $PY $SK/assets/srt2words.py sub.srt build/words.json --report
-$PY $SK/assets/wordtime.py build/src/main.mp4 build/words.json --lang id     # id, en, ms, ... atau auto
+$PY $SK/assets/wordtime.py build/src/main.mp4 build/words.json --lang ms     # ms (default, Bahasa Melayu), en, id, ... atau auto
 
 # c. rapikan waktu kata + potong jeda (SELALU dijalankan, level dari jawaban user)
 $PY $SK/assets/cuts.py build --level sedang          # tidak | halus | sedang | agresif

@@ -69,7 +69,7 @@ $PY $SK/assets/bake.py glitch build/vf/main build/vf/main --at <nomorFrame> --wi
 ## B. Saat menyebut angka
 
 ### B1. Penghitung naik
-Pemicu: persentase, jumlah, rupiah, pengikut, hasil. Angka besar menghitung naik dan berhenti tepat saat angkanya diucapkan.
+Pemicu: persentase, jumlah, ringgit (RM), pengikut, hasil. Angka besar menghitung naik dan berhenti tepat saat angkanya diucapkan.
 
 ```js
 { const t0=T(8.10), tEnd=T(9.20), t1=T(11.0), target=37, suf='%';
@@ -82,7 +82,7 @@ Pemicu: persentase, jumlah, rupiah, pengikut, hasil. Angka besar menghitung naik
   sfx(tEnd,'tick'); exit(g,t1); }
 ```
 
-Untuk rupiah atau angka besar, format dengan `toLocaleString('id-ID')`.
+Untuk ringgit (RM) atau angka besar, format dengan `toLocaleString('ms-MY')`.
 
 ### B2. Roda angka bergulir
 Pemicu: tahun, tanggal, tenggat. Layar hitam penuh (pengecualian aturan latar yang disengaja), deretan angka bergulir vertikal lalu melambat dan berhenti. Nilai sebelum dan sesudahnya terlihat samar.

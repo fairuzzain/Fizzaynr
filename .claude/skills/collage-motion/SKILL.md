@@ -6,6 +6,13 @@ argument-hint: "[voiceover script or topic] [presenter photo] [style refs] [9:16
 
 # Collage motion graphic (refs → creative brief → Nexabot takes → cut to VO)
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Source workflow (ANDR3 AI, X article, 24 Jun 2026): save 4-6 Pinterest "collage art" refs → ChatGPT
 turns refs + VO script into a scene-by-scene Gemini video prompt (style written directly, never
 "based on the reference"; strict identity rule for the presenter) → Gemini Omni in Google Flow →

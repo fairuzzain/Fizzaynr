@@ -6,6 +6,13 @@ argument-hint: "[photos or folder] [10|15|30 s] [feel] [music file]"
 
 # TravelCut (trip photos → auto-crop → Nexabot clips → real-speed beat cut)
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Turn ordinary trip photos into a short cinematic travel film. Read the photos, choose the strongest
 moments, find the best vertical frame inside each one, animate them, and cut the clips to music.
 Based on @sferro21's TRAVELCUT (Higgsfield/Seedance), rebuilt on the user's own stack:

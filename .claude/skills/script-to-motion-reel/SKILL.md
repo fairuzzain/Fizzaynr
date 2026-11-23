@@ -5,6 +5,13 @@ description: "Buat video motion graphic vertikal 1080x1920 (reel/promo) dari MP3
 
 # Script to Motion Reel
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Skill ini membuat video motion graphic vertikal (9:16, 1080x1920, 30fps) gaya "kinetic typography + mockup + metafora" dari bahan:
 
 1. **MP3 voiceover** + **transkrip TXT** (atau subtitle .srt)
@@ -19,7 +26,7 @@ Prinsip utama: **setiap kata penting muncul tepat saat diucapkan**, setiap eleme
 
 ## Cara bicara ke user
 
-- Bahasa Indonesia sederhana, langsung ke inti, ramah.
+- Bahasa Melayu Malaysia yang ringkas, terus ke inti, mesra.
 - User biasanya **bukan orang teknis**. Jangan tampilkan perintah, path, atau istilah seperti "render chunk", "LUFS", "words.json". Katakan artinya: "videonya sedang dirakit, sekitar 3 menit lagi".
 - Kabar progres singkat di titik penting saja, dengan perkiraan waktu kalau langkahnya lama.
 - Kalau permintaan user akan membuat hasil jelek atau tidak akan berhasil, bilang sekali dengan alasan dan saran, lalu ikuti keputusannya.
@@ -118,7 +125,7 @@ $PY $SK/assets/srt2words.py sub.srt build/words.json --report
 
 **Jalur B, dari suara (kalau tidak ada subtitle):**
 ```bash
-$PY $SK/assets/wordtime.py build/aset/vo.mp3 build/words.json --lang id
+$PY $SK/assets/wordtime.py build/aset/vo.mp3 build/words.json --lang ms
 ```
 Pertama kali mengunduh model sekitar 850 MB (beberapa menit, beri tahu user). Model disimpan di cache, jadi proyek berikutnya tidak mengunduh ulang.
 

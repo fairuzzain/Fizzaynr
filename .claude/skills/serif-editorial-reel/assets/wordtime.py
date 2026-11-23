@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Word-level timing untuk VO bahasa Indonesia.
+"""Word-level timing untuk VO Bahasa Melayu Malaysia (default).
 
-  python3 wordtime.py <video_atau_audio> <out.json> [--models DIR] [--lang id]
+  python3 wordtime.py <video_atau_audio> <out.json> [--models DIR] [--lang ms]
 
 Keluaran: [[detik, "kata"], ...] di timeline VIDEO ASLI (sebelum jeda disisipkan).
 Bungkus dengan T() di halaman untuk mendapat timeline final.
@@ -49,7 +49,7 @@ def silences(a, sr, floor=-38.0, minlen=0.10):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("src"); ap.add_argument("out")
-    ap.add_argument("--models", default="models"); ap.add_argument("--lang", default="id")
+    ap.add_argument("--models", default="models"); ap.add_argument("--lang", default="ms")
     ap.add_argument("--threads", type=int, default=2); ap.add_argument("--step", type=float, default=0.15)
     args = ap.parse_args()
 

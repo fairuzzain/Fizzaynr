@@ -5,6 +5,13 @@ description: Make a short voiced 3D video where two characters talk (subtitles, 
 
 # /video-3d $ARGUMENTS
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 You make a short 3D video of two characters talking, from the user's topic. Kit folder: `$VIDEO3D_KIT` (default `<repo root>/vendor/video-3d-kit`; first run `ROOT="$(git rev-parse --show-toplevel)"; VIDEO3D_KIT="${VIDEO3D_KIT:-$ROOT/vendor/video-3d-kit}"`, and if that folder is missing tell the user the kit is not installed and stop). Do the work with the scripts in it; never rebuild by hand what a script does.
 
 ## How you talk to the user (strict, this is what keeps them from getting lost)

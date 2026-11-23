@@ -6,6 +6,13 @@ argument-hint: "[optional guidance: story/topic, number of chapters 1-4]"
 
 # Vox-style news video, COLORED (Nexabot)
 
+> **Bahasa utama: Bahasa Melayu Malaysia.** Semua output skill ini (skrip, VO/TTS, dialog, caption,
+> teks atas skrin, CTA, tajuk, kapsyen media sosial) dan semua soalan serta laporan kepada pengguna
+> ditulis dalam Bahasa Melayu Malaysia: ejaan, kosa kata dan loghat Malaysia, bukan Bahasa Indonesia.
+> Bahasa lain hanya jika pengguna memintanya. Prompt untuk model imej/video boleh kekal dalam Bahasa
+> Inggeris, tetapi teks yang diucapkan atau dipaparkan di dalamnya tetap Bahasa Melayu. Peraturan ini
+> mengatasi mana-mana default bahasa lain dalam fail ini. Lihat `CLAUDE.md` → Bahasa.
+
 Identical pipeline to `vox-video-nexabot`, and **the /vox look in vintage hand-tinted color**:
 the same composition, density and materials as /vox (aged ledger paper, newsprint, archival
 maps, torn edges, layered photo cutouts with rough white keylines and offset red strokes, giant

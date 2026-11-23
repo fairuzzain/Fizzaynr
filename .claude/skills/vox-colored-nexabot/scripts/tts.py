@@ -42,7 +42,7 @@ def whisper_words(audio, narration):
     pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", str(audio), "-f", "f32le", "-ac", "1", "-ar", "16000", "-"],
                          capture_output=True, check=True).stdout
     def run(prompt):
-        segs, _ = _model.transcribe(np.frombuffer(pcm, np.float32), word_timestamps=True, language=env("TTS_LANGUAGE") or None,
+        segs, _ = _model.transcribe(np.frombuffer(pcm, np.float32), word_timestamps=True, language=env("TTS_LANGUAGE", "ms") or None,
                                     initial_prompt=prompt, vad_filter=False)
         return [(w.word.strip(), w.start, w.end) for s in segs for w in (s.words or []) if w.word.strip()]
     words = run(narration[:800])

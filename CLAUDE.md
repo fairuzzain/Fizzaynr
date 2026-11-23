@@ -13,6 +13,16 @@ variables (`.env` at the repo root, see `.env.example`) when the environment cha
 - Outputs: `${RUNS_DIR:-$ROOT/runs}/<skill>/<slug>` (git-ignored). Music: `${MUSIC_DIR:-$ROOT/assets/music}`.
 - Never write machine-specific absolute paths (`C:\Users\...`, `D:\Motion Claude\...`) into skills.
 
+## Bahasa (semua skill)
+- **Bahasa utama: Bahasa Melayu Malaysia** untuk semua output dan perbualan: skrip, VO/TTS, dialog,
+  caption, teks atas skrin, CTA, tajuk, kapsyen, soalan dan laporan kepada pengguna.
+- Ejaan dan kosa kata Malaysia, bukan Indonesia (contoh: *tak, nak, awak, tengok, percuma, kat*;
+  bukan *gak, mau, kamu, lihat, gratis, di sini*). Mata wang RM, format nombor `ms-MY`.
+- Transkripsi/ASR dan TTS: kod bahasa `ms` secara default (`--lang ms`, `TTS_LANGUAGE=ms`).
+- Prompt untuk model imej/video boleh dalam Bahasa Inggeris (hasil lebih baik), tetapi dialog dan
+  teks yang dipaparkan di dalamnya tetap Bahasa Melayu Malaysia.
+- Bahasa lain hanya jika pengguna minta secara jelas. Peraturan ini mengatasi default bahasa dalam skill.
+
 ## Defaults
 - **Images: ChatGPT images** for every skill — `python "$ROOT/.claude/skills/codex-image/openai_image.py"`
   (gpt-image models, `OPENAI_IMAGE_API_KEY`). Nexabot `img` only if it fails twice.
