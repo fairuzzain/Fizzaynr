@@ -32,6 +32,11 @@ Claude Code plans, runs commands, checks results and talks to the user. Bulk tex
 - `codex` / `codex --profile claude` (config in `config/codex/`) can take whole coding sub-tasks.
 - To run Claude Code itself on the Sub2API key instead of the Claude plan: `bash tools/claude-sub2api.sh`.
 
+## NotebookLM (optional)
+`bash tools/setup_notebooklm.sh` installs `notebooklm-mcp-cli`, runs `nlm login` (one Google sign-in,
+cookies stay local) and adds the `gemini-notebook-mcp` server to Claude Code. Use it to pull cited
+research from your notebooks.
+
 ## Before a run
 `bash tools/check_env.sh` lists what is missing (kits in `vendor/`, keys, ffmpeg, bun, .venv).
 If a skill's kit is missing, tell the user in one line what to install and stop.
