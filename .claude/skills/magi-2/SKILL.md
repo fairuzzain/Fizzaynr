@@ -34,7 +34,7 @@ Key: `NEXABOT_API_KEY` in `.env` (or injected by the environment). Never print i
 | `i2v` | prompt + 1-3 "ingredient" images (characters, product, place) | 15 s | 0.3 |
 | `r2v` | prompt + 1 video (+ optional 1 style image) | 10 s | 0.3 |
 | `extend` | 1 video (+ optional prompt) | continues the video, always 1080p | 0.3 |
-| `tts` | text + `voice` (e.g. Achernar, Kore, Puck) | voice-over | 0.02 |
+| `tts` | text + `voice` (e.g. Leda bright, Kore low/firm, Puck) | voice-over WAV | 0.15 |
 | `music` | description / lyrics | music track | - |
 
 Video model: Omni Flash 1.2, no watermark. Typical times: img ~20 s, video ~2-3 min.
@@ -61,35 +61,47 @@ GPT Image / codex-image, on the user's instruction for this skill).
 1. **Brief.** From the user's text: characters, look, duration, ratio, shot list, dialogue, sound.
    Missing reference images → make them in step 3. Tell the user in one line what changes vs. real
    MAGI-2 (15 s clips, 16:9/9:16 only, 1080p not 4K, `@Image N` tags rewritten in words).
-2. **Plan the clips.** Duration ≤ 15 s → one clip. Longer → split the shot list at a natural break
-   into ~15 s parts (30 s → S-ranges of ~15 s each) and re-time each part to 0-15 s. If one
-   unbroken take matters more than shot accuracy, use clip 1 + `extend` instead.
-3. **Reference images (Nexabot `img`).** One full-body character sheet per hero (aspect 5),
-   describing face, hair, build, outfit, footwear, setting light. Run in parallel:
-   `python "$S/nexabot_run.py" "$RUN/refs/kitty.json" "$RUN/refs/kitty"` (extension is added).
-   Look at them (contact sheet with ffmpeg `hstack`) and send them to the user. If the user supplied
-   images, use theirs instead. Max 3 images per `i2v` clip.
-4. **Prompts.** Follow `references/prompting.md`: overview → "The woman in the first image is
-   NAME: ..." for each reference → look/physics/camera/light block (shared by every clip, so
-   characters and grade match) → `Shot list, 15 seconds, hard cuts:` with `0-1.5s: ...` lines →
-   `Audio:` line last (dialogue in quotes, in its own language; diegetic SFX; "no music" if wanted).
-   Keep the user's wording where it works; turn "No X" locks into positive descriptions.
-   Long prompts are fine (~4,000 chars tested). Delegate drafting to
-   `python "$ROOT/tools/llm.py"` when its keys are set; otherwise write it yourself (say so in one line).
-   Save each as `$RUN/clipA_prompt.md` and the request as `$RUN/clipA.json`:
-   `{"mode":"i2v","ratio":1,"resolution":1080,"prompt":"...","media":["refs/kitty.jpg","refs/sena.jpg"]}`
-   (media paths are relative to the json; sent as data URIs).
-5. **Generate (all clips in parallel).**
-   `python "$S/nexabot_run.py" "$RUN/clipA.json" "$RUN/clipA.mp4"` (& for each clip, then `wait`).
-   On a timeout the job can still be downloaded within 60 min - do not resubmit blindly.
-   Extend route: generate clip A, then `{"mode":"extend","ratio":1,"prompt":"<next shots>","media":["clipA.mp4"]}`.
-6. **Check.** For each clip: `bash "$S/fetch_and_check.sh" "file://$RUN/clipA.mp4" "$RUN/check.mp4" 1 15`
-   and a contact sheet (frames every ~2 s, `hstack`/`vstack`) - look at it: same faces as the refs,
-   right outfits, shots in order, no text. Re-run only a clip that is clearly wrong (0.3 credit).
-7. **Join.** `bash "$S/join.sh" "$RUN/final.mp4" "$RUN/clipA.mp4" "$RUN/clipB.mp4"`, then check the
-   final with `fetch_and_check.sh ... 1 <total seconds>`. Send the final film and the contact sheet.
-8. Vertical delivery → `reel-export`. Dialogue that came out wrong → `tts` the line and mix it in
-   with ffmpeg at the shot's time.
+2. **Plan the clips - shot by shot.** Tested 2026-11-28: one 15 s clip with a 10-shot timed list
+   comes out as one generic scene (most shots missing). One clip **per 1-2 beats** follows well.
+   Group the user's shot list into ~10-15 beats, one Nexabot clip each, and plan how many seconds
+   of each you will use (sum = target length). Only for a ≤ 15 s single take use one clip.
+3. **Images (Nexabot `img`).**
+   - One full-body character sheet per hero (aspect 5): face, hair, build, outfit, footwear, light.
+   - One start frame (aspect 2 or 5) per scene that has no hero in it yet, or has props/extras
+     (e.g. the couple with a puddle, the grandmother and dog on the crossing, the sedan).
+   - Run in parallel: `python "$S/nexabot_run.py" "$RUN/refs/kitty.json" "$RUN/refs/kitty"`.
+   - Make a contact sheet (ffmpeg `hstack`), look at it, send it to the user. User images win.
+4. **Clip prompts (short, ~1,000-1,500 chars each).** Per clip:
+   - hero shot → `i2v` with the character sheets (+ one scene image, max 3):
+     "The woman in the first image is NAME (look)." + **one beat** with camera + `Audio:` line;
+   - no-hero or scene-setting shot → `sfv` from its start frame + the beat.
+   - Append one shared look/physics/camera block to every clip so the grade matches.
+   - Positive wording; dialogue in quotes in its own language; "no music".
+   Drafting: `python "$ROOT/tools/llm.py"` when its keys are set, else write it (say so in one line).
+   Save as `$RUN/clips/cNN.json` (`media` paths relative to the json file).
+5. **Generate all clips in parallel** (6 at a time is fine):
+   `ls "$RUN"/clips/*.json | xargs -P 6 -I{} sh -c 'python3 "$S/nexabot_run.py" {} "${0%.json}.mp4"' {}`
+   or a loop. ~2 min each. On a timeout don't resubmit blindly (job downloadable for 60 min).
+6. **Review.** One sheet per clip, frames every 1.5 s with timestamps
+   (`fps=2/3,scale=192:-1,drawtext=...%{pts\:hms}...,tile=10x1`), stacked with `vstack`. For each
+   clip write the usable window: `cNN start end speed` in `$RUN/edit.txt` (speed 1.25-1.33 sells
+   superspeed shots). Re-generate only a clip with no usable window (0.3).
+7. **Cut.** For each line of `edit.txt` (use `ffmpeg -nostdin` inside `while read` loops):
+   `-ss start -to end -vf "delogo=x=1695:y=855:w=95:h=95,setpts=PTS/speed,fps=24" -af atempo=speed`
+   (the Gemini sparkle sits bottom-right: 1920x1080 → 1695,855,95,95; 1080x1920 → 855,1695,95,95).
+   Concat with re-encode and `fps=24,setpts=N/24/TB` (stream copy drifts to 23.92 fps).
+8. **Dialogue.** Nexabot clips rarely lip-sync the exact line. `tts` each line with **only the words**
+   in `prompt` (any delivery note gets read aloud), `atrim` to the speech, `adelay` to the shot,
+   duck the clip sound under it (`volume='if(between(t,a,b),0.35,1)':eval=frame`), `amix`
+   `normalize=0`, `alimiter`. End with a 0.25 s fade if the brief says cut to black.
+9. **Check & deliver.** `fetch_and_check.sh "file://$RUN/final.mp4" ... 1 <seconds>` plus a
+   1.5 s frame sheet of the final; send both. Vertical delivery → `reel-export`.
+
+Alternative for a single continuous take > 15 s: clip 1, then `extend` with the next beats.
+`scripts/join.sh` joins whole clips (no trimming) when no cut list is needed.
+
+Tested run (2026-11-28, "PINKSHIFT: Morning Rush V2", 18-shot 30 s brief): 5 images + 13 clips +
+2 tts ≈ 5 Nexabot credits; every shot present except a weak overtake; faces consistent via `i2v`.
 
 ## Don'ts
 - Don't call Higgsfield (no quotes, no generation) unless the user asks for Higgsfield by name.
