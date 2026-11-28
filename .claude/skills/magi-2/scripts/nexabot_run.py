@@ -101,12 +101,23 @@ def main():
 
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
+    if body.get("mode") in ("img",) and a.trim:
+        a.trim = None
     raw = out.with_suffix(".raw.mp4") if a.trim else out
     with s.get(f"{BASE}/api/v1/jobs/{job}/download", stream=True, timeout=600) as r:
         r.raise_for_status()
         with open(raw, "wb") as f:
             for chunk in r.iter_content(1 << 16):
                 f.write(chunk)
+    # Name the file after what Nexabot actually sent (img returns JPEG).
+    head = raw.read_bytes()[:12]
+    real = ".jpg" if head[:3] == b"\xff\xd8\xff" else ".png" if head[:4] == b"\x89PNG" else \
+           ".mp3" if head[:3] == b"ID3" or head[:2] == b"\xff\xfb" else ".wav" if head[:4] == b"RIFF" else \
+           ".mp4" if head[4:8] == b"ftyp" else raw.suffix
+    if raw.suffix.lower() != real and not a.trim:
+        fixed = raw.with_suffix(real)
+        raw.rename(fixed)
+        raw = out = fixed
     if a.trim:
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-t", str(a.trim),
                         "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", str(out)], check=True)
