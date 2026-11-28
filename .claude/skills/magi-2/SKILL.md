@@ -7,7 +7,8 @@ argument-hint: "[prompt] [start image] [end image] [duration 4-30] [16:9|9:16|..
 # MAGI-2 (Sand AI) on Higgsfield
 
 Spec pulled from the Higgsfield catalog (`models_explore` get `magi_2`) on 2026-11-26.
-Prompt guide: `references/prompting.md` (from Sand.ai's own docs). Check script: `scripts/fetch_and_check.sh`.
+Prompt guide: `references/prompting.md` (from Sand.ai's own docs). Scripts: `scripts/fetch_and_check.sh`
+(download + check), `scripts/nexabot_run.py` (Nexabot fallback).
 Higgsfield has no `/magi-2` recipe; it is a plain model run through `generate_video`.
 
 **Paid connector.** Repo default for video is Nexabot (CLAUDE.md). Use this skill only when the
@@ -108,11 +109,15 @@ Map the request, keep the same prompt (it reads fine as a Veo-style prompt), and
 | `video_references` (1) | `r2v` (1 video + optional 1 image) | 10 s output |
 | `audio_references` | none | drop, or add the audio in the edit |
 
-Run with the repo client: `bun "${NEXABOT_TS:-$ROOT/vendor/Motion_as_kit/nexabot/nexabot.ts}" batch clips.json`
-(`[{"name":"c01","mode":"t2v","prompt":"...","ratio":2,"resolution":1080}]`), or the raw API that
-`vox-colored-nexabot/scripts/common.py` uses: `POST /api/v1/api` → poll `/api/v1/jobs/<id>` →
-`GET /api/v1/jobs/<id>/download`. Check `GET /api/v1/modes` first; limits change. Trim the ~15 s clip
-to the asked length with ffmpeg. Other aspect ratios (21:9, 4:3, 1:1, 3:4) need a crop afterwards.
+Run with the bundled script (key from `NEXABOT_API_KEY` / `.env`, local media paths sent as data URIs):
+```
+python "$ROOT/.claude/skills/magi-2/scripts/nexabot_run.py" "$RUN/body.json" "$RUN/clip.mp4" --trim <seconds>
+```
+`body.json` e.g. `{"mode":"t2v","ratio":2,"resolution":1080,"prompt":"..."}`. Check
+`GET https://nexabot.id/api/v1/modes` first; limits change. `--trim` cuts the ~15 s clip to the asked
+length. Other aspect ratios (21:9, 4:3, 1:1, 3:4) need a crop afterwards. Then run
+`fetch_and_check.sh "file://$RUN/clip.mp4" ...` to check it. Tested 2026-11-26: t2v 9:16 1080p,
+~2 min, 0.3 credit - scene and look follow the prompt well, timed camera beats only loosely.
 
 ## Example params
 
